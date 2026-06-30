@@ -5,8 +5,7 @@ export const site = {
   description:
     "AIM Imports helps buyers source Japanese-market vehicles with careful documentation review, clear communication, and coordinated delivery to Texas.",
   location: "Texas, USA",
-  // TODO: replace with real contact details before launch.
-  email: "info@aimimports.com",
+  email: "sammer@aimimports.jp",
   inquiryCta: "Start an Inquiry",
 };
 

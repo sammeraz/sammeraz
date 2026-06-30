@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Core palette — warm ink/cream, restrained brass accent */
+  /* Core palette — warm ink/cream, brand red accent (from logo) */
   --color-ink: #121212;
   --color-ink-soft: #1e1c19;
   --color-cream: #f5f1e7;
   --color-cream-deep: #e9e1cd;
   --color-sand: #cabfa3;
-  --color-accent: #a35f2e;
-  --color-accent-soft: #c68a52;
+  --color-accent: #d3261a;
+  --color-accent-soft: #e8746a;
 
   --font-sans: var(--font-inter);
   --font-serif: var(--font-fraunces);
