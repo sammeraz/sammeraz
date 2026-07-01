@@ -12,6 +12,7 @@
 
   --font-sans: var(--font-inter);
   --font-serif: var(--font-fraunces);
+  --font-body: var(--font-space-grotesk);
 
   --container-page: 1280px;
 }

@@ -29,7 +29,10 @@ export default function AboutPage() {
               product, not an afterthought.
             </p>
           </Reveal>
-          <Reveal delay={0.12} className="max-w-2xl space-y-5 text-left text-base leading-relaxed text-ink/65">
+          <Reveal
+            delay={0.12}
+            className="font-body max-w-2xl space-y-5 text-left text-base leading-relaxed text-ink/65"
+          >
             <p>
               Most of what&apos;s frustrating about importing a JDM vehicle isn&apos;t the car —
               it&apos;s the uncertainty. Auction sheets are written in Japanese shorthand. Photos

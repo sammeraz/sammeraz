@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Space_Grotesk } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/motion/Cursor";
@@ -21,6 +21,15 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
+// Used specifically for the descriptive/explanatory copy (hero, section
+// descriptions, About narrative) — distinct from Inter, which stays on nav,
+// buttons, footer, and other UI chrome.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: `${site.name} | ${site.tagline}`,
@@ -35,7 +44,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col bg-cream text-ink">
         <Preloader />
         <Cursor />

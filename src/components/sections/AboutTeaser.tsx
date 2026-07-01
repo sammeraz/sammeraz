@@ -18,7 +18,7 @@ export function AboutTeaser() {
           <h2 className="font-serif text-[clamp(2rem,4vw,2.75rem)] leading-[1.1] text-ink">
             Built for buyers who want the full story on a car, not just the photos.
           </h2>
-          <p className="max-w-md text-base leading-relaxed text-ink/65">
+          <p className="font-body max-w-md text-base leading-relaxed text-ink/65">
             Importing from Japan rewards patience and good information. We handle the sourcing,
             verification, and paperwork so you can make a confident decision on a vehicle you may
             never see in person before it arrives.

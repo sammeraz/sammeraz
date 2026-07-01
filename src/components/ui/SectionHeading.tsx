@@ -34,7 +34,7 @@ export function SectionHeading({
         {title}
       </h2>
       {description ? (
-        <p className={`text-base leading-relaxed ${subToneClasses}`}>{description}</p>
+        <p className={`font-body text-base leading-relaxed ${subToneClasses}`}>{description}</p>
       ) : null}
     </Reveal>
   );

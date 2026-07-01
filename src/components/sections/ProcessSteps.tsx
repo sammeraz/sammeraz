@@ -21,7 +21,7 @@ export function ProcessSteps() {
                 {String(index + 1).padStart(2, "0")}
               </span>
               <h3 className="text-lg font-medium">{step.title}</h3>
-              <p className="text-sm leading-relaxed text-cream/65">{step.description}</p>
+              <p className="font-body text-sm leading-relaxed text-cream/65">{step.description}</p>
             </RevealItem>
           ))}
         </RevealGroup>

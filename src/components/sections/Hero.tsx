@@ -46,7 +46,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.55, ease: easing }}
-            className="mt-6 max-w-lg text-base leading-relaxed text-cream/75 md:text-lg"
+            className="font-body mt-6 max-w-lg text-base leading-relaxed text-cream/75 md:text-lg"
           >
             {site.description}
           </motion.p>

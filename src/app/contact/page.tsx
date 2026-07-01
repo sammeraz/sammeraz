@@ -54,7 +54,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <h3 className="text-sm font-medium text-ink">{step.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-ink/60">{step.description}</p>
+                    <p className="font-body mt-1 text-sm leading-relaxed text-ink/60">{step.description}</p>
                   </div>
                 </RevealItem>
               ))}

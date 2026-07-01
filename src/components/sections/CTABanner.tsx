@@ -18,7 +18,7 @@ export function CTABanner({
           <h2 className="max-w-xl font-serif text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[1.15]">
             {title}
           </h2>
-          <p className="max-w-md text-sm leading-relaxed text-cream/65">{description}</p>
+          <p className="font-body max-w-md text-sm leading-relaxed text-cream/65">{description}</p>
           <Button href="/contact" variant="light" className="mt-2">
             Start an Inquiry
           </Button>
