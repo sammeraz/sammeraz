@@ -54,12 +54,19 @@ list a real vehicle, add an entry to the `inventory` array:
 Once `images` is set, the real photo replaces the placeholder art automatically — no other
 changes needed. Leave `images` off and a vehicle still displays fine with placeholder art.
 
+## Brand assets
+
+- **Logo** — `public/brand/aim-imports-mark.png` is the real logo, pre-processed to remove its
+  black backing so it drops cleanly onto dark surfaces. It **only works on dark backgrounds**
+  (the wordmark inside it is white with no dark variant) — that's fine today since Header and
+  Footer are both on `bg-ink`, but don't reuse this file on a light section without a light-safe
+  export from the source logo. Rendered via `src/components/layout/Logo.tsx`.
+- **Favicon / app icon** — `src/app/icon.png` and `src/app/apple-icon.png` (Next.js file
+  convention, no code needed) use the solid square version of the same logo.
+- **Accent red** (`--color-accent` in `globals.css`) is sampled from the logo.
+
 ## Things to swap in before launch
 
-- **Logo** — `src/components/layout/Logo.tsx` currently renders a text wordmark. Replace it with
-  an `<Image>` once artwork exists; the header/footer layout won't need to change.
-- **Favicon** — `src/app/icon.tsx` is a generated "A" monogram placeholder.
-- **Contact email** — `src/data/site.ts` (`site.email`).
 - **Contact form delivery** — `src/app/api/contact/route.ts` currently validates and logs
   inquiries server-side only. Wire it up to a real email service (Resend, SendGrid, etc.) or CRM
   before relying on it in production.

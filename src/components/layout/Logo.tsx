@@ -1,15 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Text wordmark used until a real logo file is supplied. Swap the markup
- * below for an <Image src="/logo.svg" .../> when artwork is ready — the
- * surrounding header/footer layout will not need to change.
+ * Mark is pre-processed to drop its black backing (see public/brand), so it
+ * only reads cleanly over dark surfaces — which is every surface this sits
+ * on today (Header and Footer are both on ink). If a section ever needs the
+ * logo on a light background, a separate light-safe export will be needed;
+ * this file should not be reused there as-is.
  */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={`group inline-flex flex-col leading-none ${className}`}>
-      <span className="font-serif text-xl tracking-[0.02em]">AIM Imports</span>
-      <span className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.32em] opacity-60">
+    <Link href="/" className={`group inline-flex items-center gap-3 ${className}`}>
+      <Image
+        src="/brand/aim-imports-mark.png"
+        alt="AIM Imports"
+        width={512}
+        height={512}
+        priority
+        className="h-10 w-10 object-contain md:h-11 md:w-11"
+      />
+      <span className="hidden text-[10px] font-medium uppercase tracking-[0.32em] opacity-60 sm:inline">
         Japan &middot; USA
       </span>
     </Link>
