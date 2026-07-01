@@ -1,16 +1,17 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { Reveal } from "@/components/motion/Reveal";
 
 export function AboutTeaser() {
   return (
     <section className="bg-cream py-24 md:py-32">
       <Container className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
-        <div className="aspect-[4/5] w-full overflow-hidden rounded-sm">
+        <Reveal y={36} className="aspect-[4/5] w-full overflow-hidden rounded-sm">
           <PlaceholderArt variant="panel" label="AIM Imports" />
-        </div>
+        </Reveal>
 
-        <div className="flex flex-col items-start gap-6">
+        <Reveal delay={0.15} className="flex flex-col items-start gap-6">
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
             Why AIM Imports
           </span>
@@ -25,7 +26,7 @@ export function AboutTeaser() {
           <Button href="/about" variant="outline-dark">
             More About Us
           </Button>
-        </div>
+        </Reveal>
       </Container>
     </section>
   );

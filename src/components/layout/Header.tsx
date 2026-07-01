@@ -39,17 +39,25 @@ export function Header() {
         <Logo />
 
         <nav className="hidden items-center gap-10 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-[13px] font-medium uppercase tracking-[0.1em] transition-opacity hover:opacity-100 ${
-                pathname === link.href ? "opacity-100" : "opacity-75"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group relative text-[13px] font-medium uppercase tracking-[0.1em] transition-opacity hover:opacity-100 ${
+                  isActive ? "opacity-100" : "opacity-75"
+                }`}
+              >
+                {link.label}
+                <span
+                  className={`absolute -bottom-1.5 left-0 h-px bg-current transition-all duration-300 ease-out ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden md:block">

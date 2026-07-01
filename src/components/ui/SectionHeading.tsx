@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/motion/Reveal";
+
 interface SectionHeadingProps {
   eyebrow?: string;
   title: string;
@@ -18,7 +20,7 @@ export function SectionHeading({
   const subToneClasses = tone === "ink" ? "text-ink/65" : "text-cream/70";
 
   return (
-    <div className={`flex max-w-2xl flex-col gap-4 ${alignClasses}`}>
+    <Reveal className={`flex max-w-2xl flex-col gap-4 ${alignClasses}`}>
       {eyebrow ? (
         <span
           className={`text-xs font-medium uppercase tracking-[0.2em] ${
@@ -34,6 +36,6 @@ export function SectionHeading({
       {description ? (
         <p className={`text-base leading-relaxed ${subToneClasses}`}>{description}</p>
       ) : null}
-    </div>
+    </Reveal>
   );
 }

@@ -23,9 +23,13 @@ src/
     sections/           Page sections composed from ui/: Hero, ProcessSteps, CTABanner, etc.
     inventory/          VehicleCard, ComingSoonCard, InventoryGrid
     contact/            InquiryForm (client component, posts to /api/contact)
+    motion/             Cursor, Preloader, PageTransition, Reveal/RevealGroup/RevealItem — see below
   data/
     site.ts             Nav links, company blurb, process steps, values — edit copy here
     inventory.ts        Vehicle listings — currently empty, see below
+  hooks/
+    useIsFinePointer.ts       Mouse/trackpad vs touch, gates cursor + magnetic effects
+    useSafeReducedMotion.ts   Hydration-safe wrapper around motion's useReducedMotion — see below
   lib/
     types.ts             Vehicle type definition
 ```
@@ -79,6 +83,35 @@ Color, font, and spacing tokens live in `src/app/globals.css` under the Tailwind
 block (`--color-ink`, `--color-cream`, `--color-accent`, etc.), so palette changes happen in one
 place. Headings use Fraunces (serif), body/UI text uses Inter — both loaded via `next/font` in
 `src/app/layout.tsx`.
+
+## Motion & interaction
+
+Built with [motion](https://motion.dev) (the Framer Motion successor). Everything respects
+`prefers-reduced-motion` and touch/coarse-pointer devices automatically:
+
+- **Cursor** (`components/motion/Cursor.tsx`) — custom dot + ring, only on fine-pointer (mouse)
+  devices. Grows on hover over `a`, `button`, and `[data-cursor]`; add
+  `data-cursor-text="Label"` to any element for a contextual label. Hides itself over form
+  fields so the native text caret stays visible.
+- **Preloader** (`components/motion/Preloader.tsx`) — spinning-logo intro, plays once per tab
+  session (module-level flag, not state — the root layout persists across client-side nav, so it
+  naturally never replays on internal links, only on a hard reload or fresh tab).
+- **PageTransition** (`components/motion/PageTransition.tsx`) — fades `{children}` between
+  routes in the root layout; Header/Footer are outside it so they don't re-animate.
+- **Reveal / RevealGroup + RevealItem** (`components/motion/Reveal.tsx`) — scroll-triggered
+  fade-up. `Reveal` for single blocks, `RevealGroup` wrapping `RevealItem` children for a
+  staggered grid/list. Don't nest a `Reveal` around a `RevealGroup` (or vice versa) — each
+  triggers its own `whileInView` independently, so nesting causes two animations to fire slightly
+  out of sync. Use one `RevealGroup` with everything as `RevealItem` siblings instead.
+- **Magnetic buttons** — built into `Button.tsx` itself (not a separate wrapper), so every button
+  site-wide gets the cursor-follow pull and sliding arrow for free. Pass `arrow={false}` to omit
+  the arrow.
+
+**Hydration gotcha:** motion's `useReducedMotion()` reads `matchMedia` synchronously on the
+client's first render, which can differ from what the server rendered (always unaware of the
+user's OS preference) and trigger a React hydration error — this happened during development and
+is why `hooks/useSafeReducedMotion.ts` exists. Use that hook, not motion's directly, anywhere the
+reduced-motion value affects the rendered tree (not just an animation's `transition` config).
 
 ## Scripts
 

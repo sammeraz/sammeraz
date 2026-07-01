@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Cursor } from "@/components/motion/Cursor";
+import { Preloader } from "@/components/motion/Preloader";
+import { PageTransition } from "@/components/motion/PageTransition";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -34,8 +37,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-cream text-ink">
+        <Preloader />
+        <Cursor />
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
       </body>
     </html>

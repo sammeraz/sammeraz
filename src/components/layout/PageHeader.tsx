@@ -1,5 +1,10 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+
+const easing = [0.16, 1, 0.3, 1] as const;
 
 interface PageHeaderProps {
   eyebrow: string;
@@ -14,14 +19,31 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
         <PlaceholderArt variant="hero" />
       </div>
       <Container className="relative z-10 pb-14 pt-32">
-        <span className="text-xs font-medium uppercase tracking-[0.25em] text-accent-soft">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: easing }}
+          className="block text-xs font-medium uppercase tracking-[0.25em] text-accent-soft"
+        >
           {eyebrow}
-        </span>
-        <h1 className="mt-4 max-w-2xl font-serif text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.08]">
+        </motion.span>
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: easing }}
+          className="mt-4 max-w-2xl font-serif text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.08]"
+        >
           {title}
-        </h1>
+        </motion.h1>
         {description ? (
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-cream/70">{description}</p>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25, ease: easing }}
+            className="mt-4 max-w-xl text-base leading-relaxed text-cream/70"
+          >
+            {description}
+          </motion.p>
         ) : null}
       </Container>
     </section>
