@@ -33,6 +33,7 @@ interface LinkButtonProps extends BaseProps {
   href: string;
   target?: string;
   rel?: string;
+  onClick?: () => void;
 }
 
 interface NativeButtonProps extends BaseProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className"> {
@@ -87,7 +88,13 @@ export function Button({
       onMouseLeave={handleMouseLeave}
     >
       {rest.href ? (
-        <Link href={rest.href} target={rest.target} rel={rest.rel} className={classes}>
+        <Link
+          href={rest.href}
+          target={rest.target}
+          rel={rest.rel}
+          onClick={rest.onClick}
+          className={classes}
+        >
           {content}
         </Link>
       ) : (

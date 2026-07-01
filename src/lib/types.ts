@@ -17,3 +17,18 @@ export interface Vehicle {
   /** Left empty until real photography exists — UI falls back to placeholder art. */
   images?: string[];
 }
+
+export type MagazineCondition = "new" | "like-new" | "good" | "fair";
+
+export interface Magazine {
+  /** Stable identifier, also used as the URL slug for a future detail page. */
+  slug: string;
+  title: string;
+  /** Issue line, e.g. "Option2 — March 1998" or "Best Motoring, Vol. 112". */
+  issue: string;
+  price: number;
+  condition: MagazineCondition;
+  description?: string;
+  /** Left empty until real photography exists — UI falls back to placeholder art. */
+  images?: string[];
+}

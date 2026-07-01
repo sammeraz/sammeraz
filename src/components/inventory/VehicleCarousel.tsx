@@ -14,7 +14,7 @@ interface VehicleCarouselProps {
 }
 
 const arrowButtonClass =
-  "flex h-12 w-12 items-center justify-center border-2 border-ink text-ink transition-colors duration-200 hover:bg-ink hover:text-cream disabled:pointer-events-none disabled:opacity-30";
+  "flex h-12 w-12 items-center justify-center border border-ink/25 text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-cream disabled:pointer-events-none disabled:opacity-30";
 
 /** Scroller bleeds to the viewport edge (inviting a scroll); the caption and
  * arrow controls below stay aligned with the rest of the page via Container. */
@@ -51,9 +51,7 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
       </div>
 
       <Container className="mt-8 flex items-center justify-between">
-        <p className="font-mono text-xs uppercase tracking-[0.1em] text-ink/45">
-          Drag or scroll to browse
-        </p>
+        <p className="text-xs uppercase tracking-[0.1em] text-ink/45">Drag or scroll to browse</p>
         <div className="flex gap-3">
           <motion.button
             type="button"

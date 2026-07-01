@@ -8,22 +8,18 @@ export function InventoryPreview() {
   const vehicles = inventory.slice(0, 8);
 
   return (
-    <section className="bg-cream py-24 md:py-32">
+    <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
       <Container>
         <Reveal className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              002 / Inventory
-            </span>
-            <h2 className="font-display mt-2 text-[clamp(2.5rem,6vw,4rem)] leading-[0.95] text-ink">
-              What&apos;s Moving
-              <br />
-              Through the Yard
+            <span className="font-display text-sm italic text-ink/50">02 — Inventory</span>
+            <h2 className="font-display mt-2 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1] text-ink">
+              What&apos;s moving through the yard
             </h2>
           </div>
-          <p className="font-body max-w-xs text-sm leading-relaxed text-ink/60">
-            New public inventory appears here only when real vehicle information is ready — no
-            filler listings, no stand-in prices.
+          <p className="max-w-xs text-sm leading-relaxed text-ink/60">
+            New listings appear here only once real vehicle information is ready — no filler, no
+            stand-in prices.
           </p>
         </Reveal>
       </Container>

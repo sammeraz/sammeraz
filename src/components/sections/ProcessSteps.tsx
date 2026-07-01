@@ -6,32 +6,30 @@ interface ProcessStepsProps {
   eyebrow?: string;
 }
 
-export function ProcessSteps({ eyebrow = "003 / How It Works" }: ProcessStepsProps) {
+export function ProcessSteps({ eyebrow = "03 — How It Works" }: ProcessStepsProps) {
   return (
-    <section className="bg-ink py-24 text-cream md:py-32">
+    <section className="bg-cream-deep/50 py-24 md:py-32">
       <Container>
         <Reveal>
-          <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
-            {eyebrow}
-          </span>
-          <h2 className="font-display mt-2 text-[clamp(2.5rem,6vw,4rem)] leading-[0.95]">
-            Auction To Driveway
+          <span className="font-display text-sm italic text-ink/50">{eyebrow}</span>
+          <h2 className="font-display mt-2 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1] text-ink">
+            Auction to driveway
           </h2>
         </Reveal>
 
-        <RevealGroup className="mt-14 border-t-2 border-cream/20">
+        <RevealGroup className="mt-14 border-t border-ink/15">
           {processSteps.map((step, index) => (
             <RevealItem
               key={step.title}
-              className="flex flex-col gap-2 border-b-2 border-cream/20 py-7 md:flex-row md:items-center md:gap-10"
+              className="flex flex-col gap-2 border-b border-ink/15 py-7 md:flex-row md:items-center md:gap-10"
             >
-              <span className="font-mono w-14 shrink-0 text-sm font-bold text-accent-soft">
+              <span className="font-display w-14 shrink-0 text-lg italic text-accent">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="font-display shrink-0 text-2xl leading-none md:w-64">{step.title}</h3>
-              <p className="font-body max-w-xl text-sm leading-relaxed text-cream/60">
-                {step.description}
-              </p>
+              <h3 className="font-display shrink-0 text-2xl leading-none text-ink md:w-64">
+                {step.title}
+              </h3>
+              <p className="max-w-xl text-sm leading-relaxed text-ink/60">{step.description}</p>
             </RevealItem>
           ))}
         </RevealGroup>

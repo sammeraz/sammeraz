@@ -38,34 +38,32 @@ export default function AboutPage() {
         title="Built around the parts of importing that are easy to get wrong"
       />
 
-      <section className="border-t-2 border-ink bg-cream py-24 md:py-32">
+      <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
         <Container>
           <Reveal className="max-w-3xl">
-            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              01 / Our Approach
-            </span>
-            <p className="font-display mt-4 text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.05] text-ink">
+            <span className="font-display text-sm italic text-ink/50">01 — Our Approach</span>
+            <p className="font-display mt-4 text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.1] text-ink">
               Buying a car you&apos;ve never seen, from a country you&apos;ve never been to, takes
               more trust than most transactions.
             </p>
           </Reveal>
 
-          <RevealGroup className="mt-14 grid gap-10 border-t-2 border-ink pt-10 sm:grid-cols-3">
+          <RevealGroup className="mt-14 grid gap-10 border-t border-ink/15 pt-10 sm:grid-cols-3">
             {approach.map((point, index) => (
               <RevealItem key={point.title} className="flex flex-col gap-2">
-                <span className="font-mono text-xs font-bold text-accent">
+                <span className="font-display text-sm italic text-accent">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-display text-xl leading-none text-ink">{point.title}</h3>
-                <p className="font-body text-sm leading-relaxed text-ink/60">{point.description}</p>
+                <p className="text-sm leading-relaxed text-ink/60">{point.description}</p>
               </RevealItem>
             ))}
           </RevealGroup>
         </Container>
       </section>
 
-      <ValuesGrid eyebrow="02 / What We Believe" />
-      <ProcessSteps eyebrow="03 / How It Works" />
+      <ValuesGrid eyebrow="02 — What We Believe" />
+      <ProcessSteps eyebrow="03 — How It Works" />
       <CTABanner />
     </>
   );

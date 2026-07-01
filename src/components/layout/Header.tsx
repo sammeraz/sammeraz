@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
+import { CartButton } from "@/components/store/CartButton";
 import { navLinks, site } from "@/data/site";
 
 const easing = [0.16, 1, 0.3, 1] as const;
@@ -39,6 +40,26 @@ export function Header() {
   }
 
   const solid = scrolled || menuOpen;
+  const [leftLinks, rightLinks] = [navLinks.slice(0, 2), navLinks.slice(2)];
+
+  function NavLink({ href, label }: { href: string; label: string }) {
+    const isActive = pathname === href;
+    return (
+      <Link
+        href={href}
+        className={`group relative font-display text-base transition-opacity hover:opacity-100 ${
+          isActive ? "opacity-100" : "opacity-70"
+        }`}
+      >
+        {label}
+        <span
+          className={`absolute -bottom-1 left-0 h-px bg-current transition-all duration-300 ease-out ${
+            isActive ? "w-full" : "w-0 group-hover:w-full"
+          }`}
+        />
+      </Link>
+    );
+  }
 
   return (
     <header
@@ -46,56 +67,57 @@ export function Header() {
         solid ? "bg-ink/95 backdrop-blur-sm shadow-[0_1px_0_0] shadow-cream/10" : "bg-transparent"
       }`}
     >
-      <Container className="flex h-20 items-center justify-between text-cream">
-        <Logo />
+      <div className="hidden border-b border-cream/10 md:block">
+        <Container className="flex h-9 items-center justify-between text-[11px] uppercase tracking-[0.14em] text-cream/45">
+          <span>{site.location} &mdash; Nationwide Delivery</span>
+          <a href={`mailto:${site.email}`} className="transition-colors hover:text-cream/80">
+            {site.email}
+          </a>
+        </Container>
+      </div>
 
-        <nav className="hidden items-center gap-10 md:flex">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`group relative text-[13px] font-medium uppercase tracking-[0.1em] transition-opacity hover:opacity-100 ${
-                  isActive ? "opacity-100" : "opacity-75"
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute -bottom-1.5 left-0 h-px bg-current transition-all duration-300 ease-out ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
-                />
-              </Link>
-            );
-          })}
+      <Container className="grid h-20 grid-cols-[1fr_auto_1fr] items-center text-cream md:h-24">
+        <nav className="hidden items-center gap-8 md:flex">
+          {leftLinks.map((link) => (
+            <NavLink key={link.href} {...link} />
+          ))}
         </nav>
 
-        <div className="hidden md:block">
-          <Button href="/contact" variant="light">
-            {site.inquiryCta}
-          </Button>
-        </div>
+        <Logo className="md:justify-self-center" />
 
-        <motion.button
-          type="button"
-          whileTap={{ scale: 0.88 }}
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-label="Toggle menu"
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-        >
-          <span
-            className={`h-px w-6 bg-cream transition-transform duration-200 ${
-              menuOpen ? "translate-y-[3.5px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`h-px w-6 bg-cream transition-transform duration-200 ${
-              menuOpen ? "-translate-y-[3.5px] -rotate-45" : ""
-            }`}
-          />
-        </motion.button>
+        <div className="flex items-center justify-end gap-7">
+          <nav className="hidden items-center gap-8 md:flex">
+            {rightLinks.map((link) => (
+              <NavLink key={link.href} {...link} />
+            ))}
+          </nav>
+          <div className="hidden lg:block">
+            <Button href="/contact" variant="light">
+              {site.inquiryCta}
+            </Button>
+          </div>
+          <CartButton />
+
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.88 }}
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-label="Toggle menu"
+            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+          >
+            <span
+              className={`h-px w-6 bg-cream transition-transform duration-200 ${
+                menuOpen ? "translate-y-[3.5px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`h-px w-6 bg-cream transition-transform duration-200 ${
+                menuOpen ? "-translate-y-[3.5px] -rotate-45" : ""
+              }`}
+            />
+          </motion.button>
+        </div>
       </Container>
 
       <AnimatePresence>
@@ -115,10 +137,7 @@ export function Header() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.05 + index * 0.05, ease: easing }}
                 >
-                  <Link
-                    href={link.href}
-                    className="text-lg font-medium uppercase tracking-[0.08em] text-cream"
-                  >
+                  <Link href={link.href} className="font-display text-2xl text-cream">
                     {link.label}
                   </Link>
                 </motion.div>

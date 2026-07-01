@@ -12,16 +12,14 @@ export function CTABanner({
   description = "Tell us the make, model, and spec you're after. We'll let you know what's realistic to source and roughly what it costs, landed in Texas.",
 }: CTABannerProps) {
   return (
-    <section className="bg-accent py-20 text-cream">
+    <section className="border-y border-accent/30 bg-ink py-20 text-cream">
       <Container>
         <Reveal className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div className="max-w-xl">
-            <h2 className="font-display text-[clamp(2rem,4.5vw,3.25rem)] leading-[0.95]">
+            <h2 className="font-display text-[clamp(1.85rem,4vw,2.75rem)] leading-[1.05]">
               {title}
             </h2>
-            <p className="font-body mt-3 max-w-md text-sm leading-relaxed text-cream/85">
-              {description}
-            </p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-cream/70">{description}</p>
           </div>
           <Button href="/contact" variant="light" className="shrink-0">
             Start an Inquiry

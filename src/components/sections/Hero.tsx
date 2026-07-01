@@ -22,14 +22,14 @@ export function Hero() {
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: easing }}
-            className="inline-flex items-center bg-accent px-3 py-1.5"
+            className="inline-flex items-center border border-accent-soft/50 px-4 py-1.5"
           >
-            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-cream">
+            <span className="font-display text-sm italic text-accent-soft">
               AIM Imports — Texas, USA
             </span>
           </motion.div>
 
-          <h1 className="font-display mt-6 text-[clamp(3.25rem,9vw,7.5rem)] leading-[0.92]">
+          <h1 className="font-display mt-6 text-[clamp(2.75rem,7vw,5.75rem)] leading-[1.02]">
             {words.map((word, i) => (
               <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
                 <motion.span
@@ -48,14 +48,14 @@ export function Hero() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.7, delay: 0.5, ease: easing }}
-            className="mt-4 block h-1.5 w-24 origin-left bg-accent"
+            className="mt-5 block h-px w-16 origin-left bg-accent"
           />
 
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6, ease: easing }}
-            className="font-body mt-6 max-w-lg text-base leading-relaxed text-cream/75 md:text-lg"
+            className="mt-6 max-w-lg text-base leading-relaxed text-cream/75 md:text-lg"
           >
             {site.description}
           </motion.p>

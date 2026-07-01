@@ -1,22 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Core palette — ink/cream print base, red pushed hard as a dominant color
-     (not a sparing accent) per direct feedback. accent-deep gives red compositions
-     depth when used as large fills/badges rather than thin highlights. */
-  --color-ink: #121212;
-  --color-ink-soft: #1e1c19;
-  --color-cream: #f5f1e7;
-  --color-cream-deep: #e9e1cd;
-  --color-sand: #cabfa3;
+  /* Warm, paper-toned palette — aged-print neutrals rather than stark
+     black/white. Ink is a warm espresso brown, not near-black, so it never
+     reads as a harsh block next to the cream tones. Red is intentionally
+     NOT part of the large-surface palette here — it only ever appears via
+     .text-accent/.bg-accent used sparingly (buttons, borders, small marks). */
+  --color-ink: #2a2019;
+  --color-ink-soft: #3b2d21;
+  --color-cream: #f8f2e4;
+  --color-cream-deep: #efe3cb;
+  --color-sand: #c9b48f;
   --color-accent: #d3261a;
-  --color-accent-deep: #7a140d;
   --color-accent-soft: #e8746a;
 
   --font-sans: var(--font-inter);
-  --font-display: var(--font-bebas);
-  --font-body: var(--font-space-grotesk);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-fraunces);
 
   --container-page: 1280px;
 }
@@ -54,16 +53,7 @@ body {
   cursor: auto;
 }
 
-/* Bebas Neue is a condensed display face — uppercase and a touch of extra
-   tracking keeps it reading as a deliberate poster/decal headline style
-   rather than looking like squeezed body text. */
-.font-display {
-  text-transform: uppercase;
-  letter-spacing: 0.015em;
-}
-
-/* Subtle film-grain texture — print/poster surface, used broadly now rather
-   than only on dark placeholder art. */
+/* Subtle film-grain texture — print/paper surface. */
 .bg-grain {
   position: relative;
   isolation: isolate;
@@ -80,10 +70,9 @@ body {
   background-size: 160px 160px;
 }
 
-/* Halftone dot texture — screen-printed poster feel for badge/stamp elements. */
-.bg-halftone {
-  background-image: radial-gradient(color-mix(in srgb, currentColor 55%, transparent) 1px, transparent 1.4px);
-  background-size: 7px 7px;
+/* Dark falloff toward the edges, like natural lens vignetting on a photo. */
+.bg-radial-vignette {
+  background: radial-gradient(120% 120% at 50% 45%, transparent 45%, rgb(0 0 0 / 0.35) 100%);
 }
 
 /* Hide scrollbar on the horizontal vehicle carousel while staying scrollable
@@ -107,5 +96,5 @@ body {
 }
 
 .animate-marquee {
-  animation: marquee 22s linear infinite;
+  animation: marquee 32s linear infinite;
 }

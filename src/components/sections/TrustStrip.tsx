@@ -13,16 +13,14 @@ const track = [...half, ...half];
 
 export function TrustStrip() {
   return (
-    <div className="overflow-hidden border-y-4 border-ink bg-accent py-3">
+    <div className="overflow-hidden border-y border-ink/15 bg-cream-deep/50 py-4">
       <div className="animate-marquee flex w-max items-center">
         {track.map((label, i) => (
           <span key={i} className="flex items-center">
-            <span className="font-mono px-6 text-[13px] font-bold uppercase tracking-[0.12em] text-cream whitespace-nowrap">
+            <span className="font-display px-7 text-lg italic text-ink/70 whitespace-nowrap">
               {label}
             </span>
-            <span aria-hidden="true" className="text-cream/50">
-              ▲
-            </span>
+            <span aria-hidden="true" className="h-1 w-1 rounded-full bg-accent" />
           </span>
         ))}
       </div>

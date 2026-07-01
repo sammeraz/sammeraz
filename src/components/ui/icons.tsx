@@ -55,3 +55,36 @@ export function ArrowLeftIcon({ className = "" }: IconProps) {
     </svg>
   );
 }
+
+export function BagIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M6.5 8h11l1 12.5h-13z" />
+      <path d="M9 8V6.5a3 3 0 016 0V8" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+export function MinusIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}

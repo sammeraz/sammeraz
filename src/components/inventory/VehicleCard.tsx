@@ -18,8 +18,8 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const image = vehicle.images?.[0];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden border-2 border-ink bg-white transition-transform duration-300 hover:-translate-y-1">
-      <div className="relative aspect-[4/3] w-full overflow-hidden border-b-2 border-ink">
+    <article className="group flex h-full flex-col overflow-hidden bg-white transition-transform duration-300 hover:-translate-y-1">
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
           <Image
             src={image}
@@ -30,17 +30,17 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         ) : (
           <PlaceholderArt variant="card" />
         )}
-        <span className="font-mono absolute left-0 top-3 bg-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-cream">
+        <span className="absolute left-0 top-3 border border-accent bg-cream px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-accent">
           {statusLabel[vehicle.status]}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-5">
+      <div className="flex flex-1 flex-col gap-1 border-t border-ink/12 p-5">
         <h3 className="font-display text-2xl leading-none text-ink">
           {vehicle.year} {vehicle.make} {vehicle.model}
         </h3>
         {vehicle.trim ? (
-          <p className="font-mono text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+          <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
         ) : null}
 
         {vehicle.highlights?.length ? (
@@ -48,7 +48,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             {vehicle.highlights.map((highlight) => (
               <span
                 key={highlight}
-                className="font-mono border border-ink/25 px-2 py-0.5 text-[10px] uppercase tracking-[0.06em] text-ink/60"
+                className="border border-ink/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.06em] text-ink/60"
               >
                 {highlight}
               </span>
@@ -56,10 +56,14 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </div>
         ) : null}
 
-        <div className="mt-3 flex items-center justify-between border-t-2 border-ink pt-3">
-          <span className="font-mono text-lg font-bold text-ink">{currency.format(vehicle.price)}</span>
+        <div className="mt-3 flex items-center justify-between border-t border-ink/12 pt-3">
+          <span className="text-lg font-medium tabular-nums text-ink">
+            {currency.format(vehicle.price)}
+          </span>
           {vehicle.mileage ? (
-            <span className="font-mono text-xs text-ink/50">{vehicle.mileage.toLocaleString()} mi</span>
+            <span className="text-xs tabular-nums text-ink/50">
+              {vehicle.mileage.toLocaleString()} mi
+            </span>
           ) : null}
         </div>
       </div>

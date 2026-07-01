@@ -7,33 +7,30 @@ interface PlaceholderArtProps {
 }
 
 /**
- * Stand-in for real photography. Renders an intentional, branded "image slot"
- * (gradient + horizon motif + grain) rather than a broken image or stock photo,
- * so real photos can be dropped in later without any layout changes.
+ * Stand-in for real photography. Leans on gradient "lighting" (a soft
+ * diagonal glare + dark vignette, the way a studio car photo is lit) plus
+ * grain, rather than flat abstract shapes, so it reads closer to a moody
+ * photo than to generated graphic art. Real photos can drop in later
+ * without any layout changes.
  */
 export function PlaceholderArt({ variant = "card", label, className = "" }: PlaceholderArtProps) {
   const showFrame = variant !== "hero";
 
   return (
     <div
-      className={`bg-grain relative h-full w-full overflow-hidden bg-gradient-to-br from-ink via-ink-soft to-ink ${className}`}
+      className={`bg-grain relative h-full w-full overflow-hidden bg-gradient-to-br from-ink-soft via-ink to-[#170f0a] ${className}`}
     >
-      {/* Warm glow, subtle nod to a low sun */}
-      <div className="absolute -bottom-1/4 left-1/2 h-2/3 w-2/3 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
+      {/* Diagonal glare, the way light catches a body panel in a studio shot */}
+      <div className="absolute -inset-y-1/4 -left-1/3 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-cream/[0.07] to-transparent" />
 
-      {/* Horizon + sun line-art motif */}
-      <svg
-        viewBox="0 0 400 220"
-        preserveAspectRatio="xMidYMax slice"
-        className="absolute inset-0 h-full w-full text-cream/[0.16]"
-        aria-hidden="true"
-      >
-        <circle cx="200" cy="150" r="52" stroke="currentColor" strokeWidth="1" fill="none" />
-        <line x1="0" y1="150" x2="400" y2="150" stroke="currentColor" strokeWidth="1" />
-      </svg>
+      {/* Warm rim-light, low and off-center rather than dead-center */}
+      <div className="absolute -bottom-1/3 -right-1/4 h-3/4 w-3/4 rounded-full bg-accent-soft/[0.12] blur-3xl" />
+
+      {/* Dark vignette to pull focus inward like a lens falloff */}
+      <div className="absolute inset-0 bg-radial-vignette" />
 
       {variant === "hero" ? (
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
       ) : null}
 
       {showFrame ? (

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/motion/Cursor";
 import { Preloader } from "@/components/motion/Preloader";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { CartProvider } from "@/lib/cart-context";
+import { CartDrawer } from "@/components/store/CartDrawer";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -14,26 +16,13 @@ const inter = Inter({
   display: "swap",
 });
 
-// Bold condensed display face for headlines — motorsport poster/decal energy.
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
+// Editorial serif for headlines and pull quotes — warm, refined, mixed case.
+// Optical sizing lets it stay sharp from small eyebrows up to large headlines.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: "400",
-  display: "swap",
-});
-
-// Descriptive/explanatory copy (hero, section descriptions, About narrative)
-// — distinct from Inter, which stays on nav, buttons, footer, and UI chrome.
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Technical/spec-sheet readouts — prices, stats, badges, data labels.
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -51,18 +40,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${bebasNeue.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-cream text-ink">
-        <Preloader />
-        <Cursor />
-        <Header />
-        <main className="flex-1">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
+        <CartProvider>
+          <Preloader />
+          <Cursor />
+          <Header />
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

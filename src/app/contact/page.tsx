@@ -34,39 +34,35 @@ export default function ContactPage() {
         description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
       />
 
-      <section className="border-t-2 border-ink bg-cream pb-24 pt-12 md:pb-28">
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
             <InquiryForm />
           </Reveal>
 
           <RevealGroup className="flex flex-col gap-12">
-            <div className="flex flex-col gap-7 border-t-2 border-ink/15 pt-8">
+            <div className="flex flex-col gap-7 border-t border-ink/15 pt-8">
               <RevealItem>
-                <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">
-                  What Happens Next
-                </span>
+                <span className="font-display text-sm italic text-accent">What Happens Next</span>
               </RevealItem>
               {nextSteps.map((step, index) => (
                 <RevealItem
                   key={step.title}
-                  className="flex gap-4 border-b-2 border-ink/15 pb-7 last:border-b-0 last:pb-0"
+                  className="flex gap-4 border-b border-ink/15 pb-7 last:border-b-0 last:pb-0"
                 >
-                  <span className="font-mono text-sm font-bold text-accent">
+                  <span className="font-display text-lg italic text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <h3 className="font-display text-lg leading-tight text-ink">{step.title}</h3>
-                    <p className="font-body mt-1 text-sm leading-relaxed text-ink/60">{step.description}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-ink/60">{step.description}</p>
                   </div>
                 </RevealItem>
               ))}
             </div>
 
-            <RevealItem className="flex flex-col gap-3 border-t-2 border-ink/15 pt-8">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ink/45">
-                Direct
-              </span>
+            <RevealItem className="flex flex-col gap-3 border-t border-ink/15 pt-8">
+              <span className="font-display text-sm italic text-ink/45">Direct</span>
               <a
                 href={`mailto:${site.email}`}
                 className="text-base text-ink underline underline-offset-4 hover:text-accent"

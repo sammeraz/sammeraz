@@ -23,7 +23,7 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easing }}
-          className="block text-xs font-medium uppercase tracking-[0.25em] text-accent-soft"
+          className="font-display block text-sm italic text-accent-soft"
         >
           {eyebrow}
         </motion.span>
@@ -40,7 +40,7 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25, ease: easing }}
-            className="font-body mt-4 max-w-xl text-base leading-relaxed text-cream/70"
+            className="mt-4 max-w-xl text-base leading-relaxed text-cream/70"
           >
             {description}
           </motion.p>
