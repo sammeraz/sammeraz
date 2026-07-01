@@ -8,10 +8,15 @@ export function AboutTeaser() {
     <section className="bg-cream py-24 md:py-32">
       <Container className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
         <Reveal delay={0.1} className="order-2 flex flex-col items-start gap-6 md:order-1">
-          <span className="font-display text-sm italic text-ink/50">04 — Why AIM Imports</span>
-          <h2 className="font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1] text-ink">
-            The full story on the car, not just the photos
-          </h2>
+          <div className="flex w-full items-center gap-4">
+            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+              Why AIM Imports
+            </h2>
+            <span className="h-1 flex-1 bg-accent" />
+          </div>
+          <p className="font-display text-lg text-accent">
+            The full story on the car, not just the photos.
+          </p>
           <p className="max-w-md text-base leading-relaxed text-ink/65">
             Importing from Japan rewards patience and good information. We handle sourcing,
             verification, and paperwork so you can decide with confidence on a car you may never
@@ -28,7 +33,7 @@ export function AboutTeaser() {
         >
           <PlaceholderArt variant="panel" label="AIM Imports" />
           <div className="absolute bottom-0 right-0 flex flex-col items-end bg-ink px-4 py-3 text-cream">
-            <span className="font-display text-3xl italic leading-none text-accent-soft">25</span>
+            <span className="font-display text-3xl leading-none text-accent-soft">25</span>
             <span className="text-[10px] uppercase tracking-[0.14em]">Year Import Rule</span>
           </div>
         </Reveal>

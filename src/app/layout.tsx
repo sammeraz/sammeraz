@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter, Oswald } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/motion/Cursor";
@@ -16,13 +16,12 @@ const inter = Inter({
   display: "swap",
 });
 
-// Editorial serif for headlines and pull quotes — warm, refined, mixed case.
-// Optical sizing lets it stay sharp from small eyebrows up to large headlines.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Bold condensed display face for headlines — motorsport/racing-livery energy,
+// used uppercase (see .font-display in globals.css).
+const oswald = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -40,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-cream text-ink">
         <CartProvider>
           <Preloader />

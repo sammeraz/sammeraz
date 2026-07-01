@@ -22,11 +22,9 @@ export function Hero() {
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: easing }}
-            className="inline-flex items-center border border-accent-soft/50 px-4 py-1.5"
+            className="inline-flex items-center border border-accent px-4 py-1.5"
           >
-            <span className="font-display text-sm italic text-accent-soft">
-              AIM Imports — Texas, USA
-            </span>
+            <span className="font-display text-xs text-accent-soft">AIM Imports — Texas, USA</span>
           </motion.div>
 
           <h1 className="font-display mt-6 text-[clamp(2.75rem,7vw,5.75rem)] leading-[1.02]">
@@ -48,7 +46,7 @@ export function Hero() {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.7, delay: 0.5, ease: easing }}
-            className="mt-5 block h-px w-16 origin-left bg-accent"
+            className="mt-5 block h-1 w-20 origin-left bg-accent"
           />
 
           <motion.p

@@ -18,6 +18,7 @@ const EXIT_DURATION = 650;
 export function Preloader() {
   const reducedMotion = useSafeReducedMotion();
   const [phase, setPhase] = useState<Phase>(() => (hasPlayed ? "done" : "loading"));
+  const [percent, setPercent] = useState(0);
 
   // Skip the animated intro when the OS asks for reduced motion. Adjusted
   // during render (React's documented pattern for this) rather than in an
@@ -35,8 +36,22 @@ export function Preloader() {
   useEffect(() => {
     if (phase !== "loading") return;
     hasPlayed = true;
-    const timer = setTimeout(() => setPhase("exiting"), LOAD_DURATION);
-    return () => clearTimeout(timer);
+
+    let raf = 0;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      setPercent(Math.min(100, Math.round((elapsed / LOAD_DURATION) * 100)));
+      if (elapsed < LOAD_DURATION) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        setPhase("exiting");
+      }
+    };
+    raf = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(raf);
   }, [phase]);
 
   useEffect(() => {
@@ -50,7 +65,7 @@ export function Preloader() {
       {phase !== "done" ? (
         <motion.div
           aria-hidden="true"
-          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-ink"
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-6 bg-ink"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: EXIT_DURATION / 1000, ease: [0.16, 1, 0.3, 1] }}
@@ -68,6 +83,9 @@ export function Preloader() {
               className="h-14 w-14 object-contain md:h-[72px] md:w-[72px]"
             />
           </motion.div>
+          <span className="font-sans text-xs tracking-[0.3em] text-cream/45 tabular-nums">
+            {percent.toString().padStart(3, "0")}
+          </span>
         </motion.div>
       ) : null}
     </AnimatePresence>

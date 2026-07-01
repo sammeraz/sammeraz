@@ -40,9 +40,12 @@ export default function AboutPage() {
 
       <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
         <Container>
-          <Reveal className="max-w-3xl">
-            <span className="font-display text-sm italic text-ink/50">01 — Our Approach</span>
-            <p className="font-display mt-4 text-[clamp(1.75rem,4vw,2.75rem)] leading-[1.1] text-ink">
+          <Reveal className="flex items-center gap-5">
+            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">Our Approach</h2>
+            <span className="h-1 flex-1 bg-accent" />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="font-display mt-6 max-w-3xl text-[clamp(1.5rem,3.5vw,2.25rem)] leading-[1.15] text-ink">
               Buying a car you&apos;ve never seen, from a country you&apos;ve never been to, takes
               more trust than most transactions.
             </p>
@@ -51,7 +54,7 @@ export default function AboutPage() {
           <RevealGroup className="mt-14 grid gap-10 border-t border-ink/15 pt-10 sm:grid-cols-3">
             {approach.map((point, index) => (
               <RevealItem key={point.title} className="flex flex-col gap-2">
-                <span className="font-display text-sm italic text-accent">
+                <span className="font-display text-sm text-accent">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-display text-xl leading-none text-ink">{point.title}</h3>
@@ -62,8 +65,8 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <ValuesGrid eyebrow="02 — What We Believe" />
-      <ProcessSteps eyebrow="03 — How It Works" />
+      <ValuesGrid />
+      <ProcessSteps />
       <CTABanner />
     </>
   );

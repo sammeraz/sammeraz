@@ -10,14 +10,14 @@ export function InventoryPreview() {
   return (
     <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
       <Container>
-        <Reveal className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <span className="font-display text-sm italic text-ink/50">02 — Inventory</span>
-            <h2 className="font-display mt-2 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1] text-ink">
-              What&apos;s moving through the yard
+        <Reveal className="flex flex-col gap-6">
+          <div className="flex items-center gap-5">
+            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+              Featured Inventory
             </h2>
+            <span className="h-1 flex-1 bg-accent" />
           </div>
-          <p className="max-w-xs text-sm leading-relaxed text-ink/60">
+          <p className="max-w-lg text-sm leading-relaxed text-ink/60">
             New listings appear here only once real vehicle information is ready — no filler, no
             stand-in prices.
           </p>

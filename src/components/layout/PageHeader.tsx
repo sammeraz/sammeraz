@@ -23,7 +23,7 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easing }}
-          className="font-display block text-sm italic text-accent-soft"
+          className="font-display block text-sm text-accent-soft"
         >
           {eyebrow}
         </motion.span>

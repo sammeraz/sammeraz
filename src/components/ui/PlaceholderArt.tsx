@@ -18,13 +18,13 @@ export function PlaceholderArt({ variant = "card", label, className = "" }: Plac
 
   return (
     <div
-      className={`bg-grain relative h-full w-full overflow-hidden bg-gradient-to-br from-ink-soft via-ink to-[#170f0a] ${className}`}
+      className={`bg-grain relative h-full w-full overflow-hidden bg-gradient-to-br from-ink-soft via-ink to-black ${className}`}
     >
       {/* Diagonal glare, the way light catches a body panel in a studio shot */}
-      <div className="absolute -inset-y-1/4 -left-1/3 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-cream/[0.07] to-transparent" />
+      <div className="absolute -inset-y-1/4 -left-1/3 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-cream/[0.06] to-transparent" />
 
-      {/* Warm rim-light, low and off-center rather than dead-center */}
-      <div className="absolute -bottom-1/3 -right-1/4 h-3/4 w-3/4 rounded-full bg-accent-soft/[0.12] blur-3xl" />
+      {/* Red rim-light, low and off-center rather than dead-center */}
+      <div className="absolute -bottom-1/3 -right-1/4 h-3/4 w-3/4 rounded-full bg-accent/20 blur-3xl" />
 
       {/* Dark vignette to pull focus inward like a lens falloff */}
       <div className="absolute inset-0 bg-radial-vignette" />

@@ -9,14 +9,14 @@ import { useIsFinePointer } from "@/hooks/useIsFinePointer";
 type Variant = "dark" | "light" | "outline-light" | "outline-dark";
 
 const variantClasses: Record<Variant, string> = {
-  dark: "bg-ink text-cream hover:bg-accent",
-  light: "bg-cream text-ink hover:bg-white",
-  "outline-light": "border border-cream/35 text-cream hover:bg-cream/10",
-  "outline-dark": "border border-ink/25 text-ink hover:bg-ink/5",
+  dark: "border border-ink bg-ink text-cream hover:border-accent hover:bg-accent",
+  light: "border border-cream bg-cream text-ink hover:border-accent hover:bg-accent hover:text-cream",
+  "outline-light": "border border-cream text-cream hover:bg-cream hover:text-ink",
+  "outline-dark": "border border-ink text-ink hover:bg-ink hover:text-cream",
 };
 
 const base =
-  "group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-7 py-3 text-[13px] font-medium uppercase tracking-[0.08em] transition-colors duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-50";
+  "font-display group inline-flex items-center justify-center gap-2 whitespace-nowrap px-7 py-3 text-sm transition-colors duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-50";
 
 const MAGNETIC_STRENGTH = 0.3;
 const MAGNETIC_MAX = 14;
@@ -46,7 +46,7 @@ export function Button({
   variant = "dark",
   className = "",
   children,
-  arrow = true,
+  arrow = false,
   ...rest
 }: ButtonProps) {
   const isFinePointer = useIsFinePointer();

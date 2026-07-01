@@ -70,7 +70,7 @@ export function CheckoutForm() {
         </p>
         <Link
           href="/store"
-          className="mt-6 inline-block text-xs font-medium uppercase tracking-[0.14em] text-accent underline underline-offset-4"
+          className="font-display mt-6 inline-block text-xs text-accent underline underline-offset-4"
         >
           Back to the store
         </Link>
@@ -87,7 +87,7 @@ export function CheckoutForm() {
         </p>
         <Link
           href="/store"
-          className="mt-6 inline-block text-xs font-medium uppercase tracking-[0.14em] text-accent underline underline-offset-4"
+          className="font-display mt-6 inline-block text-xs text-accent underline underline-offset-4"
         >
           Browse the store
         </Link>
@@ -147,7 +147,7 @@ export function CheckoutForm() {
           type="submit"
           whileTap={{ scale: 0.97 }}
           disabled={status === "submitting"}
-          className="mt-2 inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-200 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+          className="font-display mt-2 inline-flex items-center justify-center border border-ink bg-ink px-7 py-3.5 text-sm text-cream transition-colors duration-200 hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "submitting" ? "Placing Order…" : "Place Order"}
         </motion.button>
@@ -158,7 +158,7 @@ export function CheckoutForm() {
       </form>
 
       <div className="flex flex-col gap-6">
-        <span className="font-display text-sm italic text-ink/50">Order Summary</span>
+        <span className="font-display text-sm text-ink/50">Order Summary</span>
         <ul className="flex flex-col gap-5 border-t border-ink/15 pt-6">
           {items.map((item) => (
             <li key={item.slug} className="flex items-start justify-between gap-4">

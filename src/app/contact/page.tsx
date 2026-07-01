@@ -43,14 +43,14 @@ export default function ContactPage() {
           <RevealGroup className="flex flex-col gap-12">
             <div className="flex flex-col gap-7 border-t border-ink/15 pt-8">
               <RevealItem>
-                <span className="font-display text-sm italic text-accent">What Happens Next</span>
+                <span className="font-display text-sm text-accent">What Happens Next</span>
               </RevealItem>
               {nextSteps.map((step, index) => (
                 <RevealItem
                   key={step.title}
                   className="flex gap-4 border-b border-ink/15 pb-7 last:border-b-0 last:pb-0"
                 >
-                  <span className="font-display text-lg italic text-accent">
+                  <span className="font-display text-lg text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
@@ -62,7 +62,7 @@ export default function ContactPage() {
             </div>
 
             <RevealItem className="flex flex-col gap-3 border-t border-ink/15 pt-8">
-              <span className="font-display text-sm italic text-ink/45">Direct</span>
+              <span className="font-display text-sm text-ink/45">Direct</span>
               <a
                 href={`mailto:${site.email}`}
                 className="text-base text-ink underline underline-offset-4 hover:text-accent"

@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Warm, paper-toned palette — aged-print neutrals rather than stark
-     black/white. Ink is a warm espresso brown, not near-black, so it never
-     reads as a harsh block next to the cream tones. Red is intentionally
-     NOT part of the large-surface palette here — it only ever appears via
-     .text-accent/.bg-accent used sparingly (buttons, borders, small marks). */
-  --color-ink: #2a2019;
-  --color-ink-soft: #3b2d21;
-  --color-cream: #f8f2e4;
-  --color-cream-deep: #efe3cb;
-  --color-sand: #c9b48f;
+  /* Black / white / red — the classic JDM racing-livery palette (Type-R
+     red, Nismo, Mugen) rather than a warm paper tone. Ink is near-black,
+     cream is now a clean white, sand is repurposed as a dark charcoal for
+     secondary dark surfaces (mobile nav, filter panels). Red is used
+     confidently and often, not just as a rare accent. */
+  --color-ink: #0d0d0d;
+  --color-ink-soft: #1c1c1c;
+  --color-cream: #ffffff;
+  --color-cream-deep: #f2f2f2;
+  --color-sand: #262626;
   --color-accent: #d3261a;
-  --color-accent-soft: #e8746a;
+  --color-accent-soft: #e8483d;
 
   --font-sans: var(--font-inter);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-oswald);
 
   --container-page: 1280px;
 }
@@ -38,6 +38,15 @@ body {
 ::selection {
   background: var(--color-accent);
   color: var(--color-cream);
+}
+
+/* Oswald is a bold condensed grotesque — uppercase and a bold weight give it
+   the confident, motorsport-livery energy the brand reference uses for
+   headlines, nav, and model names. */
+.font-display {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 /* Custom cursor replaces the native pointer, except where a real text caret

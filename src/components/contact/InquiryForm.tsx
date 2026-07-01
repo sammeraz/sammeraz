@@ -54,7 +54,7 @@ export function InquiryForm() {
           type="button"
           whileTap={{ scale: 0.94 }}
           onClick={() => setStatus("idle")}
-          className="mt-6 text-xs font-medium uppercase tracking-[0.14em] text-accent underline underline-offset-4"
+          className="font-display mt-6 text-xs text-accent underline underline-offset-4"
         >
           Send another inquiry
         </motion.button>
@@ -133,7 +133,7 @@ export function InquiryForm() {
         type="submit"
         whileTap={{ scale: 0.97 }}
         disabled={status === "submitting"}
-        className="mt-2 inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-200 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+        className="font-display mt-2 inline-flex items-center justify-center border border-ink bg-ink px-7 py-3.5 text-sm text-cream transition-colors duration-200 hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
         {status === "submitting" ? "Sending…" : "Send Inquiry"}
       </motion.button>
