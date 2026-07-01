@@ -26,6 +26,12 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
+  // True for a moment right after navigation, covering the page-transition
+  // fade (see PageTransition.tsx). The entering page's hero/dark background
+  // fades in from opacity 0, so a transparent header briefly sits over the
+  // plain white <body> during that window — forcing solid here avoids the
+  // white-on-nothing logo flashing illegible mid-transition.
+  const [transitioning, setTransitioning] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -34,13 +40,21 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu when navigation occurs, without an effect.
+  // Close the mobile menu and start the transition-solid window when
+  // navigation occurs, without an effect.
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setMenuOpen(false);
+    setTransitioning(true);
   }
 
-  const solid = scrolled || menuOpen;
+  useEffect(() => {
+    if (!transitioning) return;
+    const timer = setTimeout(() => setTransitioning(false), 550);
+    return () => clearTimeout(timer);
+  }, [transitioning]);
+
+  const solid = scrolled || menuOpen || transitioning;
 
   function NavLink({ href, label }: { href: string; label: string }) {
     const isActive = pathname === href;

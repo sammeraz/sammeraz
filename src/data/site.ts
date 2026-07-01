@@ -3,7 +3,7 @@ export const site = {
   shortName: "AIM",
   tagline: "Japanese vehicles, sourced properly.",
   description:
-    "AIM Imports helps buyers source Japanese-market vehicles with careful documentation review, clear communication, and coordinated delivery to Texas.",
+    "AIM Imports helps buyers nationwide source Japanese-market vehicles with careful documentation review, clear communication, and coordinated delivery anywhere in the U.S. from our Texas base.",
   location: "Texas, USA",
   email: "sammer@aimimports.jp",
   inquiryCta: "Start an Inquiry",
@@ -13,6 +13,7 @@ export const navLinks = [
   { label: "Inventory", href: "/inventory" },
   { label: "About", href: "/about" },
   { label: "Store", href: "/store" },
+  { label: "Financing", href: "/financing" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -35,7 +36,7 @@ export const processSteps = [
   {
     title: "Deliver",
     description:
-      "Once cleared, your vehicle is coordinated for delivery to Texas, with a complete paper trail from auction to driveway.",
+      "Once cleared, your vehicle is coordinated for delivery nationwide, with a complete paper trail from auction to driveway.",
   },
 ];
 

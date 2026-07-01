@@ -17,7 +17,7 @@ const nextSteps = [
   },
   {
     title: "We reply with feasibility",
-    description: "What's realistic to source, roughly what it costs landed in Texas, and timeline.",
+    description: "What's realistic to source, roughly what it costs delivered nationwide, and timeline.",
   },
   {
     title: "We start the search",

@@ -13,7 +13,7 @@ export function MagazineGrid({ magazines, placeholderCount = 3 }: MagazineGridPr
   if (magazines.length === 0) {
     return (
       <div>
-        <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <RevealGroup className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {Array.from({ length: placeholderCount }).map((_, index) => (
             <RevealItem key={index}>
               <ComingSoonMagazineCard />
@@ -34,7 +34,7 @@ export function MagazineGrid({ magazines, placeholderCount = 3 }: MagazineGridPr
   }
 
   return (
-    <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <RevealGroup className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
       {magazines.map((magazine) => (
         <RevealItem key={magazine.slug}>
           <MagazineCard magazine={magazine} />

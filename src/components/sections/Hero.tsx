@@ -11,12 +11,12 @@ const words = site.tagline.split(" ");
 
 export function Hero() {
   return (
-    <section className="relative flex h-[92vh] min-h-[640px] items-end overflow-hidden bg-ink text-cream">
+    <section className="relative flex h-[80vh] min-h-[560px] items-end overflow-hidden bg-ink text-cream md:h-[92vh] md:min-h-[640px]">
       <div className="absolute inset-0">
         <PlaceholderArt variant="hero" />
       </div>
 
-      <Container className="relative z-10 pb-24 pt-32">
+      <Container className="relative z-10 pb-16 pt-20 md:pb-24 md:pt-32">
         <div className="max-w-3xl">
           <motion.div
             initial={{ opacity: 0, x: -12 }}

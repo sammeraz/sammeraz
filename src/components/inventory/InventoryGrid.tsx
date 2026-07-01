@@ -13,7 +13,7 @@ export function InventoryGrid({ vehicles, placeholderCount = 3 }: InventoryGridP
   if (vehicles.length === 0) {
     return (
       <div>
-        <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
           {Array.from({ length: placeholderCount }).map((_, index) => (
             <RevealItem key={index}>
               <ComingSoonCard />
@@ -34,7 +34,7 @@ export function InventoryGrid({ vehicles, placeholderCount = 3 }: InventoryGridP
   }
 
   return (
-    <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <RevealGroup className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
       {vehicles.map((vehicle) => (
         <RevealItem key={vehicle.slug}>
           <VehicleCard vehicle={vehicle} />

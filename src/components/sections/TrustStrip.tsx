@@ -1,8 +1,8 @@
 const items = [
-  "25-Year Import Specialists",
-  "Auction-Verified Sourcing",
-  "Full Documentation & Compliance",
-  "Texas-Based, Nationwide Delivery",
+  "25 Years Deep in the JDM Game",
+  "Every Car Auction-Verified, No Exceptions",
+  "Paperwork Handled Right, Every Time",
+  "Texas Built, Delivered Nationwide",
 ];
 
 // Repeated enough times that one "half" of the track (for the -50% loop

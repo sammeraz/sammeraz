@@ -41,15 +41,23 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 pt-5">
-        <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{magazine.issue}</p>
-        <h3 className="font-display text-2xl leading-none text-accent">{magazine.title}</h3>
+      <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
+        <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
+          {magazine.issue}
+        </p>
+        <h3 className="font-display text-lg leading-none text-accent sm:text-xl md:text-2xl">
+          {magazine.title}
+        </h3>
         {magazine.description ? (
-          <p className="mt-2 text-sm leading-relaxed text-ink/60">{magazine.description}</p>
+          <p className="mt-2 hidden text-sm leading-relaxed text-ink/60 sm:block">
+            {magazine.description}
+          </p>
         ) : null}
 
-        <div className="mt-3 flex items-center justify-between gap-3 border-t border-ink/15 pt-3">
-          <span className="font-display text-base text-ink">{currency.format(magazine.price)}</span>
+        <div className="mt-3 flex flex-col gap-2 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-display text-sm text-ink sm:text-base">
+            {currency.format(magazine.price)}
+          </span>
           <motion.button
             type="button"
             whileTap={{ scale: 0.94 }}

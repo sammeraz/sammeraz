@@ -35,13 +35,17 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 pt-5">
-        <p className="text-sm font-medium uppercase tracking-[0.04em] text-ink/70">
+      <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
+        <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
-        <h3 className="font-display text-3xl leading-none text-accent">{vehicle.model}</h3>
+        <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
+          {vehicle.model}
+        </h3>
         {vehicle.trim ? (
-          <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
+            {vehicle.trim}
+          </p>
         ) : null}
 
         {vehicle.highlights?.length ? (
@@ -57,8 +61,8 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </div>
         ) : null}
 
-        <div className="mt-3 flex items-center justify-between border-t border-ink/15 pt-3">
-          <span className="font-display text-base text-ink">
+        <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
+          <span className="font-display text-sm text-ink sm:text-base">
             Offered at: {currency.format(vehicle.price)}
           </span>
           {vehicle.mileage ? (

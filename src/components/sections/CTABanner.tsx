@@ -9,7 +9,7 @@ interface CTABannerProps {
 
 export function CTABanner({
   title = "Looking for a specific JDM vehicle?",
-  description = "Tell us the make, model, and spec you're after. We'll let you know what's realistic to source and roughly what it costs, landed in Texas.",
+  description = "Tell us the make, model, and spec you're after. We'll let you know what's realistic to source and roughly what it costs, delivered anywhere in the U.S.",
 }: CTABannerProps) {
   return (
     <section className="border-t-4 border-accent bg-ink py-20 text-cream">

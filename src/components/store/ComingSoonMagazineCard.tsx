@@ -6,9 +6,13 @@ export function ComingSoonMagazineCard() {
       <div className="relative aspect-[3/4] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Coming Soon" />
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-5">
-        <h3 className="font-display text-xl leading-none text-ink/35">Issue Details</h3>
-        <p className="text-xs uppercase tracking-[0.08em] text-ink/35">To be announced</p>
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
+        <h3 className="font-display text-base leading-none text-ink/35 sm:text-xl">
+          Issue Details
+        </h3>
+        <p className="text-[10px] uppercase tracking-[0.08em] text-ink/35 sm:text-xs">
+          To be announced
+        </p>
       </div>
     </div>
   );

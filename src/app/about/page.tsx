@@ -4,31 +4,13 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ValuesGrid } from "@/components/sections/ValuesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
-import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "AIM Imports is a Texas-based JDM importer focused on transparent sourcing, careful documentation, and clear communication.",
 };
-
-const approach = [
-  {
-    title: "The Uncertainty Problem",
-    description:
-      "Auction sheets are written in Japanese shorthand. Photos hide as much as they show. Once a vehicle's on a boat, communication often goes quiet until it shows up.",
-  },
-  {
-    title: "How We Close The Gap",
-    description:
-      "We review condition reports line by line, ask the questions you'd ask if you were at the auction yourself, and stay in touch through sourcing, shipping, customs, and compliance.",
-  },
-  {
-    title: "Texas-Based, Nationwide",
-    description:
-      "We work with buyers across the country who are ready to navigate state registration and emissions requirements for an imported vehicle.",
-  },
-];
 
 export default function AboutPage() {
   return (
@@ -50,18 +32,13 @@ export default function AboutPage() {
               more trust than most transactions.
             </p>
           </Reveal>
-
-          <RevealGroup className="mt-14 grid gap-10 border-t border-ink/15 pt-10 sm:grid-cols-3">
-            {approach.map((point, index) => (
-              <RevealItem key={point.title} className="flex flex-col gap-2">
-                <span className="font-display text-sm text-accent">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display text-xl leading-none text-ink">{point.title}</h3>
-                <p className="text-sm leading-relaxed text-ink/60">{point.description}</p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
+          <Reveal delay={0.18}>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink/65">
+              We treat documentation and communication as the product, not an afterthought —
+              reviewing every auction sheet line by line and staying in touch from sourcing
+              through delivery, anywhere in the country.
+            </p>
+          </Reveal>
         </Container>
       </section>
 
