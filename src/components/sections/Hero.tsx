@@ -16,6 +16,18 @@ export function Hero() {
         <PlaceholderArt variant="hero" />
       </div>
 
+      {/* Bold diagonal accent — motorsport-stripe treatment, kept clear of the text column */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute -right-24 top-0 h-full w-[28%] origin-top bg-gradient-to-b from-accent/0 via-accent/35 to-accent/0"
+          style={{ transform: "skewX(-14deg)" }}
+        />
+        <div
+          className="absolute -right-8 top-0 h-full w-12 origin-top bg-gradient-to-b from-cream/0 via-cream/[0.08] to-cream/0"
+          style={{ transform: "skewX(-14deg)" }}
+        />
+      </div>
+
       <Container className="relative z-10 pb-24 pt-32">
         <div className="max-w-2xl">
           <motion.span

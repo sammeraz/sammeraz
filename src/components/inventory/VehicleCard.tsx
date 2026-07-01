@@ -18,7 +18,10 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const image = vehicle.images?.[0];
 
   return (
-    <article className="group flex flex-col overflow-hidden border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-ink/5">
+    <article
+      className="group flex flex-col overflow-hidden border border-ink/10 bg-white transition-shadow duration-300 hover:shadow-lg hover:shadow-ink/5"
+      style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px))" }}
+    >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
           <Image

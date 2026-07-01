@@ -2,7 +2,10 @@ import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 
 export function ComingSoonCard() {
   return (
-    <div className="flex flex-col overflow-hidden border border-dashed border-ink/15 bg-white/60">
+    <div
+      className="flex flex-col overflow-hidden border border-dashed border-ink/15 bg-white/60"
+      style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px))" }}
+    >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Coming Soon" />
       </div>

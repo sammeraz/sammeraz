@@ -1,11 +1,12 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 import { processSteps } from "@/data/site";
 
 export function ProcessSteps() {
   return (
-    <section className="bg-ink py-24 text-cream md:py-32">
+    <DiagonalEdge size={48} direction="falling" className="bg-ink pb-24 pt-12 text-cream md:pb-32">
       <Container>
         <SectionHeading
           tone="cream"
@@ -26,6 +27,6 @@ export function ProcessSteps() {
           ))}
         </RevealGroup>
       </Container>
-    </section>
+    </DiagonalEdge>
   );
 }

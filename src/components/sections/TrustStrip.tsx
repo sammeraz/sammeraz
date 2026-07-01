@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { ClockIcon, DocumentCheckIcon, ShieldCheckIcon, MapPinIcon } from "@/components/ui/icons";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 
 const items = [
   { icon: ClockIcon, label: "25-Year Import Specialists" },
@@ -11,7 +12,7 @@ const items = [
 
 export function TrustStrip() {
   return (
-    <div className="border-b border-ink/10 bg-cream">
+    <DiagonalEdge size={28} direction="rising" className="border-b border-ink/10 bg-cream">
       <Container>
         <RevealGroup className="grid grid-cols-2 gap-y-8 py-10 md:grid-cols-4 md:gap-8 md:py-8">
           {items.map(({ icon: Icon, label }) => (
@@ -22,6 +23,6 @@ export function TrustStrip() {
           ))}
         </RevealGroup>
       </Container>
-    </div>
+    </DiagonalEdge>
   );
 }

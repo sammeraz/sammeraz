@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 
 interface CTABannerProps {
   title?: string;
@@ -12,7 +13,7 @@ export function CTABanner({
   description = "Tell us the make, model, and spec you're after. We'll let you know what's realistic to source and roughly what it costs, landed in Texas.",
 }: CTABannerProps) {
   return (
-    <section className="bg-ink-soft py-20 text-cream">
+    <DiagonalEdge size={40} direction="falling" className="bg-ink-soft pb-20 pt-10 text-cream">
       <Container>
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <h2 className="max-w-xl font-serif text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[1.15]">
@@ -24,6 +25,6 @@ export function CTABanner({
           </Button>
         </Reveal>
       </Container>
-    </section>
+    </DiagonalEdge>
   );
 }

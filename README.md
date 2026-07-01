@@ -81,8 +81,19 @@ changes needed. Leave `images` off and a vehicle still displays fine with placeh
 
 Color, font, and spacing tokens live in `src/app/globals.css` under the Tailwind v4 `@theme`
 block (`--color-ink`, `--color-cream`, `--color-accent`, etc.), so palette changes happen in one
-place. Headings use Fraunces (serif), body/UI text uses Inter — both loaded via `next/font` in
-`src/app/layout.tsx`.
+place. Headings use Fraunces (serif); descriptive/explanatory paragraph copy uses Space Grotesk
+(`font-body`); nav, buttons, footer, and other UI chrome stay on Inter. All three load via
+`next/font` in `src/app/layout.tsx`.
+
+### Diagonal section dividers
+
+`components/ui/DiagonalEdge.tsx` gives a section's top edge a diagonal cut instead of a flat
+line — the site's visual signature, used at every major color transition (Hero→TrustStrip,
+PageHeader→content, etc.) and on inventory card corners. It only works correctly on the *later*
+element in DOM order: clip-path removes pixels rather than painting over them, and since later
+elements already paint on top of earlier ones, only the later section needs the cut — the section
+above it must stay a plain, uncut rectangle for the seam to read cleanly. See the component's own
+comment before reordering sections that use it.
 
 ## Motion & interaction
 

@@ -2,10 +2,11 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { Reveal } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 
 export function AboutTeaser() {
   return (
-    <section className="bg-cream py-24 md:py-32">
+    <DiagonalEdge size={48} direction="rising" className="bg-cream pb-24 pt-12 md:pb-32">
       <Container className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
         <Reveal y={36} className="aspect-[4/5] w-full overflow-hidden rounded-sm">
           <PlaceholderArt variant="panel" label="AIM Imports" />
@@ -28,6 +29,6 @@ export function AboutTeaser() {
           </Button>
         </Reveal>
       </Container>
-    </section>
+    </DiagonalEdge>
   );
 }

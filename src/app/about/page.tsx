@@ -5,6 +5,7 @@ import { ValuesGrid } from "@/components/sections/ValuesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 
 export const metadata: Metadata = {
   title: "About",
@@ -20,7 +21,7 @@ export default function AboutPage() {
         title="Built around the parts of importing that are easy to get wrong"
       />
 
-      <section className="bg-cream py-24 md:py-28">
+      <DiagonalEdge size={48} direction="rising" className="bg-cream pb-24 pt-12 md:pb-28">
         <Container className="flex flex-col items-center gap-8 text-center">
           <Reveal>
             <p className="max-w-2xl font-serif text-[clamp(1.5rem,3vw,2.25rem)] leading-[1.3] text-ink">
@@ -51,7 +52,7 @@ export default function AboutPage() {
             </p>
           </Reveal>
         </Container>
-      </section>
+      </DiagonalEdge>
 
       <ValuesGrid />
       <ProcessSteps />

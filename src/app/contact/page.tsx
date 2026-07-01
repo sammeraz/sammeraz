@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { InquiryForm } from "@/components/contact/InquiryForm";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default function ContactPage() {
         description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
       />
 
-      <section className="bg-cream py-24 md:py-28">
+      <DiagonalEdge size={48} direction="rising" className="bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
             <InquiryForm />
@@ -74,7 +75,7 @@ export default function ContactPage() {
             </RevealItem>
           </RevealGroup>
         </Container>
-      </section>
+      </DiagonalEdge>
     </>
   );
 }
