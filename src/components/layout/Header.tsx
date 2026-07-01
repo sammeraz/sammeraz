@@ -9,7 +9,15 @@ import { Logo } from "@/components/layout/Logo";
 import { navLinks, site } from "@/data/site";
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
+  // Default to the solid/dark state, not transparent. The logo has no dark
+  // backing (see Logo.tsx), so it only reads correctly over a dark surface.
+  // Browsers commonly restore scroll position on a hard refresh, and this
+  // component can't know the real scroll position during SSR or its first
+  // client paint — defaulting to transparent risked the header (and its
+  // white-on-nothing logo) briefly sitting over a light section before the
+  // scroll effect below corrects it. Solid is always safe; transparent is
+  // only safe once we've confirmed we're actually at the top.
+  const [scrolled, setScrolled] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
