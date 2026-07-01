@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, Space_Grotesk } from "next/font/google";
+import { Bebas_Neue, Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/motion/Cursor";
@@ -14,18 +14,25 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Bold condensed display face for headlines — motorsport poster/decal energy.
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
   subsets: ["latin"],
-  axes: ["SOFT"],
+  weight: "400",
   display: "swap",
 });
 
-// Used specifically for the descriptive/explanatory copy (hero, section
-// descriptions, About narrative) — distinct from Inter, which stays on nav,
-// buttons, footer, and other UI chrome.
+// Descriptive/explanatory copy (hero, section descriptions, About narrative)
+// — distinct from Inter, which stays on nav, buttons, footer, and UI chrome.
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Technical/spec-sheet readouts — prices, stats, badges, data labels.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -46,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${fraunces.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${inter.variable} ${bebasNeue.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-cream text-ink">
         <Preloader />

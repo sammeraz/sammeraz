@@ -2,16 +2,13 @@ import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 
 export function ComingSoonCard() {
   return (
-    <div
-      className="flex flex-col overflow-hidden border border-dashed border-ink/15 bg-white/60"
-      style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 18px 100%, 0 calc(100% - 18px))" }}
-    >
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden border-2 border-dashed border-ink/25 bg-white/60">
+      <div className="relative aspect-[4/3] w-full overflow-hidden border-b-2 border-dashed border-ink/25">
         <PlaceholderArt variant="card" label="Coming Soon" />
       </div>
       <div className="flex flex-1 flex-col gap-1 p-5">
-        <h3 className="font-serif text-lg text-ink/35">Vehicle details</h3>
-        <p className="text-sm text-ink/35">To be announced</p>
+        <h3 className="font-display text-xl leading-none text-ink/35">Vehicle details</h3>
+        <p className="font-mono text-xs uppercase tracking-[0.08em] text-ink/35">To be announced</p>
       </div>
     </div>
   );

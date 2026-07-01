@@ -31,7 +31,7 @@ export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1, ease: easing }}
-          className="mt-4 max-w-2xl font-serif text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.08]"
+          className="font-display mt-4 max-w-2xl text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.08]"
         >
           {title}
         </motion.h1>

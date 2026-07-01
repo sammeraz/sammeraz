@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { motion } from "motion/react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -44,18 +45,19 @@ export function InquiryForm() {
   if (status === "success") {
     return (
       <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-        <h3 className="font-serif text-2xl text-ink">Inquiry received</h3>
+        <h3 className="font-display text-2xl text-ink">Inquiry received</h3>
         <p className="mt-3 text-sm leading-relaxed text-ink/65">
           Thanks for reaching out — we&apos;ll review what you&apos;re looking for and get back
           to you shortly.
         </p>
-        <button
+        <motion.button
           type="button"
+          whileTap={{ scale: 0.94 }}
           onClick={() => setStatus("idle")}
           className="mt-6 text-xs font-medium uppercase tracking-[0.14em] text-accent underline underline-offset-4"
         >
           Send another inquiry
-        </button>
+        </motion.button>
       </div>
     );
   }
@@ -127,13 +129,14 @@ export function InquiryForm() {
 
       {status === "error" ? <p className="text-sm text-accent">{errorMessage}</p> : null}
 
-      <button
+      <motion.button
         type="submit"
+        whileTap={{ scale: 0.97 }}
         disabled={status === "submitting"}
         className="mt-2 inline-flex items-center justify-center rounded-full bg-ink px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.08em] text-cream transition-colors duration-200 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
         {status === "submitting" ? "Sending…" : "Send Inquiry"}
-      </button>
+      </motion.button>
     </form>
   );
 }

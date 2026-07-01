@@ -1,32 +1,41 @@
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
-import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
+import { RevealGroup, RevealItem, Reveal } from "@/components/motion/Reveal";
 import { processSteps } from "@/data/site";
 
-export function ProcessSteps() {
-  return (
-    <DiagonalEdge size={48} direction="falling" className="bg-ink pb-24 pt-12 text-cream md:pb-32">
-      <Container>
-        <SectionHeading
-          tone="cream"
-          eyebrow="How It Works"
-          title="From Japanese auction to your driveway"
-          description="Importing a vehicle from Japan involves more steps than buying domestically. Here's how we move a car through each one."
-        />
+interface ProcessStepsProps {
+  eyebrow?: string;
+}
 
-        <RevealGroup className="mt-16 grid gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-4">
+export function ProcessSteps({ eyebrow = "003 / How It Works" }: ProcessStepsProps) {
+  return (
+    <section className="bg-ink py-24 text-cream md:py-32">
+      <Container>
+        <Reveal>
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent-soft">
+            {eyebrow}
+          </span>
+          <h2 className="font-display mt-2 text-[clamp(2.5rem,6vw,4rem)] leading-[0.95]">
+            Auction To Driveway
+          </h2>
+        </Reveal>
+
+        <RevealGroup className="mt-14 border-t-2 border-cream/20">
           {processSteps.map((step, index) => (
-            <RevealItem key={step.title} className="flex flex-col gap-4 border-t border-cream/15 pt-6">
-              <span className="font-serif text-3xl text-accent-soft">
+            <RevealItem
+              key={step.title}
+              className="flex flex-col gap-2 border-b-2 border-cream/20 py-7 md:flex-row md:items-center md:gap-10"
+            >
+              <span className="font-mono w-14 shrink-0 text-sm font-bold text-accent-soft">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="text-lg font-medium">{step.title}</h3>
-              <p className="font-body text-sm leading-relaxed text-cream/65">{step.description}</p>
+              <h3 className="font-display shrink-0 text-2xl leading-none md:w-64">{step.title}</h3>
+              <p className="font-body max-w-xl text-sm leading-relaxed text-cream/60">
+                {step.description}
+              </p>
             </RevealItem>
           ))}
         </RevealGroup>
       </Container>
-    </DiagonalEdge>
+    </section>
   );
 }

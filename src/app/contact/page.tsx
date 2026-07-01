@@ -3,7 +3,6 @@ import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { InquiryForm } from "@/components/contact/InquiryForm";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
-import { DiagonalEdge } from "@/components/ui/DiagonalEdge";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -35,34 +34,37 @@ export default function ContactPage() {
         description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
       />
 
-      <DiagonalEdge size={48} direction="rising" className="bg-cream pb-24 pt-12 md:pb-28">
+      <section className="border-t-2 border-ink bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
             <InquiryForm />
           </Reveal>
 
           <RevealGroup className="flex flex-col gap-12">
-            <div className="flex flex-col gap-7">
+            <div className="flex flex-col gap-7 border-t-2 border-ink/15 pt-8">
               <RevealItem>
-                <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">
                   What Happens Next
                 </span>
               </RevealItem>
               {nextSteps.map((step, index) => (
-                <RevealItem key={step.title} className="flex gap-4">
-                  <span className="font-serif text-lg text-ink/30">
+                <RevealItem
+                  key={step.title}
+                  className="flex gap-4 border-b-2 border-ink/15 pb-7 last:border-b-0 last:pb-0"
+                >
+                  <span className="font-mono text-sm font-bold text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <h3 className="text-sm font-medium text-ink">{step.title}</h3>
+                    <h3 className="font-display text-lg leading-tight text-ink">{step.title}</h3>
                     <p className="font-body mt-1 text-sm leading-relaxed text-ink/60">{step.description}</p>
                   </div>
                 </RevealItem>
               ))}
             </div>
 
-            <RevealItem className="flex flex-col gap-3 border-t border-ink/10 pt-8">
-              <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink/45">
+            <RevealItem className="flex flex-col gap-3 border-t-2 border-ink/15 pt-8">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ink/45">
                 Direct
               </span>
               <a
@@ -75,7 +77,7 @@ export default function ContactPage() {
             </RevealItem>
           </RevealGroup>
         </Container>
-      </DiagonalEdge>
+      </section>
     </>
   );
 }

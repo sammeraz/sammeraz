@@ -82,6 +82,7 @@ export function Button({
     <motion.span
       className="inline-block"
       style={{ x: springX, y: springY }}
+      whileTap={{ scale: 0.94 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >

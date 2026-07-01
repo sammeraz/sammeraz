@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Core palette — warm ink/cream, brand red accent (from logo) */
+  /* Core palette — ink/cream print base, red pushed hard as a dominant color
+     (not a sparing accent) per direct feedback. accent-deep gives red compositions
+     depth when used as large fills/badges rather than thin highlights. */
   --color-ink: #121212;
   --color-ink-soft: #1e1c19;
   --color-cream: #f5f1e7;
   --color-cream-deep: #e9e1cd;
   --color-sand: #cabfa3;
   --color-accent: #d3261a;
+  --color-accent-deep: #7a140d;
   --color-accent-soft: #e8746a;
 
   --font-sans: var(--font-inter);
-  --font-serif: var(--font-fraunces);
+  --font-display: var(--font-bebas);
   --font-body: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 
   --container-page: 1280px;
 }
@@ -24,10 +28,6 @@
 
 * {
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {
@@ -54,12 +54,16 @@ body {
   cursor: auto;
 }
 
-.font-serif {
-  font-variation-settings: "SOFT" 18;
-  letter-spacing: -0.01em;
+/* Bebas Neue is a condensed display face — uppercase and a touch of extra
+   tracking keeps it reading as a deliberate poster/decal headline style
+   rather than looking like squeezed body text. */
+.font-display {
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
 }
 
-/* Subtle film-grain texture used over dark placeholder/hero surfaces */
+/* Subtle film-grain texture — print/poster surface, used broadly now rather
+   than only on dark placeholder art. */
 .bg-grain {
   position: relative;
   isolation: isolate;
@@ -76,14 +80,32 @@ body {
   background-size: 160px 160px;
 }
 
-/* Fine diagonal hairline pattern used on light placeholder surfaces */
-.bg-hairline {
-  background-image: repeating-linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--color-ink) 6%, transparent) 0px,
-    color-mix(in srgb, var(--color-ink) 6%, transparent) 1px,
-    transparent 1px,
-    transparent 10px
-  );
+/* Halftone dot texture — screen-printed poster feel for badge/stamp elements. */
+.bg-halftone {
+  background-image: radial-gradient(color-mix(in srgb, currentColor 55%, transparent) 1px, transparent 1.4px);
+  background-size: 7px 7px;
 }
 
+/* Hide scrollbar on the horizontal vehicle carousel while staying scrollable
+   (touch/drag/wheel all still work — this only hides the visual scrollbar chrome). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}
