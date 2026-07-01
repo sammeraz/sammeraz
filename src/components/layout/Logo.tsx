@@ -14,8 +14,8 @@ export function Logo({ className = "" }: { className?: string }) {
       <Image
         src="/brand/aim-imports-mark.png"
         alt="AIM Imports"
-        width={512}
-        height={512}
+        width={96}
+        height={96}
         priority
         className="h-10 w-10 object-contain md:h-11 md:w-11"
       />
