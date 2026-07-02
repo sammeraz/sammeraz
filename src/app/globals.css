@@ -21,17 +21,23 @@
 }
 
 :root {
-  --background: var(--color-cream);
-  --foreground: var(--color-ink);
+  --background: var(--color-ink);
+  --foreground: var(--color-cream);
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Dark, not cream: every page opens on a dark section (Hero, PageHeader, or
+   a dark breadcrumb strip) and the Footer is dark too, so this is what
+   briefly shows through fading/transparent content during a page
+   transition. A cream body here meant that gap flashed white against the
+   surrounding dark sections; matching them removes the flash instead of
+   just changing how the transition moves. */
 body {
-  background: var(--color-cream);
-  color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-cream);
   font-family: var(--font-sans);
 }
 

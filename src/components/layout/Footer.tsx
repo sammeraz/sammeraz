@@ -47,7 +47,7 @@ export function Footer() {
       <div className="border-t border-cream/10 py-6">
         <Container className="flex flex-col items-center justify-between gap-3 text-xs text-cream/45 md:flex-row">
           <span>&copy; {year} AIM Imports. All rights reserved.</span>
-          <span>25-year import specialists &middot; Leander, Texas</span>
+          <span>JDM import specialists &middot; Leander, Texas</span>
         </Container>
       </div>
     </footer>

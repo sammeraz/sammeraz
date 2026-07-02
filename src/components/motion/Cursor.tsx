@@ -8,6 +8,13 @@ import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 const INTERACTIVE_SELECTOR = "a, button, [role='button'], [data-cursor]";
 const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 
+// Matches --color-accent-soft / --color-accent in globals.css. A constant
+// bright-red cursor following your mouse everywhere reads as fatiguing over
+// time, so the reticle is muted by default and only jumps to the fuller red
+// as a deliberate "this is clickable" signal on hover.
+const SOFT_RED = "#e8483d";
+const FULL_RED = "#d3261a";
+
 // Four L-shaped ticks that fan out from the frame on hover, like a camera
 // autofocus reticle locking on — reinforces "this is clickable" instead of
 // just scaling the same shape bigger.
@@ -93,16 +100,26 @@ export function Cursor() {
 
   return (
     <>
+      {/* z-[250] beats every overlay in the app (CartDrawer's backdrop is
+          z-[100], same as this used to be — with equal z-index the later
+          element in the DOM wins, so the drawer's backdrop was painting
+          over the cursor and hiding it completely any time the cart was
+          open). Also above Preloader's z-[200] so the cursor never
+          vanishes for the moment the intro is still on screen. */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 bg-accent"
+        className="pointer-events-none fixed left-0 top-0 z-[250] h-1.5 w-1.5"
         style={{ x, y, translate: "-50% -50%" }}
-        animate={{ opacity: visible ? 1 : 0, rotate: pressed ? 45 : 0 }}
+        animate={{
+          opacity: visible ? 1 : 0,
+          rotate: pressed ? 45 : 0,
+          backgroundColor: hover ? FULL_RED : SOFT_RED,
+        }}
         transition={{ duration: 0.15 }}
       />
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center"
+        className="pointer-events-none fixed left-0 top-0 z-[250] flex items-center justify-center"
         style={{ x: ringX, y: ringY, translate: "-50% -50%" }}
         animate={{
           width: ringSize,
@@ -118,16 +135,16 @@ export function Cursor() {
       >
         {/* Diamond by default, squares up on hover — the one shape in the
             cursor that isn't a plain circle, matching the sharp, uncut
-            corners used on buttons and cards everywhere else. Solid accent
-            red rather than a white + mix-blend-difference trick: the blend
+            corners used on buttons and cards everywhere else. Solid red
+            rather than a white + mix-blend-difference trick: the blend
             approach was unreliable and went invisible over the site's own
             light (cream) sections, whereas this red already reads clearly
             against both the light and dark surfaces used everywhere else on
             the site. */}
         <motion.div
           aria-hidden="true"
-          className="absolute inset-0 border border-accent"
-          animate={{ rotate: hover ? 0 : 45 }}
+          className="absolute inset-0 border"
+          animate={{ rotate: hover ? 0 : 45, borderColor: hover ? FULL_RED : SOFT_RED }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
 

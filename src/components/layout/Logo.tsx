@@ -17,9 +17,9 @@ export function Logo({ className = "" }: { className?: string }) {
         width={96}
         height={96}
         priority
-        className="h-10 w-10 object-contain md:h-11 md:w-11"
+        className="h-10 w-10 object-contain transition-transform duration-300 ease-out group-hover:scale-110 md:h-11 md:w-11"
       />
-      <span className="hidden text-[10px] font-medium uppercase tracking-[0.32em] opacity-60 sm:inline">
+      <span className="hidden text-[10px] font-medium uppercase tracking-[0.32em] opacity-60 transition-opacity duration-300 sm:inline group-hover:opacity-100">
         Leander, TX
       </span>
     </Link>

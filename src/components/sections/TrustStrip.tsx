@@ -1,5 +1,5 @@
 const items = [
-  "25 Years Deep in the JDM Game",
+  "Direct Sourcing From Japan's Auction Houses",
   "Every Car Auction-Verified, No Exceptions",
   "Paperwork Handled Right, Every Time",
   "Based in Leander, Texas — Nationwide Delivery",
