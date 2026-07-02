@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
@@ -46,6 +47,17 @@ export function Cursor() {
   const [label, setLabel] = useState<string | null>(null);
   const [overText, setOverText] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const pathname = usePathname();
+  const [lastPathname, setLastPathname] = useState(pathname);
+  // The position the pointer was actually last seen at, via a real
+  // mousemove. A mouseover whose own coordinates match this exactly didn't
+  // come from the pointer moving — e.g. a nav link's own classes change the
+  // instant its route becomes active (see NavLink's isActive), and browsers
+  // re-fire mouseover for whatever's still stationary underneath when that
+  // happens. Comparing against this (rather than event order, which puts
+  // mouseover before its accompanying mousemove even on a genuine first
+  // entry) is what tells a real hover apart from that noise.
+  const lastMoveRef = useRef({ x: -100, y: -100 });
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -62,9 +74,13 @@ export function Cursor() {
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
+      lastMoveRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const over = (e: MouseEvent) => {
+      if (e.clientX === lastMoveRef.current.x && e.clientY === lastMoveRef.current.y) {
+        return;
+      }
       const target = e.target as HTMLElement;
       if (target.closest?.(TEXT_INPUT_SELECTOR)) {
         setOverText(true);
@@ -106,6 +122,16 @@ export function Cursor() {
       window.removeEventListener("mouseup", up);
     };
   }, [active, x, y]);
+
+  // Clicking a nav link and landing on its own page leaves it still
+  // physically under the pointer — without this, hover would keep reading
+  // as active for as long as the mouse happens to stay put after the click,
+  // even once the visitor has moved on to reading the new page.
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setHover(false);
+    setLabel(null);
+  }
 
   if (!active) return null;
 
