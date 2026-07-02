@@ -54,22 +54,22 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </p>
         ) : null}
 
-        <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
-          {sold ? (
-            <span className="font-display text-sm text-ink sm:text-base">Sold</span>
-          ) : vehicle.price ? (
-            <span className="font-display text-sm text-ink sm:text-base">
-              Offered at: {currency.format(vehicle.price)}
-            </span>
-          ) : (
-            <span className="text-sm text-ink/50">Price available on request</span>
-          )}
-          {vehicle.mileage ? (
-            <span className="text-xs tabular-nums text-ink/50 sm:ml-auto">
-              {vehicle.mileage.toLocaleString()} mi
-            </span>
-          ) : null}
-        </div>
+        {sold ? null : (
+          <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
+            {vehicle.price ? (
+              <span className="font-display text-sm text-ink sm:text-base">
+                Offered at: {currency.format(vehicle.price)}
+              </span>
+            ) : (
+              <span className="text-sm text-ink/50">Price available on request</span>
+            )}
+            {vehicle.mileage ? (
+              <span className="text-xs tabular-nums text-ink/50 sm:ml-auto">
+                {vehicle.mileage.toLocaleString()} mi
+              </span>
+            ) : null}
+          </div>
+        )}
       </div>
     </Link>
   );
