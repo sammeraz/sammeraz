@@ -15,6 +15,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   }
 
   const image = vehicle.images?.[0];
+  const sold = vehicle.status === "sold";
 
   return (
     <Link
@@ -53,29 +54,16 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </p>
         ) : null}
 
-        {vehicle.highlights?.length ? (
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {vehicle.highlights.map((highlight) => (
-              <span
-                key={highlight}
-                className="border border-ink/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.06em] text-ink/60"
-              >
-                {highlight}
-              </span>
-            ))}
-          </div>
-        ) : null}
-
-        <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
-          {vehicle.price ? (
-            <span className="font-display text-sm text-ink sm:text-base">
-              Offered at: {currency.format(vehicle.price)}
+        <div className="mt-3 flex items-end gap-3 border-t border-ink/15 pt-3">
+          {sold ? null : vehicle.price ? (
+            <span className="font-display text-2xl leading-none text-ink sm:text-[1.75rem]">
+              {currency.format(vehicle.price)}
             </span>
           ) : (
             <span className="text-sm text-ink/50">Price available on request</span>
           )}
           {vehicle.mileage ? (
-            <span className="text-xs tabular-nums text-ink/50">
+            <span className="ml-auto text-xs tabular-nums text-ink/50">
               {vehicle.mileage.toLocaleString()} mi
             </span>
           ) : null}

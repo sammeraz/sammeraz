@@ -130,7 +130,7 @@ export default async function VehicleDetailPage({
 
               <Reveal delay={0.16}>
                 <div className="mt-6 flex flex-wrap items-baseline gap-4">
-                  {vehicle.price ? (
+                  {sold ? null : vehicle.price ? (
                     <span className="font-display text-2xl text-ink md:text-3xl">
                       Offered at: {currency.format(vehicle.price)}
                     </span>
@@ -144,21 +144,6 @@ export default async function VehicleDetailPage({
                   ) : null}
                 </div>
               </Reveal>
-
-              {vehicle.highlights?.length ? (
-                <Reveal delay={0.22}>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {vehicle.highlights.map((highlight) => (
-                      <span
-                        key={highlight}
-                        className="border border-ink/20 px-3 py-1 text-xs uppercase tracking-[0.06em] text-ink/65"
-                      >
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-                </Reveal>
-              ) : null}
 
               <Reveal delay={0.28}>
                 <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
