@@ -14,12 +14,6 @@ import { navLinks, site } from "@/data/site";
 const easing = [0.16, 1, 0.3, 1] as const;
 const menuLinks = [{ label: "Home", href: "/" }, ...navLinks];
 
-// Collapsed to a small rectangle near the trigger button (top-right), then
-// expands to fill the screen — an aperture "locking on" open, echoing the
-// camera-focus brackets the custom cursor already uses on hover.
-const CLOSED_CLIP = "inset(0% 0% 100% 55%)";
-const OPEN_CLIP = "inset(0% 0% 0% 0%)";
-
 export function Header() {
   // Default to the solid/dark state, not transparent. The logo has no dark
   // backing (see Logo.tsx), so it only reads correctly over a dark surface.
@@ -147,95 +141,53 @@ export function Header() {
 
       <AnimatePresence>
         {menuOpen ? (
-          <motion.div
-            initial={{ clipPath: reducedMotion ? OPEN_CLIP : CLOSED_CLIP, opacity: reducedMotion ? 0 : 1 }}
-            animate={{ clipPath: OPEN_CLIP, opacity: 1 }}
-            exit={{ clipPath: reducedMotion ? OPEN_CLIP : CLOSED_CLIP, opacity: reducedMotion ? 0 : 1 }}
-            transition={
-              reducedMotion
-                ? { duration: 0.2, ease: "linear" }
-                : { duration: 0.65, ease: easing }
-            }
-            className="fixed inset-x-0 top-20 h-[calc(100vh-5rem)] overflow-y-auto bg-sand"
-          >
-            {/* Corner frame, revealed as the clip-path opens over it — same
-                motif as PlaceholderArt's photo frame and the cursor's hover
-                brackets, tying the menu into the rest of the site's system. */}
-            {[
-              "left-4 top-4 border-l border-t",
-              "right-4 top-4 border-r border-t",
-              "bottom-4 left-4 border-b border-l",
-              "bottom-4 right-4 border-b border-r",
-            ].map((pos) => (
-              <motion.span
-                key={pos}
-                aria-hidden="true"
-                initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: reducedMotion ? 0 : 0.4, ease: easing }}
-                className={`pointer-events-none absolute h-6 w-6 border-cream/25 ${pos}`}
-              />
-            ))}
+          <>
+            {/* Tap anywhere outside the panel to dismiss — a compact dropdown
+                shouldn't require hunting for the close button. */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+              className="fixed inset-x-0 bottom-0 top-20 z-40 bg-ink/50 lg:hidden"
+            />
 
-            <div className="bg-grain relative flex min-h-full flex-col px-6 pb-10 pt-10 sm:px-10">
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: reducedMotion ? 0 : 0.1, ease: easing }}
-                className="flex items-center gap-4"
-              >
-                <span className="font-display text-sm text-accent-soft">Menu</span>
-                <span className="h-px flex-1 bg-cream/15" />
-              </motion.div>
-
-              <nav className="mt-6 flex flex-col">
+            {/* Sized to its content, not the full viewport — a quick dropdown
+                to glance at and dismiss, not a takeover you have to escape. */}
+            <motion.div
+              initial={{ opacity: 0, y: reducedMotion ? 0 : -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reducedMotion ? 0 : -8 }}
+              transition={{ duration: reducedMotion ? 0.15 : 0.25, ease: easing }}
+              className="fixed inset-x-0 top-20 z-50 max-h-[calc(100vh-5rem)] overflow-y-auto border-b-2 border-accent bg-ink lg:hidden"
+            >
+              <nav className="flex flex-col px-6 sm:px-10">
                 {menuLinks.map((link, index) => {
                   const isActive = pathname === link.href;
                   return (
-                    <motion.div
+                    <Link
                       key={link.href}
-                      initial={{ opacity: 0, y: 24 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: reducedMotion ? 0 : 0.2 + index * 0.06,
-                        ease: easing,
-                      }}
-                      className="border-b border-cream/10"
+                      href={link.href}
+                      className="group flex items-center gap-4 border-b border-cream/10 py-4 first:pt-6 last:border-b-0 last:pb-6"
                     >
-                      <Link href={link.href} className="group relative flex items-baseline gap-4 py-4">
-                        <span className="font-display text-xs text-accent">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span
-                          className={`font-display text-3xl transition-colors duration-200 sm:text-4xl ${
-                            isActive ? "text-accent-soft" : "text-cream group-hover:text-accent-soft"
-                          }`}
-                        >
-                          {link.label}
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className={`absolute -bottom-px left-0 h-px bg-accent transition-all duration-300 ease-out ${
-                            isActive ? "w-full" : "w-0 group-hover:w-full"
-                          }`}
-                        />
-                      </Link>
-                    </motion.div>
+                      <span className="font-display text-xs text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className={`font-display text-xl transition-colors duration-200 ${
+                          isActive ? "text-accent-soft" : "text-cream group-hover:text-accent-soft"
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+                    </Link>
                   );
                 })}
               </nav>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: reducedMotion ? 0 : 0.55, ease: easing }}
-                className="font-display mt-auto pt-10 text-xs text-cream/35"
-              >
-                {site.tagline}
-              </motion.p>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         ) : null}
       </AnimatePresence>
     </header>

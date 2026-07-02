@@ -26,15 +26,14 @@ const FULL_RED = "#d3261a";
 // blend modes for visibility at all.
 const HALO = "shadow-[0_0_0_1.5px_rgba(255,255,255,0.65)]";
 
-// Four L-shaped ticks that fan out from the frame on hover, like a camera
-// autofocus reticle locking on — reinforces "this is clickable" instead of
-// just scaling the same shape bigger.
-const CORNERS = [
-  { key: "tl", pos: "-left-2 -top-2", border: "border-l border-t" },
-  { key: "tr", pos: "-right-2 -top-2", border: "border-r border-t" },
-  { key: "br", pos: "-right-2 -bottom-2", border: "border-r border-b" },
-  { key: "bl", pos: "-left-2 -bottom-2", border: "border-l border-b" },
-] as const;
+// Hover traces a short red segment around the box's perimeter on a loop,
+// rather than mixing red with the ink/white idle look — the perimeter of
+// the traced rect below (52x52, 2px inset from the 56px hover size) is
+// 4*52 = 208, so a dash pattern that sums to 208 and an offset animation of
+// exactly -208 loops seamlessly (the pattern at -208 is pixel-identical to
+// the one at 0, so the reset each cycle is invisible).
+const TRACE_PERIMETER = 208;
+const TRACE_DASH = "40 168";
 
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
@@ -119,12 +118,14 @@ export function Cursor() {
           vanishes for the moment the intro is still on screen. */}
       <motion.div
         aria-hidden="true"
-        className={`pointer-events-none fixed left-0 top-0 z-[250] h-1.5 w-1.5 ${HALO}`}
+        className="pointer-events-none fixed left-0 top-0 z-[250] h-1.5 w-1.5"
         style={{ x, y, translate: "-50% -50%" }}
         animate={{
           opacity: visible ? 1 : 0,
           rotate: pressed ? 45 : 0,
           backgroundColor: hover ? FULL_RED : INK,
+          // No halo on hover — fully red then, nothing white mixed in.
+          boxShadow: hover ? "0 0 0 0px rgba(255,255,255,0)" : "0 0 0 1.5px rgba(255,255,255,0.65)",
         }}
         transition={{ duration: 0.15 }}
       />
@@ -144,25 +145,52 @@ export function Cursor() {
         }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
       >
-        {/* Diamond by default, squares up on hover — the one shape in the
-            cursor that isn't a plain circle, matching the sharp, uncut
-            corners used on buttons and cards everywhere else. */}
+        {/* Diamond at rest — the one shape in the cursor that isn't a plain
+            circle, matching the sharp, uncut corners used on buttons and
+            cards everywhere else. Fades out entirely on hover rather than
+            just switching color, since the traced red line below takes
+            over as the "clickable" signal. */}
         <motion.div
           aria-hidden="true"
           className={`absolute inset-0 border ${HALO}`}
-          animate={{ rotate: hover ? 0 : 45, borderColor: hover ? FULL_RED : INK }}
+          style={{ borderColor: INK }}
+          animate={{ rotate: hover ? 0 : 45, opacity: hover ? 0 : 1 }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
 
-        {CORNERS.map((corner) => (
-          <motion.span
-            key={corner.key}
-            aria-hidden="true"
-            className={`absolute h-2.5 w-2.5 border-accent ${HALO} ${corner.pos} ${corner.border}`}
-            animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.4 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+        {/* Hover: a short red segment chases around the box on a loop
+            instead of a static border — fully red, no white halo mixed
+            in, and moving rather than just scaled-up. */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+          viewBox="0 0 56 56"
+          preserveAspectRatio="none"
+        >
+          <motion.rect
+            x="2"
+            y="2"
+            width="52"
+            height="52"
+            fill="none"
+            stroke={FULL_RED}
+            strokeWidth="2"
+            strokeDasharray={TRACE_DASH}
+            animate={
+              hover
+                ? { opacity: 1, strokeDashoffset: -TRACE_PERIMETER }
+                : { opacity: 0 }
+            }
+            transition={
+              hover
+                ? {
+                    opacity: { duration: 0.15 },
+                    strokeDashoffset: { duration: 1.4, repeat: Infinity, ease: "linear" },
+                  }
+                : { duration: 0.15 }
+            }
           />
-        ))}
+        </svg>
 
         {label ? (
           <motion.span
