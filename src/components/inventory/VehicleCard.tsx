@@ -84,12 +84,7 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <div className="flex h-full flex-col bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <PlaceholderArt variant="card" label="" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-display text-lg uppercase tracking-[0.12em] text-cream/80">
-            Incoming
-          </span>
-        </div>
+        <PlaceholderArt variant="card" label="Incoming" />
       </div>
       <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 sm:text-sm">

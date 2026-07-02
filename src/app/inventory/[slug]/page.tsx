@@ -128,23 +128,6 @@ export default async function VehicleDetailPage({
               </Reveal>
 
               <Reveal delay={0.16}>
-                <div className="mt-6 flex flex-wrap items-baseline gap-4">
-                  {sold ? null : vehicle.price ? (
-                    <span className="font-display text-2xl text-ink md:text-3xl">
-                      Offered at: {currency.format(vehicle.price)}
-                    </span>
-                  ) : (
-                    <span className="text-base text-ink/50">Price available on request</span>
-                  )}
-                  {vehicle.mileage ? (
-                    <span className="text-sm tabular-nums text-ink/50">
-                      {vehicle.mileage.toLocaleString()} mi
-                    </span>
-                  ) : null}
-                </div>
-              </Reveal>
-
-              <Reveal delay={0.28}>
                 <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
                   {sold
                     ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
@@ -182,6 +165,23 @@ export default async function VehicleDetailPage({
           ) : null}
 
           <Reveal delay={specRows.length > 0 ? 0.1 : 0} className={specRows.length > 0 ? "mt-10" : undefined}>
+            <div className="flex flex-wrap items-baseline gap-4">
+              {sold ? null : vehicle.price ? (
+                <span className="font-display text-2xl text-ink md:text-3xl">
+                  Offered at: {currency.format(vehicle.price)}
+                </span>
+              ) : (
+                <span className="text-base text-ink/50">Price available on request</span>
+              )}
+              {vehicle.mileage ? (
+                <span className="text-sm tabular-nums text-ink/50">
+                  {vehicle.mileage.toLocaleString()} mi
+                </span>
+              ) : null}
+            </div>
+          </Reveal>
+
+          <Reveal delay={specRows.length > 0 ? 0.18 : 0.08} className="mt-8">
             <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
               {sold ? "Ask About Similar Cars" : "Ask About This Car"}
             </Button>
