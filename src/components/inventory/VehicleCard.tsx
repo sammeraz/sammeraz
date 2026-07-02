@@ -48,14 +48,23 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim ? (
-          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
-            {vehicle.trim}
-          </p>
+        {vehicle.trim || (!sold && vehicle.mileage) ? (
+          <div className="flex items-baseline gap-2">
+            {vehicle.trim ? (
+              <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
+                {vehicle.trim}
+              </p>
+            ) : null}
+            {!sold && vehicle.mileage ? (
+              <span className="ml-auto text-[10px] tabular-nums text-ink/50 sm:text-xs">
+                {vehicle.mileage.toLocaleString()} mi
+              </span>
+            ) : null}
+          </div>
         ) : null}
 
         {sold ? null : (
-          <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-3 border-t border-ink/15 pt-3">
             {vehicle.price ? (
               <span className="font-display text-sm text-ink sm:text-base">
                 Offered at: {currency.format(vehicle.price)}
@@ -63,11 +72,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             ) : (
               <span className="text-sm text-ink/50">Price available on request</span>
             )}
-            {vehicle.mileage ? (
-              <span className="text-xs tabular-nums text-ink/50 sm:ml-auto">
-                {vehicle.mileage.toLocaleString()} mi
-              </span>
-            ) : null}
           </div>
         )}
       </div>

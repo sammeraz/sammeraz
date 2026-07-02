@@ -59,3 +59,45 @@ export function RevealItem({ children, className }: { children: ReactNode; class
     </motion.div>
   );
 }
+
+/** Same fade/slide as Reveal, but plays on mount instead of waiting for
+ * scroll — for content that must never sit at opacity:0 before a visitor
+ * scrolls (e.g. a detail page's hero and spec table, both usually already
+ * on screen at load). */
+export function RevealOnLoad({ children, delay = 0, y = 26, className }: RevealProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay, ease: revealEase }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/** Mount-triggered counterpart to RevealGroup — pair with RevealItem. */
+export function RevealOnLoadGroup({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      initial="hidden"
+      animate="show"
+      variants={{
+        hidden: {},
+        show: { transition: { staggerChildren: 0.09, delayChildren: delay } },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
