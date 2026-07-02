@@ -28,4 +28,39 @@ import type { Vehicle } from "@/lib/types";
  *   },
  * }
  */
-export const inventory: Vehicle[] = [];
+// DEMO DATA — temporary, so the quick-view/sold-ribbon/incoming-teaser
+// treatments are visible and clickable on the live preview before any real
+// vehicles are posted. Remove this block (back to an empty array) once real
+// inventory is ready, or ask Claude to swap it out.
+export const inventory: Vehicle[] = [
+  {
+    slug: "demo-1999-nissan-skyline-gtr",
+    make: "Nissan",
+    model: "Skyline GT-R",
+    year: 1999,
+    trim: "V-Spec (BNR34)",
+    price: 124500,
+    status: "available",
+    mileage: 42000,
+    highlights: ["Demo Listing", "Auction grade 4.5", "One owner"],
+  },
+  {
+    slug: "demo-1998-toyota-chaser",
+    make: "Toyota",
+    model: "Chaser",
+    year: 1998,
+    trim: "Tourer V (JZX100)",
+    price: 45000,
+    status: "sold",
+    mileage: 88000,
+    highlights: ["Demo Listing"],
+  },
+  {
+    slug: "demo-1995-honda-nsx",
+    make: "Honda",
+    model: "NSX",
+    year: 1995,
+    status: "incoming",
+    price: 89000,
+  },
+];
