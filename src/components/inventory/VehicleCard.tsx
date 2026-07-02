@@ -35,7 +35,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           <PlaceholderArt variant="card" />
         )}
         {vehicle.status === "sold" ? (
-          <span className="font-display absolute left-0 top-3 bg-accent px-4 py-2 text-sm text-cream">
+          <span className="font-display absolute left-0 top-3 bg-accent px-3.5 py-1.5 text-xs tracking-[0.14em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
             Sold
           </span>
         ) : null}
