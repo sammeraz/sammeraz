@@ -1,10 +1,7 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
-import { SoldRibbon } from "@/components/inventory/SoldRibbon";
-import { useQuickView } from "@/lib/quick-view-context";
+import { StatusRibbon } from "@/components/inventory/StatusRibbon";
 import type { Vehicle } from "@/lib/types";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -14,28 +11,16 @@ const currency = new Intl.NumberFormat("en-US", {
 });
 
 export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
-  const { open } = useQuickView();
-
   if (vehicle.status === "incoming") {
     return <IncomingVehicleCard vehicle={vehicle} />;
   }
 
   const image = vehicle.images?.[0];
 
-  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    // A plain left-click opens the quick view instead of navigating away —
-    // modifier-clicks (new tab/window), middle-click, and right-click still
-    // fall through to the real <Link>, so opening in a new tab still works.
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-    e.preventDefault();
-    open(vehicle);
-  }
-
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      onClick={handleClick}
-      data-cursor-text="Quick View"
+      data-cursor-text="View Details"
       className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -49,13 +34,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         ) : (
           <PlaceholderArt variant="card" />
         )}
-        {vehicle.status === "sold" ? (
-          <SoldRibbon />
-        ) : (
-          <span className="font-display absolute left-0 top-3 bg-accent px-3 py-1 text-xs text-cream">
-            Available
-          </span>
-        )}
+        <StatusRibbon status={vehicle.status === "sold" ? "sold" : "available"} />
       </div>
 
       <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
@@ -107,14 +86,24 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  * Incoming cars are purchased but not landed yet — there's no real
  * photography of the actual unit and no confirmed detail page worth
  * navigating to, so this is a flat, non-interactive teaser rather than the
- * full clickable listing above. Same dashed-border "not fully here yet"
- * language as ComingSoonCard.
+ * full clickable listing above. No price either: it's frequently not final
+ * yet at this stage, and showing one next to "details coming" reads as a
+ * contradiction. Same dashed-border "not fully here yet" language as
+ * ComingSoonCard.
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <div className="flex h-full flex-col border border-dashed border-ink/25 bg-white/50">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <PlaceholderArt variant="card" label="Incoming" />
+        <PlaceholderArt variant="card" label="" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+          <span className="font-display text-lg uppercase tracking-[0.12em] text-cream/80">
+            Incoming
+          </span>
+          <span className="max-w-[22ch] text-[11px] uppercase leading-relaxed tracking-[0.08em] text-cream/45">
+            Details will be provided once it lands stateside
+          </span>
+        </div>
       </div>
       <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 sm:text-sm">
@@ -128,15 +117,6 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
             {vehicle.trim}
           </p>
         ) : null}
-
-        <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3">
-          {vehicle.price ? (
-            <span className="font-display text-sm text-ink/70 sm:text-base">
-              Offered at: {currency.format(vehicle.price)}
-            </span>
-          ) : null}
-          <p className="text-xs text-ink/45">Details coming once it lands stateside.</p>
-        </div>
       </div>
     </div>
   );

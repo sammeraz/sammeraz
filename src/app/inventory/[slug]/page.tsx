@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
-import { SoldRibbon } from "@/components/inventory/SoldRibbon";
+import { StatusRibbon } from "@/components/inventory/StatusRibbon";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
@@ -94,22 +93,17 @@ export default async function VehicleDetailPage({
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <Reveal>
               <div className="relative aspect-[4/3] w-full overflow-hidden">
-                {/* Same name as the card and quick-view's main photo — landing
-                    here from either one morphs that image into this one
-                    instead of a hard cut (see VehicleCard, VehicleQuickView). */}
-                <ViewTransition name={`vehicle-photo-${vehicle.slug}`}>
-                  {image ? (
-                    <Image src={image} alt={name} fill className="object-cover" />
-                  ) : (
-                    <PlaceholderArt variant="card" />
-                  )}
-                </ViewTransition>
-                {sold ? (
-                  <SoldRibbon />
+                {image ? (
+                  <Image src={image} alt={name} fill className="object-cover" />
                 ) : (
-                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
-                    {vehicle.status === "incoming" ? "Incoming" : "Available"}
+                  <PlaceholderArt variant="card" />
+                )}
+                {vehicle.status === "incoming" ? (
+                  <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
+                    Incoming
                   </span>
+                ) : (
+                  <StatusRibbon status={sold ? "sold" : "available"} />
                 )}
               </div>
             </Reveal>

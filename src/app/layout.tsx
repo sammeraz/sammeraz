@@ -7,8 +7,6 @@ import { Preloader } from "@/components/motion/Preloader";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { CartProvider } from "@/lib/cart-context";
 import { CartDrawer } from "@/components/store/CartDrawer";
-import { QuickViewProvider } from "@/lib/quick-view-context";
-import { VehicleQuickView } from "@/components/inventory/VehicleQuickView";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -44,17 +42,14 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-ink text-cream">
         <CartProvider>
-          <QuickViewProvider>
-            <Preloader />
-            <Cursor />
-            <Header />
-            <main className="flex-1">
-              <PageTransition>{children}</PageTransition>
-            </main>
-            <Footer />
-            <CartDrawer />
-            <VehicleQuickView />
-          </QuickViewProvider>
+          <Preloader />
+          <Cursor />
+          <Header />
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+          <CartDrawer />
         </CartProvider>
       </body>
     </html>
