@@ -43,6 +43,14 @@ export const inventory: Vehicle[] = [
     status: "available",
     mileage: 42000,
     highlights: ["Demo Listing", "Auction grade 4.5", "One owner"],
+    specs: {
+      chassisCode: "BNR34",
+      engine: "RB26DETT 2.6L Twin-Turbo I6",
+      drivetrain: "AWD (ATTESA E-TS)",
+      transmission: "6-Speed Manual",
+      exteriorColor: "Bayside Blue",
+      auctionGrade: "4.5",
+    },
   },
   {
     slug: "demo-1998-toyota-chaser",
@@ -54,6 +62,14 @@ export const inventory: Vehicle[] = [
     status: "sold",
     mileage: 88000,
     highlights: ["Demo Listing"],
+    specs: {
+      chassisCode: "JZX100",
+      engine: "1JZ-GTE 2.5L Twin-Turbo I6",
+      drivetrain: "RWD",
+      transmission: "5-Speed Manual",
+      exteriorColor: "Black Mica",
+      auctionGrade: "4",
+    },
   },
   {
     slug: "demo-1995-honda-nsx",
@@ -62,5 +78,13 @@ export const inventory: Vehicle[] = [
     year: 1995,
     status: "incoming",
     price: 89000,
+    specs: {
+      chassisCode: "NA1",
+      engine: "C30A 3.0L V6 VTEC",
+      drivetrain: "RWD",
+      transmission: "5-Speed Manual",
+      exteriorColor: "Formula Red",
+      auctionGrade: "4.5",
+    },
   },
 ];
