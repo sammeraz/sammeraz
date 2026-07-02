@@ -20,7 +20,7 @@ export function Logo({ className = "" }: { className?: string }) {
         className="h-10 w-10 object-contain md:h-11 md:w-11"
       />
       <span className="hidden text-[10px] font-medium uppercase tracking-[0.32em] opacity-60 sm:inline">
-        Japan &middot; USA
+        Leander, TX
       </span>
     </Link>
   );

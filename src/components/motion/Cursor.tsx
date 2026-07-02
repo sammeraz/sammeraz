@@ -12,10 +12,10 @@ const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 // autofocus reticle locking on — reinforces "this is clickable" instead of
 // just scaling the same shape bigger.
 const CORNERS = [
-  { key: "tl", pos: "-left-2.5 -top-2.5", border: "border-l border-t" },
-  { key: "tr", pos: "-right-2.5 -top-2.5", border: "border-r border-t" },
-  { key: "br", pos: "-right-2.5 -bottom-2.5", border: "border-r border-b" },
-  { key: "bl", pos: "-left-2.5 -bottom-2.5", border: "border-l border-b" },
+  { key: "tl", pos: "-left-2 -top-2", border: "border-l border-t" },
+  { key: "tr", pos: "-right-2 -top-2", border: "border-r border-t" },
+  { key: "br", pos: "-right-2 -bottom-2", border: "border-r border-b" },
+  { key: "bl", pos: "-left-2 -bottom-2", border: "border-l border-b" },
 ] as const;
 
 export function Cursor() {
@@ -89,13 +89,13 @@ export function Cursor() {
   if (!active) return null;
 
   const visible = !overText;
-  const ringSize = hover ? 72 : pressed ? 20 : 32;
+  const ringSize = hover ? 56 : pressed ? 16 : 26;
 
   return (
     <>
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 bg-white mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 bg-accent"
         style={{ x, y, translate: "-50% -50%" }}
         animate={{ opacity: visible ? 1 : 0, rotate: pressed ? 45 : 0 }}
         transition={{ duration: 0.15 }}
@@ -104,15 +104,29 @@ export function Cursor() {
         aria-hidden="true"
         className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center"
         style={{ x: ringX, y: ringY, translate: "-50% -50%" }}
-        animate={{ width: ringSize, height: ringSize, opacity: visible ? 1 : 0 }}
+        animate={{
+          width: ringSize,
+          height: ringSize,
+          opacity: visible ? 1 : 0,
+          // Solid dark fill only while showing a text label — the label
+          // needs a guaranteed-dark backdrop to stay legible no matter what
+          // it's hovering over; the plain reticle (no label) stays an
+          // outline so it never blocks the button/link text underneath.
+          backgroundColor: label ? "rgba(13, 13, 13, 0.95)" : "rgba(13, 13, 13, 0)",
+        }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
       >
         {/* Diamond by default, squares up on hover — the one shape in the
             cursor that isn't a plain circle, matching the sharp, uncut
-            corners used on buttons and cards everywhere else. */}
+            corners used on buttons and cards everywhere else. Solid accent
+            red rather than a white + mix-blend-difference trick: the blend
+            approach was unreliable and went invisible over the site's own
+            light (cream) sections, whereas this red already reads clearly
+            against both the light and dark surfaces used everywhere else on
+            the site. */}
         <motion.div
           aria-hidden="true"
-          className="absolute inset-0 border border-white mix-blend-difference"
+          className="absolute inset-0 border border-accent"
           animate={{ rotate: hover ? 0 : 45 }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
@@ -121,7 +135,7 @@ export function Cursor() {
           <motion.span
             key={corner.key}
             aria-hidden="true"
-            className={`absolute h-3 w-3 border-white mix-blend-difference ${corner.pos} ${corner.border}`}
+            className={`absolute h-2.5 w-2.5 border-accent ${corner.pos} ${corner.border}`}
             animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.4 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           />
@@ -131,7 +145,7 @@ export function Cursor() {
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-white mix-blend-difference"
+            className="relative whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-white"
           >
             {label}
           </motion.span>
