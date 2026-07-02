@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { InventoryGrid } from "@/components/inventory/InventoryGrid";
-import { RevealOnLoad } from "@/components/motion/Reveal";
-import { CloseIcon, SearchIcon } from "@/components/ui/icons";
+import { InventoryList } from "@/components/inventory/InventoryList";
+import { RevealOnLoad, revealEase } from "@/components/motion/Reveal";
+import { CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
 import type { Vehicle, VehicleStatus } from "@/lib/types";
 
 interface InventoryBrowserProps {
@@ -13,12 +14,20 @@ interface InventoryBrowserProps {
 }
 
 type StatusFilter = "all" | VehicleStatus;
+type ViewMode = "grid" | "list";
 
 const tabs: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "All" },
   { value: "available", label: "Available" },
   { value: "incoming", label: "Incoming" },
   { value: "sold", label: "Sold" },
+];
+
+const mileageOptions = [
+  { label: "Any Mileage", max: Infinity },
+  { label: "Under 25,000 mi", max: 25000 },
+  { label: "Under 50,000 mi", max: 50000 },
+  { label: "Under 100,000 mi", max: 100000 },
 ];
 
 function matchesQuery(vehicle: Vehicle, query: string) {
@@ -28,14 +37,41 @@ function matchesQuery(vehicle: Vehicle, query: string) {
   return haystack.includes(q);
 }
 
-/** Search + status tabs live in their own component (rather than inline on
- * the page) so the filtering state doesn't force the whole page client-side
- * — just this bar and the grid beneath it. Mirrors the header's nav-link
- * underline motif for the tabs and the contact form's underline input style,
- * so it reads as the same site rather than a bolted-on widget. */
+function toggleInSet(set: Set<string>, value: string) {
+  const next = new Set(set);
+  if (next.has(value)) next.delete(value);
+  else next.add(value);
+  return next;
+}
+
+const pillClass = (isActive: boolean) =>
+  `border px-3 py-1.5 text-xs uppercase tracking-[0.06em] transition-colors ${
+    isActive ? "border-accent bg-accent text-cream" : "border-ink/20 text-ink/65 hover:border-ink/40"
+  }`;
+
+/** Search + status tabs + the more detailed make/transmission/mileage panel
+ * all live in their own component (rather than inline on the page) so the
+ * filtering state doesn't force the whole page client-side — just this bar
+ * and the grid beneath it. Styled to match the existing system throughout:
+ * the search input reuses the contact form's underline-input treatment, the
+ * status tabs reuse the header nav-link's animated underline, and the panel
+ * fades/slides in via RevealOnLoad (mount-triggered, not scroll — consistent
+ * with the no-invisible-above-the-fold rule already applied to this page). */
 export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBrowserProps) {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedMakes, setSelectedMakes] = useState<Set<string>>(new Set());
+  const [selectedTransmissions, setSelectedTransmissions] = useState<Set<string>>(new Set());
+  const [mileageMax, setMileageMax] = useState(Infinity);
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+
+  const allMakes = useMemo(() => [...new Set(vehicles.map((v) => v.make))].sort(), [vehicles]);
+  const allTransmissions = useMemo(
+    () =>
+      [...new Set(vehicles.map((v) => v.specs?.transmission).filter((t): t is string => Boolean(t)))].sort(),
+    [vehicles],
+  );
 
   const searchMatches = useMemo(
     () => vehicles.filter((vehicle) => matchesQuery(vehicle, query)),
@@ -51,8 +87,26 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
     return result;
   }, [searchMatches]);
 
-  const filtered =
-    statusFilter === "all" ? searchMatches : searchMatches.filter((vehicle) => vehicle.status === statusFilter);
+  const filtered = searchMatches
+    .filter((vehicle) => statusFilter === "all" || vehicle.status === statusFilter)
+    .filter((vehicle) => selectedMakes.size === 0 || selectedMakes.has(vehicle.make))
+    .filter(
+      (vehicle) =>
+        selectedTransmissions.size === 0 ||
+        (vehicle.specs?.transmission && selectedTransmissions.has(vehicle.specs.transmission)),
+    )
+    .filter((vehicle) => mileageMax === Infinity || (vehicle.mileage !== undefined && vehicle.mileage <= mileageMax));
+
+  const activeFilterCount =
+    selectedMakes.size + selectedTransmissions.size + (mileageMax === Infinity ? 0 : 1);
+
+  function clearAllFilters() {
+    setQuery("");
+    setStatusFilter("all");
+    setSelectedMakes(new Set());
+    setSelectedTransmissions(new Set());
+    setMileageMax(Infinity);
+  }
 
   // Nothing posted yet at all — skip the search/filter chrome entirely and
   // fall straight through to InventoryGrid's own honest "coming soon" state,
@@ -67,26 +121,48 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
     <div>
       <RevealOnLoad>
         <div className="flex flex-col gap-6 border-b border-ink/15 pb-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full sm:max-w-xs">
-            <SearchIcon className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
-            <input
-              type="text"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              aria-label="Search inventory"
-              placeholder="Search make, model, year…"
-              className="w-full border-b border-ink/20 bg-transparent py-3 pl-6 pr-6 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent"
-            />
-            {query ? (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                aria-label="Clear search"
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-ink/40 transition-colors hover:text-accent"
-              >
-                <CloseIcon className="h-3.5 w-3.5" />
-              </button>
-            ) : null}
+          <div className="flex items-center gap-3 sm:max-w-md sm:flex-1">
+            <div className="relative min-w-0 flex-1">
+              <SearchIcon className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
+              <input
+                type="text"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                aria-label="Search inventory"
+                placeholder="Search make, model, year…"
+                className="w-full border-b border-ink/20 bg-transparent py-3 pl-6 pr-6 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent"
+              />
+              {query ? (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-ink/40 transition-colors hover:text-accent"
+                >
+                  <CloseIcon className="h-3.5 w-3.5" />
+                </button>
+              ) : null}
+            </div>
+
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.94 }}
+              onClick={() => setFiltersOpen((open) => !open)}
+              aria-expanded={filtersOpen}
+              className={`flex shrink-0 items-center gap-1.5 border px-3 py-2.5 text-xs uppercase tracking-[0.08em] transition-colors ${
+                filtersOpen || activeFilterCount > 0
+                  ? "border-ink text-ink"
+                  : "border-ink/20 text-ink/65 hover:border-ink/40"
+              }`}
+            >
+              <SlidersIcon className="h-3.5 w-3.5" />
+              Filters
+              {activeFilterCount > 0 ? (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold leading-none text-cream">
+                  {activeFilterCount}
+                </span>
+              ) : null}
+            </motion.button>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -114,6 +190,75 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
             })}
           </div>
         </div>
+
+        <AnimatePresence initial={false}>
+          {filtersOpen ? (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: revealEase }}
+              className="overflow-hidden"
+            >
+              <div className="flex flex-col gap-6 border-b border-ink/15 py-6 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-6">
+                {allMakes.length > 1 ? (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Make</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {allMakes.map((make) => (
+                        <button
+                          key={make}
+                          type="button"
+                          onClick={() => setSelectedMakes((prev) => toggleInSet(prev, make))}
+                          aria-pressed={selectedMakes.has(make)}
+                          className={pillClass(selectedMakes.has(make))}
+                        >
+                          {make}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {allTransmissions.length > 1 ? (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Transmission</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {allTransmissions.map((transmission) => (
+                        <button
+                          key={transmission}
+                          type="button"
+                          onClick={() => setSelectedTransmissions((prev) => toggleInSet(prev, transmission))}
+                          aria-pressed={selectedTransmissions.has(transmission)}
+                          className={pillClass(selectedTransmissions.has(transmission))}
+                        >
+                          {transmission}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {mileageOptions.map((option) => (
+                      <button
+                        key={option.label}
+                        type="button"
+                        onClick={() => setMileageMax(option.max)}
+                        aria-pressed={mileageMax === option.max}
+                        className={pillClass(mileageMax === option.max)}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </RevealOnLoad>
 
       {hasNoMatches ? (
@@ -122,10 +267,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
           <p className="mt-2 text-sm text-ink/50">Try a different term, or clear the filters below.</p>
           <button
             type="button"
-            onClick={() => {
-              setQuery("");
-              setStatusFilter("all");
-            }}
+            onClick={clearAllFilters}
             className="font-display mt-6 text-xs uppercase tracking-[0.1em] text-accent underline underline-offset-4"
           >
             Clear filters
@@ -133,7 +275,41 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
         </div>
       ) : (
         <div className="mt-10">
-          <InventoryGrid vehicles={filtered} placeholderCount={placeholderCount} />
+          <div className="mb-6 flex items-center justify-between">
+            <p className="text-xs uppercase tracking-[0.08em] text-ink/40">
+              {filtered.length} vehicle{filtered.length === 1 ? "" : "s"}
+            </p>
+            <div className="flex items-center border border-ink/15">
+              <button
+                type="button"
+                onClick={() => setViewMode("grid")}
+                aria-label="Grid view"
+                aria-pressed={viewMode === "grid"}
+                className={`flex h-8 w-9 items-center justify-center transition-colors ${
+                  viewMode === "grid" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                }`}
+              >
+                <GridIcon className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("list")}
+                aria-label="List view"
+                aria-pressed={viewMode === "list"}
+                className={`flex h-8 w-9 items-center justify-center border-l border-ink/15 transition-colors ${
+                  viewMode === "list" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                }`}
+              >
+                <ListIcon className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {viewMode === "grid" ? (
+            <InventoryGrid vehicles={filtered} placeholderCount={placeholderCount} />
+          ) : (
+            <InventoryList vehicles={filtered} />
+          )}
         </div>
       )}
     </div>
