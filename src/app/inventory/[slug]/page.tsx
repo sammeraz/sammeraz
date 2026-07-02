@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
-import { StatusRibbon } from "@/components/inventory/StatusRibbon";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
@@ -102,9 +101,11 @@ export default async function VehicleDetailPage({
                   <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
                     Incoming
                   </span>
-                ) : (
-                  <StatusRibbon status={sold ? "sold" : "available"} />
-                )}
+                ) : sold ? (
+                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
+                    Sold
+                  </span>
+                ) : null}
               </div>
             </Reveal>
 

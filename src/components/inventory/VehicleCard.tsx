@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
-import { StatusRibbon } from "@/components/inventory/StatusRibbon";
 import type { Vehicle } from "@/lib/types";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -34,7 +33,11 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         ) : (
           <PlaceholderArt variant="card" />
         )}
-        <StatusRibbon status={vehicle.status === "sold" ? "sold" : "available"} />
+        {vehicle.status === "sold" ? (
+          <span className="font-display absolute left-0 top-3 bg-accent px-3 py-1 text-xs text-cream">
+            Sold
+          </span>
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
@@ -87,21 +90,16 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  * photography of the actual unit and no confirmed detail page worth
  * navigating to, so this is a flat, non-interactive teaser rather than the
  * full clickable listing above. No price either: it's frequently not final
- * yet at this stage, and showing one next to "details coming" reads as a
- * contradiction. Same dashed-border "not fully here yet" language as
- * ComingSoonCard.
+ * yet at this stage.
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
-    <div className="flex h-full flex-col border border-dashed border-ink/25 bg-white/50">
+    <div className="flex h-full flex-col bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center">
+        <div className="absolute inset-0 flex items-center justify-center">
           <span className="font-display text-lg uppercase tracking-[0.12em] text-cream/80">
             Incoming
-          </span>
-          <span className="max-w-[22ch] text-[11px] uppercase leading-relaxed tracking-[0.08em] text-cream/45">
-            Details will be provided once it lands stateside
           </span>
         </div>
       </div>
