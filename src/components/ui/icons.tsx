@@ -88,3 +88,11 @@ export function MinusIcon({ className = "" }: IconProps) {
     </svg>
   );
 }
+
+export function ExpandIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M9 4H4v5M15 4h5v5M4 15v5h5M20 15v5h-5" />
+    </svg>
+  );
+}

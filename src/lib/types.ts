@@ -23,7 +23,8 @@ export interface Vehicle {
   year: number;
   /** Trim or chassis code, e.g. "GT-R V-Spec (BNR34)". Optional flourish line under the title. */
   trim?: string;
-  price: number;
+  /** Optional so an incoming car can be listed before pricing is finalized. */
+  price?: number;
   status: VehicleStatus;
   mileage?: number;
   /** Short auction-style highlights, shown as a few tags on the card. */

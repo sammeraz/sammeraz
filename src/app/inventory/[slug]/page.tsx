@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { SoldRibbon } from "@/components/inventory/SoldRibbon";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
 import { inventory } from "@/data/inventory";
-import type { Vehicle, VehicleSpecs } from "@/lib/types";
-
-const statusLabel: Record<Vehicle["status"], string> = {
-  available: "Available",
-  incoming: "Incoming",
-  sold: "Sold",
-};
+import type { VehicleSpecs } from "@/lib/types";
 
 const specLabels: Record<keyof VehicleSpecs, string> = {
   chassisCode: "Chassis Code",
@@ -98,14 +94,23 @@ export default async function VehicleDetailPage({
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <Reveal>
               <div className="relative aspect-[4/3] w-full overflow-hidden">
-                {image ? (
-                  <Image src={image} alt={name} fill className="object-cover" />
+                {/* Same name as the card and quick-view's main photo — landing
+                    here from either one morphs that image into this one
+                    instead of a hard cut (see VehicleCard, VehicleQuickView). */}
+                <ViewTransition name={`vehicle-photo-${vehicle.slug}`}>
+                  {image ? (
+                    <Image src={image} alt={name} fill className="object-cover" />
+                  ) : (
+                    <PlaceholderArt variant="card" />
+                  )}
+                </ViewTransition>
+                {sold ? (
+                  <SoldRibbon />
                 ) : (
-                  <PlaceholderArt variant="card" />
+                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
+                    {vehicle.status === "incoming" ? "Incoming" : "Available"}
+                  </span>
                 )}
-                <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
-                  {statusLabel[vehicle.status]}
-                </span>
               </div>
             </Reveal>
 
@@ -130,9 +135,13 @@ export default async function VehicleDetailPage({
 
               <Reveal delay={0.16}>
                 <div className="mt-6 flex flex-wrap items-baseline gap-4">
-                  <span className="font-display text-2xl text-ink md:text-3xl">
-                    Offered at: {currency.format(vehicle.price)}
-                  </span>
+                  {vehicle.price ? (
+                    <span className="font-display text-2xl text-ink md:text-3xl">
+                      Offered at: {currency.format(vehicle.price)}
+                    </span>
+                  ) : (
+                    <span className="text-base text-ink/50">Price available on request</span>
+                  )}
                   {vehicle.mileage ? (
                     <span className="text-sm tabular-nums text-ink/50">
                       {vehicle.mileage.toLocaleString()} mi
