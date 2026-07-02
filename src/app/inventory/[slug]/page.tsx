@@ -102,7 +102,7 @@ export default async function VehicleDetailPage({
                     Incoming
                   </span>
                 ) : sold ? (
-                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
+                  <span className="font-display absolute left-0 top-4 bg-accent px-5 py-2 text-sm text-cream md:text-base">
                     Sold
                   </span>
                 ) : null}

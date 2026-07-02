@@ -35,7 +35,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           <PlaceholderArt variant="card" />
         )}
         {vehicle.status === "sold" ? (
-          <span className="font-display absolute left-0 top-3 bg-accent px-3 py-1 text-xs text-cream">
+          <span className="font-display absolute left-0 top-3 bg-accent px-4 py-2 text-sm text-cream">
             Sold
           </span>
         ) : null}
@@ -54,16 +54,16 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </p>
         ) : null}
 
-        <div className="mt-3 flex items-end gap-3 border-t border-ink/15 pt-3">
+        <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
           {sold ? null : vehicle.price ? (
-            <span className="font-display text-2xl leading-none text-ink sm:text-[1.75rem]">
-              {currency.format(vehicle.price)}
+            <span className="font-display text-sm text-ink sm:text-base">
+              Offered at: {currency.format(vehicle.price)}
             </span>
           ) : (
             <span className="text-sm text-ink/50">Price available on request</span>
           )}
           {vehicle.mileage ? (
-            <span className="ml-auto text-xs tabular-nums text-ink/50">
+            <span className="text-xs tabular-nums text-ink/50 sm:ml-auto">
               {vehicle.mileage.toLocaleString()} mi
             </span>
           ) : null}
