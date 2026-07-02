@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
@@ -49,15 +49,6 @@ export function Cursor() {
   const [pressed, setPressed] = useState(false);
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
-  // The position the pointer was actually last seen at, via a real
-  // mousemove. A mouseover whose own coordinates match this exactly didn't
-  // come from the pointer moving — e.g. a nav link's own classes change the
-  // instant its route becomes active (see NavLink's isActive), and browsers
-  // re-fire mouseover for whatever's still stationary underneath when that
-  // happens. Comparing against this (rather than event order, which puts
-  // mouseover before its accompanying mousemove even on a genuine first
-  // entry) is what tells a real hover apart from that noise.
-  const lastMoveRef = useRef({ x: -100, y: -100 });
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -74,11 +65,18 @@ export function Cursor() {
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
-      lastMoveRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const over = (e: MouseEvent) => {
-      if (e.clientX === lastMoveRef.current.x && e.clientY === lastMoveRef.current.y) {
+      // A mouseover whose own coordinates match the pointer's last tracked
+      // position didn't come from the pointer actually moving — e.g. a nav
+      // link's own classes change the instant its route becomes active (see
+      // NavLink's isActive), and browsers re-fire mouseover for whatever's
+      // still stationary underneath when that happens. Comparing against
+      // the tracked position (rather than event order, which puts
+      // mouseover before its accompanying mousemove even on a genuine first
+      // entry) is what tells a real hover apart from that noise.
+      if (e.clientX === x.get() && e.clientY === y.get()) {
         return;
       }
       const target = e.target as HTMLElement;
@@ -124,13 +122,23 @@ export function Cursor() {
   }, [active, x, y]);
 
   // Clicking a nav link and landing on its own page leaves it still
-  // physically under the pointer — without this, hover would keep reading
-  // as active for as long as the mouse happens to stay put after the click,
-  // even once the visitor has moved on to reading the new page.
+  // physically under the pointer — hover should stay red for exactly that
+  // reason, not get force-cleared just because the route changed. Re-check
+  // what's actually at the last known pointer position rather than
+  // assuming either way, so this is correct whether the click landed on a
+  // still-hovered link or moved on to something else entirely.
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
-    setHover(false);
-    setLabel(null);
+    const elementAtPoint =
+      typeof document !== "undefined" ? (document.elementFromPoint(x.get(), y.get()) as HTMLElement | null) : null;
+    const interactive = elementAtPoint?.closest?.(INTERACTIVE_SELECTOR) as HTMLElement | null;
+    if (interactive) {
+      setHover(true);
+      setLabel(interactive.getAttribute("data-cursor-text"));
+    } else {
+      setHover(false);
+      setLabel(null);
+    }
   }
 
   if (!active) return null;
