@@ -128,6 +128,33 @@ export default async function VehicleDetailPage({
               </Reveal>
 
               <Reveal delay={0.16}>
+                <div className="mt-6 flex flex-wrap items-baseline gap-4">
+                  {sold ? (
+                    <span className="font-display text-2xl text-ink md:text-3xl">Sold</span>
+                  ) : vehicle.price ? (
+                    <span className="font-display text-2xl text-ink md:text-3xl">
+                      Offered at: {currency.format(vehicle.price)}
+                    </span>
+                  ) : (
+                    <span className="text-base text-ink/50">Price available on request</span>
+                  )}
+                  {vehicle.mileage ? (
+                    <span className="text-sm tabular-nums text-ink/50">
+                      {vehicle.mileage.toLocaleString()} mi
+                    </span>
+                  ) : null}
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.22}>
+                <div className="mt-6">
+                  <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
+                    {sold ? "Ask About Similar Cars" : "Ask About This Car"}
+                  </Button>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.3}>
                 <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
                   {sold
                     ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
@@ -139,55 +166,30 @@ export default async function VehicleDetailPage({
         </Container>
       </section>
 
-      <section className="border-b border-ink/15 bg-cream-deep py-20 md:py-24">
-        <Container>
-          {specRows.length > 0 ? (
-            <>
-              <Reveal className="flex items-center gap-5">
-                <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
-                  Specifications
-                </h2>
-                <span className="h-1 flex-1 bg-accent" />
-              </Reveal>
+      {specRows.length > 0 ? (
+        <section className="border-b border-ink/15 bg-cream-deep py-20 md:py-24">
+          <Container>
+            <Reveal className="flex items-center gap-5">
+              <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+                Specifications
+              </h2>
+              <span className="h-1 flex-1 bg-accent" />
+            </Reveal>
 
-              <RevealGroup className="mt-10 grid gap-x-12 border-t border-ink/15 sm:grid-cols-2">
-                {specRows.map(([label, value]) => (
-                  <RevealItem
-                    key={label}
-                    className="flex items-center justify-between gap-6 border-b border-ink/15 py-4"
-                  >
-                    <span className="text-xs uppercase tracking-[0.1em] text-ink/45">{label}</span>
-                    <span className="font-display text-sm text-ink">{value}</span>
-                  </RevealItem>
-                ))}
-              </RevealGroup>
-            </>
-          ) : null}
-
-          <Reveal delay={specRows.length > 0 ? 0.1 : 0} className={specRows.length > 0 ? "mt-10" : undefined}>
-            <div className="flex flex-wrap items-baseline gap-4">
-              {sold ? null : vehicle.price ? (
-                <span className="font-display text-2xl text-ink md:text-3xl">
-                  Offered at: {currency.format(vehicle.price)}
-                </span>
-              ) : (
-                <span className="text-base text-ink/50">Price available on request</span>
-              )}
-              {vehicle.mileage ? (
-                <span className="text-sm tabular-nums text-ink/50">
-                  {vehicle.mileage.toLocaleString()} mi
-                </span>
-              ) : null}
-            </div>
-          </Reveal>
-
-          <Reveal delay={specRows.length > 0 ? 0.18 : 0.08} className="mt-8">
-            <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
-              {sold ? "Ask About Similar Cars" : "Ask About This Car"}
-            </Button>
-          </Reveal>
-        </Container>
-      </section>
+            <RevealGroup className="mt-10 grid gap-x-12 border-t border-ink/15 sm:grid-cols-2">
+              {specRows.map(([label, value]) => (
+                <RevealItem
+                  key={label}
+                  className="flex items-center justify-between gap-6 border-b border-ink/15 py-4"
+                >
+                  <span className="text-xs uppercase tracking-[0.1em] text-ink/45">{label}</span>
+                  <span className="font-display text-sm text-ink">{value}</span>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </Container>
+        </section>
+      ) : null}
 
       <CTABanner
         title="Want a closer look before you commit?"

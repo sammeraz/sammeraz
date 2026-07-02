@@ -55,7 +55,9 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         ) : null}
 
         <div className="mt-3 flex flex-col gap-1 border-t border-ink/15 pt-3 sm:flex-row sm:items-center sm:justify-between">
-          {sold ? null : vehicle.price ? (
+          {sold ? (
+            <span className="font-display text-sm text-ink sm:text-base">Sold</span>
+          ) : vehicle.price ? (
             <span className="font-display text-sm text-ink sm:text-base">
               Offered at: {currency.format(vehicle.price)}
             </span>
