@@ -42,9 +42,9 @@ export function Hero() {
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: easing }}
-            className="inline-flex items-center border border-accent px-4 py-1.5"
+            className="inline-flex items-center border border-cream px-4 py-1.5"
           >
-            <span className="font-display text-xs text-accent-soft">AIM Imports — Leander, Texas</span>
+            <span className="font-display text-xs text-cream">AIM Imports — Leander, Texas</span>
           </motion.div>
 
           <h1 className="font-display mt-6 text-[clamp(2.75rem,7vw,5.75rem)] leading-[1.02]">

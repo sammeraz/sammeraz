@@ -8,12 +8,23 @@ import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 const INTERACTIVE_SELECTOR = "a, button, [role='button'], [data-cursor]";
 const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 
-// Matches --color-accent-soft / --color-accent in globals.css. A constant
-// bright-red cursor following your mouse everywhere reads as fatiguing over
-// time, so the reticle is muted by default and only jumps to the fuller red
-// as a deliberate "this is clickable" signal on hover.
-const SOFT_RED = "#e8483d";
+// A constantly-visible saturated color following the mouse everywhere reads
+// as fatiguing over time — that held true even muted to accent-soft, so the
+// reticle carries no red at all by default. Ink (matches --color-ink) reads
+// clearly on light sections the same way body text does; the halo below is
+// what carries it on dark ones. Red is reserved entirely for hover, as a
+// deliberate "this is clickable" signal rather than a constant presence.
+const INK = "#0d0d0d";
 const FULL_RED = "#d3261a";
+// A solid (unblurred) ring just outside the shape's own edge, same in every
+// state. Invisible against light sections — the ink fill/border underneath
+// already reads there — but it's what keeps the cursor visible on dark
+// sections, where ink-on-ink would otherwise disappear outright. Doing this
+// with a real halo color instead of mix-blend-mode is deliberate: the
+// earlier white + mix-blend-difference cursor went invisible over the
+// site's own light sections in practice, so this cursor doesn't lean on
+// blend modes for visibility at all.
+const HALO = "shadow-[0_0_0_1.5px_rgba(255,255,255,0.65)]";
 
 // Four L-shaped ticks that fan out from the frame on hover, like a camera
 // autofocus reticle locking on — reinforces "this is clickable" instead of
@@ -108,12 +119,12 @@ export function Cursor() {
           vanishes for the moment the intro is still on screen. */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[250] h-1.5 w-1.5"
+        className={`pointer-events-none fixed left-0 top-0 z-[250] h-1.5 w-1.5 ${HALO}`}
         style={{ x, y, translate: "-50% -50%" }}
         animate={{
           opacity: visible ? 1 : 0,
           rotate: pressed ? 45 : 0,
-          backgroundColor: hover ? FULL_RED : SOFT_RED,
+          backgroundColor: hover ? FULL_RED : INK,
         }}
         transition={{ duration: 0.15 }}
       />
@@ -135,16 +146,11 @@ export function Cursor() {
       >
         {/* Diamond by default, squares up on hover — the one shape in the
             cursor that isn't a plain circle, matching the sharp, uncut
-            corners used on buttons and cards everywhere else. Solid red
-            rather than a white + mix-blend-difference trick: the blend
-            approach was unreliable and went invisible over the site's own
-            light (cream) sections, whereas this red already reads clearly
-            against both the light and dark surfaces used everywhere else on
-            the site. */}
+            corners used on buttons and cards everywhere else. */}
         <motion.div
           aria-hidden="true"
-          className="absolute inset-0 border"
-          animate={{ rotate: hover ? 0 : 45, borderColor: hover ? FULL_RED : SOFT_RED }}
+          className={`absolute inset-0 border ${HALO}`}
+          animate={{ rotate: hover ? 0 : 45, borderColor: hover ? FULL_RED : INK }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
 
@@ -152,7 +158,7 @@ export function Cursor() {
           <motion.span
             key={corner.key}
             aria-hidden="true"
-            className={`absolute h-2.5 w-2.5 border-accent ${corner.pos} ${corner.border}`}
+            className={`absolute h-2.5 w-2.5 border-accent ${HALO} ${corner.pos} ${corner.border}`}
             animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.4 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           />
