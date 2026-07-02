@@ -48,15 +48,15 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim || (!sold && vehicle.mileage) ? (
-          <div className="flex items-baseline gap-2">
+        {vehicle.trim || vehicle.mileage ? (
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             {vehicle.trim ? (
               <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
                 {vehicle.trim}
               </p>
             ) : null}
-            {!sold && vehicle.mileage ? (
-              <span className="ml-auto text-[10px] tabular-nums text-ink/50 sm:text-xs">
+            {vehicle.mileage ? (
+              <span className="ml-auto whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs">
                 {vehicle.mileage.toLocaleString()} mi
               </span>
             ) : null}
