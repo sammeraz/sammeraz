@@ -9,7 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "AIM Imports is a Texas-based JDM importer focused on transparent sourcing, careful documentation, and clear communication.",
+    "AIM Imports is a Leander, Texas-based JDM importer focused on transparent sourcing, careful documentation, and clear communication.",
 };
 
 export default function AboutPage() {

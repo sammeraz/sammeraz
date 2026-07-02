@@ -50,16 +50,22 @@ body {
 }
 
 /* Custom cursor replaces the native pointer, except where a real text caret
-   is expected (form fields) — never hide the cursor from someone typing. */
-.cursor-none-custom {
-  cursor: none;
+   is expected (form fields) — never hide the cursor from someone typing.
+   The `*` (plus !important) is required: links carry a browser-default
+   `cursor: pointer` declared directly on the element, and an element's own
+   specified cursor always wins over an inherited one no matter the origin —
+   so without overriding every descendant, hovering any link/button brought
+   the system pointer back. */
+.cursor-none-custom,
+.cursor-none-custom * {
+  cursor: none !important;
 }
 
 .cursor-none-custom input,
 .cursor-none-custom textarea,
 .cursor-none-custom select,
 .cursor-none-custom [contenteditable="true"] {
-  cursor: auto;
+  cursor: auto !important;
 }
 
 /* Subtle film-grain texture — print/paper surface. */

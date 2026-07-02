@@ -25,7 +25,13 @@ const nextSteps = [
   },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ vehicle?: string }>;
+}) {
+  const { vehicle } = await searchParams;
+
   return (
     <>
       <PageHeader
@@ -37,7 +43,7 @@ export default function ContactPage() {
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
-            <InquiryForm />
+            <InquiryForm defaultVehicleInterest={vehicle} />
           </Reveal>
 
           <RevealGroup className="flex flex-col gap-12">

@@ -11,7 +11,7 @@ const words = site.tagline.split(" ");
 
 export function Hero() {
   return (
-    <section className="relative flex h-[80vh] min-h-[560px] items-end overflow-hidden bg-ink text-cream md:h-[92vh] md:min-h-[640px]">
+    <section className="relative flex min-h-[max(80vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(92vh,640px)]">
       <div className="absolute inset-0">
         <PlaceholderArt variant="hero" />
       </div>
@@ -24,7 +24,7 @@ export function Hero() {
             transition={{ duration: 0.6, ease: easing }}
             className="inline-flex items-center border border-accent px-4 py-1.5"
           >
-            <span className="font-display text-xs text-accent-soft">AIM Imports — Texas, USA</span>
+            <span className="font-display text-xs text-accent-soft">AIM Imports — Leander, Texas</span>
           </motion.div>
 
           <h1 className="font-display mt-6 text-[clamp(2.75rem,7vw,5.75rem)] leading-[1.02]">

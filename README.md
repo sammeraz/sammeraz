@@ -100,10 +100,10 @@ comment before reordering sections that use it.
 Built with [motion](https://motion.dev) (the Framer Motion successor). Everything respects
 `prefers-reduced-motion` and touch/coarse-pointer devices automatically:
 
-- **Cursor** (`components/motion/Cursor.tsx`) — custom dot + ring, only on fine-pointer (mouse)
-  devices. Grows on hover over `a`, `button`, and `[data-cursor]`; add
-  `data-cursor-text="Label"` to any element for a contextual label. Hides itself over form
-  fields so the native text caret stays visible.
+- **Cursor** (`components/motion/Cursor.tsx`) — custom dot + diamond reticle, only on
+  fine-pointer (mouse) devices. The diamond squares up and camera-focus corner brackets fan out
+  on hover over `a`, `button`, and `[data-cursor]`; add `data-cursor-text="Label"` to any element
+  for a contextual label. Hides itself over form fields so the native text caret stays visible.
 - **Preloader** (`components/motion/Preloader.tsx`) — spinning-logo intro, plays once per tab
   session (module-level flag, not state — the root layout persists across client-side nav, so it
   naturally never replays on internal links, only on a hard reload or fresh tab).

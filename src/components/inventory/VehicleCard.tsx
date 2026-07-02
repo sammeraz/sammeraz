@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import type { Vehicle } from "@/lib/types";
 
@@ -18,7 +19,11 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const image = vehicle.images?.[0];
 
   return (
-    <article className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1">
+    <Link
+      href={`/inventory/${vehicle.slug}`}
+      data-cursor-text="View Details"
+      className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1"
+    >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
           <Image
@@ -72,6 +77,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           ) : null}
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

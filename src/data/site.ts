@@ -4,7 +4,7 @@ export const site = {
   tagline: "Japanese vehicles, sourced properly.",
   description:
     "AIM Imports helps buyers nationwide source Japanese-market vehicles with careful documentation review, clear communication, and coordinated delivery anywhere in the U.S. from our Texas base.",
-  location: "Texas, USA",
+  location: "Leander, Texas",
   email: "sammer@aimimports.jp",
   inquiryCta: "Start an Inquiry",
 };

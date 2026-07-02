@@ -2,7 +2,7 @@ const items = [
   "25 Years Deep in the JDM Game",
   "Every Car Auction-Verified, No Exceptions",
   "Paperwork Handled Right, Every Time",
-  "Texas Built, Delivered Nationwide",
+  "Based in Leander, Texas — Nationwide Delivery",
 ];
 
 // Repeated enough times that one "half" of the track (for the -50% loop

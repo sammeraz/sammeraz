@@ -8,6 +8,16 @@ import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 const INTERACTIVE_SELECTOR = "a, button, [role='button'], [data-cursor]";
 const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 
+// Four L-shaped ticks that fan out from the frame on hover, like a camera
+// autofocus reticle locking on — reinforces "this is clickable" instead of
+// just scaling the same shape bigger.
+const CORNERS = [
+  { key: "tl", pos: "-left-2.5 -top-2.5", border: "border-l border-t" },
+  { key: "tr", pos: "-right-2.5 -top-2.5", border: "border-r border-t" },
+  { key: "br", pos: "-right-2.5 -bottom-2.5", border: "border-r border-b" },
+  { key: "bl", pos: "-left-2.5 -bottom-2.5", border: "border-l border-b" },
+] as const;
+
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
   const reducedMotion = useSafeReducedMotion();
@@ -79,33 +89,49 @@ export function Cursor() {
   if (!active) return null;
 
   const visible = !overText;
-  const ringSize = hover ? 84 : pressed ? 22 : 34;
+  const ringSize = hover ? 72 : pressed ? 20 : 32;
 
   return (
     <>
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 rounded-full bg-white mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[100] h-1.5 w-1.5 bg-white mix-blend-difference"
         style={{ x, y, translate: "-50% -50%" }}
-        animate={{ opacity: visible ? 1 : 0 }}
+        animate={{ opacity: visible ? 1 : 0, rotate: pressed ? 45 : 0 }}
         transition={{ duration: 0.15 }}
       />
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full border border-white mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center"
         style={{ x: ringX, y: ringY, translate: "-50% -50%" }}
-        animate={{
-          width: ringSize,
-          height: ringSize,
-          opacity: visible ? 1 : 0,
-        }}
+        animate={{ width: ringSize, height: ringSize, opacity: visible ? 1 : 0 }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
       >
+        {/* Diamond by default, squares up on hover — the one shape in the
+            cursor that isn't a plain circle, matching the sharp, uncut
+            corners used on buttons and cards everywhere else. */}
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-0 border border-white mix-blend-difference"
+          animate={{ rotate: hover ? 0 : 45 }}
+          transition={{ type: "spring", damping: 20, stiffness: 240 }}
+        />
+
+        {CORNERS.map((corner) => (
+          <motion.span
+            key={corner.key}
+            aria-hidden="true"
+            className={`absolute h-3 w-3 border-white mix-blend-difference ${corner.pos} ${corner.border}`}
+            animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.4 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          />
+        ))}
+
         {label ? (
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-white"
+            className="relative whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.12em] text-white mix-blend-difference"
           >
             {label}
           </motion.span>

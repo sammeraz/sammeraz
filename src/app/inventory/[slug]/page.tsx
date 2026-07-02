@@ -1,0 +1,173 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
+import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { CTABanner } from "@/components/sections/CTABanner";
+import { Reveal } from "@/components/motion/Reveal";
+import { ArrowLeftIcon } from "@/components/ui/icons";
+import { inventory } from "@/data/inventory";
+import type { Vehicle } from "@/lib/types";
+
+const statusLabel: Record<Vehicle["status"], string> = {
+  available: "Available",
+  incoming: "Incoming",
+  sold: "Sold",
+};
+
+const currency = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+});
+
+function getVehicle(slug: string) {
+  return inventory.find((vehicle) => vehicle.slug === slug);
+}
+
+export function generateStaticParams() {
+  return inventory.map((vehicle) => ({ slug: vehicle.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const vehicle = getVehicle(slug);
+  if (!vehicle) return { title: "Vehicle Not Found" };
+
+  const name = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  return {
+    title: name,
+    description: `${name}${vehicle.trim ? ` ${vehicle.trim}` : ""} — sourced and offered through AIM Imports.`,
+  };
+}
+
+export default async function VehicleDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const vehicle = getVehicle(slug);
+  if (!vehicle) notFound();
+
+  const image = vehicle.images?.[0];
+  const name = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+  const sold = vehicle.status === "sold";
+
+  return (
+    <>
+      {/* Dark strip, not just a breadcrumb bar: the header is transparent
+          with light text at scroll-top, on the assumption every page opens
+          on a dark surface (Hero/PageHeader elsewhere) — this keeps that
+          assumption true here too instead of stranding white nav text over
+          a white section. */}
+      <section className="bg-ink pb-6 pt-24 md:pt-32">
+        <Container>
+          <Reveal>
+            <Link
+              href="/inventory"
+              className="font-display inline-flex items-center gap-2 text-xs text-cream/60 transition-colors hover:text-accent-soft"
+            >
+              <ArrowLeftIcon className="h-3.5 w-3.5" />
+              Back to Inventory
+            </Link>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="border-b border-ink/15 bg-cream pb-20 pt-12">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <Reveal>
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                {image ? (
+                  <Image src={image} alt={name} fill className="object-cover" />
+                ) : (
+                  <PlaceholderArt variant="card" />
+                )}
+                <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
+                  {statusLabel[vehicle.status]}
+                </span>
+              </div>
+            </Reveal>
+
+            <div>
+              <Reveal>
+                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
+                  {vehicle.year} {vehicle.make}
+                </p>
+                <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
+                  {vehicle.model}
+                </h1>
+                {vehicle.trim ? (
+                  <p className="mt-2 text-sm uppercase tracking-[0.08em] text-ink/55">
+                    {vehicle.trim}
+                  </p>
+                ) : null}
+              </Reveal>
+
+              <Reveal delay={0.1}>
+                <span className="mt-6 block h-1 w-16 bg-accent" />
+              </Reveal>
+
+              <Reveal delay={0.16}>
+                <div className="mt-6 flex flex-wrap items-baseline gap-4">
+                  <span className="font-display text-2xl text-ink md:text-3xl">
+                    Offered at: {currency.format(vehicle.price)}
+                  </span>
+                  {vehicle.mileage ? (
+                    <span className="text-sm tabular-nums text-ink/50">
+                      {vehicle.mileage.toLocaleString()} mi
+                    </span>
+                  ) : null}
+                </div>
+              </Reveal>
+
+              {vehicle.highlights?.length ? (
+                <Reveal delay={0.22}>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {vehicle.highlights.map((highlight) => (
+                      <span
+                        key={highlight}
+                        className="border border-ink/20 px-3 py-1 text-xs uppercase tracking-[0.06em] text-ink/65"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+                </Reveal>
+              ) : null}
+
+              <Reveal delay={0.28}>
+                <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
+                  {sold
+                    ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
+                    : "Every vehicle we offer is reviewed against its auction sheet and import eligibility before it's listed. Ask us for the full condition report, shipping timeline, and landed cost for this car."}
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.34}>
+                <div className="mt-8">
+                  <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
+                    {sold ? "Ask About Similar Cars" : "Ask About This Car"}
+                  </Button>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <CTABanner
+        title="Want a closer look before you commit?"
+        description="We'll walk you through the auction sheet, condition grade, and everything it takes to get this car to your driveway."
+      />
+    </>
+  );
+}

@@ -10,7 +10,7 @@ const inputClass =
 
 const labelClass = "text-xs font-medium uppercase tracking-[0.14em] text-ink/50";
 
-export function InquiryForm() {
+export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -108,6 +108,7 @@ export function InquiryForm() {
           id="vehicleInterest"
           name="vehicleInterest"
           type="text"
+          defaultValue={defaultVehicleInterest}
           className={inputClass}
           placeholder="e.g. 1999 Nissan Skyline GT-R, V-Spec"
         />
