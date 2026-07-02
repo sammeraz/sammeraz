@@ -21,7 +21,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
     <Link
       href={`/inventory/${vehicle.slug}`}
       data-cursor-text="View Details"
-      className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1"
+      className="group flex h-full flex-col border border-ink/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-ink/25"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
@@ -41,7 +41,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         ) : null}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
@@ -88,11 +88,11 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full flex-col border border-ink/10 bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Incoming" />
       </div>
-      <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
