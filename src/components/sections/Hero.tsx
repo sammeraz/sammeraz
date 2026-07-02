@@ -1,20 +1,40 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { site } from "@/data/site";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 const words = site.tagline.split(" ");
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useSafeReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  // Background drifts a little slower than the page scrolls past it — the
+  // wrapper below is oversized (extends past the section's own top/bottom
+  // edges) so the drift never uncovers empty space; the section's own
+  // overflow-hidden clips it back down to the hero's actual bounds.
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+
   return (
-    <section className="relative flex min-h-[max(80vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(92vh,640px)]">
-      <div className="absolute inset-0">
+    <section
+      ref={sectionRef}
+      className="relative flex min-h-[max(80vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(92vh,640px)]"
+    >
+      <motion.div
+        className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
+        style={{ y: reducedMotion ? "0%" : parallaxY }}
+      >
         <PlaceholderArt variant="hero" />
-      </div>
+      </motion.div>
 
       <Container className="relative z-10 pb-16 pt-20 md:pb-24 md:pt-32">
         <div className="max-w-3xl">

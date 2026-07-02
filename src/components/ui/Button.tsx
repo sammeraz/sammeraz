@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from "react";
+import { useRef, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from "react";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
 
@@ -54,10 +54,20 @@ export function Button({
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 20, mass: 0.5 });
   const springY = useSpring(y, { stiffness: 300, damping: 20, mass: 0.5 });
+  const rectRef = useRef<DOMRect | null>(null);
+
+  function handleMouseEnter(e: MouseEvent<HTMLElement>) {
+    if (!isFinePointer) return;
+    // Measured once on enter rather than every mousemove: getBoundingClientRect
+    // forces a synchronous layout flush, and this button doesn't resize or
+    // reposition while hovered, so re-measuring on each pixel of travel only
+    // adds cost without adding accuracy.
+    rectRef.current = e.currentTarget.getBoundingClientRect();
+  }
 
   function handleMouseMove(e: MouseEvent<HTMLElement>) {
     if (!isFinePointer) return;
-    const rect = e.currentTarget.getBoundingClientRect();
+    const rect = rectRef.current ?? e.currentTarget.getBoundingClientRect();
     const relX = e.clientX - rect.left - rect.width / 2;
     const relY = e.clientY - rect.top - rect.height / 2;
     x.set(Math.max(-MAGNETIC_MAX, Math.min(MAGNETIC_MAX, relX * MAGNETIC_STRENGTH)));
@@ -65,6 +75,7 @@ export function Button({
   }
 
   function handleMouseLeave() {
+    rectRef.current = null;
     x.set(0);
     y.set(0);
   }
@@ -84,6 +95,7 @@ export function Button({
       className="inline-block"
       style={{ x: springX, y: springY }}
       whileTap={{ scale: 0.94 }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
