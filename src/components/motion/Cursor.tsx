@@ -16,15 +16,17 @@ const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 // deliberate "this is clickable" signal rather than a constant presence.
 const INK = "#0d0d0d";
 const FULL_RED = "#d3261a";
-// A solid (unblurred) ring just outside the shape's own edge, same in every
-// state. Invisible against light sections — the ink fill/border underneath
-// already reads there — but it's what keeps the cursor visible on dark
-// sections, where ink-on-ink would otherwise disappear outright. Doing this
-// with a real halo color instead of mix-blend-mode is deliberate: the
-// earlier white + mix-blend-difference cursor went invisible over the
-// site's own light sections in practice, so this cursor doesn't lean on
-// blend modes for visibility at all.
-const HALO = "shadow-[0_0_0_1.5px_rgba(255,255,255,0.65)]";
+// A solid (unblurred) ring just outside the shape's own edge, used on both
+// the dot and the box outline below. Invisible against light sections — the
+// ink fill/border underneath already reads there — but it's what keeps the
+// cursor visible on dark sections, where ink-on-ink would otherwise
+// disappear outright. Doing this with a real halo color instead of
+// mix-blend-mode is deliberate: the earlier white + mix-blend-difference
+// cursor went invisible over the site's own light sections in practice, so
+// this cursor doesn't lean on blend modes for visibility at all. Dropped
+// entirely on hover so red reads as fully red, nothing white mixed in.
+const HALO_SHADOW = "0 0 0 1.5px rgba(255,255,255,0.65)";
+const NO_HALO_SHADOW = "0 0 0 0px rgba(255,255,255,0)";
 
 // Hover traces a short red segment around the box's perimeter on a loop,
 // rather than mixing red with the ink/white idle look — the perimeter of
@@ -125,7 +127,7 @@ export function Cursor() {
           rotate: pressed ? 45 : 0,
           backgroundColor: hover ? FULL_RED : INK,
           // No halo on hover — fully red then, nothing white mixed in.
-          boxShadow: hover ? "0 0 0 0px rgba(255,255,255,0)" : "0 0 0 1.5px rgba(255,255,255,0.65)",
+          boxShadow: hover ? NO_HALO_SHADOW : HALO_SHADOW,
         }}
         transition={{ duration: 0.15 }}
       />
@@ -145,22 +147,28 @@ export function Cursor() {
         }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
       >
-        {/* Diamond at rest — the one shape in the cursor that isn't a plain
-            circle, matching the sharp, uncut corners used on buttons and
-            cards everywhere else. Fades out entirely on hover rather than
-            just switching color, since the traced red line below takes
-            over as the "clickable" signal. */}
+        {/* Diamond at rest, square on hover — the one shape in the cursor
+            that isn't a plain circle, matching the sharp, uncut corners used
+            on buttons and cards everywhere else. Stays visible through the
+            hover transition instead of fading out, so hovering something
+            clickable still reads as a solid box; the traced segment below
+            rides on top of it for motion. */}
         <motion.div
           aria-hidden="true"
-          className={`absolute inset-0 border ${HALO}`}
-          style={{ borderColor: INK }}
-          animate={{ rotate: hover ? 0 : 45, opacity: hover ? 0 : 1 }}
+          className="absolute inset-0 border"
+          animate={{
+            rotate: hover ? 0 : 45,
+            borderColor: hover ? FULL_RED : INK,
+            boxShadow: hover ? NO_HALO_SHADOW : HALO_SHADOW,
+          }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
 
-        {/* Hover: a short red segment chases around the box on a loop
-            instead of a static border — fully red, no white halo mixed
-            in, and moving rather than just scaled-up. */}
+        {/* Hover: a brighter red segment chases around the box's edge on a
+            loop, layered on top of the solid outline above — its 2px stroke
+            reads as a pulse against the 1px border beneath it, so the
+            motion stays visible even though both are the same fully-red
+            color with no white mixed in. */}
         <svg
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
