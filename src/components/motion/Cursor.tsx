@@ -16,26 +16,28 @@ const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
 // deliberate "this is clickable" signal rather than a constant presence.
 const INK = "#0d0d0d";
 const FULL_RED = "#d3261a";
-// A solid (unblurred) ring just outside the shape's own edge, used on both
-// the dot and the box outline below. Invisible against light sections — the
-// ink fill/border underneath already reads there — but it's what keeps the
-// cursor visible on dark sections, where ink-on-ink would otherwise
-// disappear outright. Doing this with a real halo color instead of
-// mix-blend-mode is deliberate: the earlier white + mix-blend-difference
-// cursor went invisible over the site's own light sections in practice, so
-// this cursor doesn't lean on blend modes for visibility at all. Dropped
-// entirely on hover so red reads as fully red, nothing white mixed in.
+// A solid (unblurred) ring just outside the shape's own edge. Invisible
+// against light sections — the ink fill/border underneath already reads
+// there — but it's what keeps the cursor visible on dark sections, where
+// ink-on-ink would otherwise disappear outright. Doing this with a real
+// halo color instead of mix-blend-mode is deliberate: the earlier white +
+// mix-blend-difference cursor went invisible over the site's own light
+// sections in practice, so this cursor doesn't lean on blend modes for
+// visibility at all.
+const HALO = "shadow-[0_0_0_1.5px_rgba(255,255,255,0.65)]";
 const HALO_SHADOW = "0 0 0 1.5px rgba(255,255,255,0.65)";
 const NO_HALO_SHADOW = "0 0 0 0px rgba(255,255,255,0)";
 
-// Hover traces a short red segment around the box's perimeter on a loop,
-// rather than mixing red with the ink/white idle look — the perimeter of
-// the traced rect below (52x52, 2px inset from the 56px hover size) is
-// 4*52 = 208, so a dash pattern that sums to 208 and an offset animation of
-// exactly -208 loops seamlessly (the pattern at -208 is pixel-identical to
-// the one at 0, so the reset each cycle is invisible).
-const TRACE_PERIMETER = 208;
-const TRACE_DASH = "40 168";
+// Four corner brackets "lock on" to the box on hover — the same camera-focus
+// language the mobile menu button borrows for touch users who never see
+// this cursor. Independent marks rather than a connected border, so hover
+// reads as a clean red frame instead of a solid line or a moving dash.
+const BRACKET_POSITIONS = [
+  "-left-2 -top-2 border-l border-t",
+  "-right-2 -top-2 border-r border-t",
+  "-bottom-2 -left-2 border-b border-l",
+  "-bottom-2 -right-2 border-b border-r",
+];
 
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
@@ -147,58 +149,30 @@ export function Cursor() {
         }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
       >
-        {/* Diamond at rest, square on hover — the one shape in the cursor
-            that isn't a plain circle, matching the sharp, uncut corners used
-            on buttons and cards everywhere else. Stays visible through the
-            hover transition instead of fading out, so hovering something
-            clickable still reads as a solid box; the traced segment below
-            rides on top of it for motion. */}
+        {/* Diamond at rest — the one shape in the cursor that isn't a plain
+            circle, matching the sharp, uncut corners used on buttons and
+            cards everywhere else. Fades out entirely on hover, since the
+            corner brackets below take over as the "clickable" signal. */}
         <motion.div
           aria-hidden="true"
-          className="absolute inset-0 border"
-          animate={{
-            rotate: hover ? 0 : 45,
-            borderColor: hover ? FULL_RED : INK,
-            boxShadow: hover ? NO_HALO_SHADOW : HALO_SHADOW,
-          }}
+          className={`absolute inset-0 border ${HALO}`}
+          style={{ borderColor: INK }}
+          animate={{ rotate: hover ? 0 : 45, opacity: hover ? 0 : 1 }}
           transition={{ type: "spring", damping: 20, stiffness: 240 }}
         />
 
-        {/* Hover: a brighter red segment chases around the box's edge on a
-            loop, layered on top of the solid outline above — its 2px stroke
-            reads as a pulse against the 1px border beneath it, so the
-            motion stays visible even though both are the same fully-red
-            color with no white mixed in. */}
-        <svg
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-          viewBox="0 0 56 56"
-          preserveAspectRatio="none"
-        >
-          <motion.rect
-            x="2"
-            y="2"
-            width="52"
-            height="52"
-            fill="none"
-            stroke={FULL_RED}
-            strokeWidth="2"
-            strokeDasharray={TRACE_DASH}
-            animate={
-              hover
-                ? { opacity: 1, strokeDashoffset: -TRACE_PERIMETER }
-                : { opacity: 0 }
-            }
-            transition={
-              hover
-                ? {
-                    opacity: { duration: 0.15 },
-                    strokeDashoffset: { duration: 1.4, repeat: Infinity, ease: "linear" },
-                  }
-                : { duration: 0.15 }
-            }
+        {/* Hover: four corner brackets lock onto the box — fully red, no
+            white halo mixed in. */}
+        {BRACKET_POSITIONS.map((pos) => (
+          <motion.span
+            key={pos}
+            aria-hidden="true"
+            className={`absolute h-2 w-2 ${pos}`}
+            style={{ borderColor: FULL_RED }}
+            animate={{ opacity: hover ? 1 : 0, scale: hover ? 1 : 0.5 }}
+            transition={{ type: "spring", damping: 20, stiffness: 240 }}
           />
-        </svg>
+        ))}
 
         {label ? (
           <motion.span
