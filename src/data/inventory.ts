@@ -18,6 +18,14 @@ import type { Vehicle } from "@/lib/types";
  *   mileage: 42000,
  *   highlights: ["Auction grade 4.5", "One owner", "Unmodified"],
  *   images: ["/inventory/bnr34-v-spec-1.jpg"],
+ *   specs: {
+ *     chassisCode: "BNR34",
+ *     engine: "RB26DETT 2.6L Twin-Turbo I6",
+ *     drivetrain: "AWD (ATTESA E-TS)",
+ *     transmission: "6-Speed Manual",
+ *     exteriorColor: "Bayside Blue",
+ *     auctionGrade: "4.5",
+ *   },
  * }
  */
 export const inventory: Vehicle[] = [];

@@ -1,5 +1,19 @@
 export type VehicleStatus = "available" | "incoming" | "sold";
 
+/** Structured spec-sheet fields for the detail page. All optional — fill in
+ * whatever's confirmed for a given car; the detail page only renders a spec
+ * table when at least one field is present, same honest-empty pattern as
+ * the rest of the site. */
+export interface VehicleSpecs {
+  chassisCode?: string;
+  engine?: string;
+  drivetrain?: string;
+  transmission?: string;
+  exteriorColor?: string;
+  /** As graded on the Japanese auction sheet, e.g. "4.5". */
+  auctionGrade?: string;
+}
+
 export interface Vehicle {
   /** Stable identifier, also used as the URL slug for a future detail page. */
   slug: string;
@@ -16,6 +30,8 @@ export interface Vehicle {
   highlights?: string[];
   /** Left empty until real photography exists — UI falls back to placeholder art. */
   images?: string[];
+  /** Shown as a spec-sheet table on the detail page only, not the card. */
+  specs?: VehicleSpecs;
 }
 
 export type MagazineCondition = "new" | "like-new" | "good" | "fair";

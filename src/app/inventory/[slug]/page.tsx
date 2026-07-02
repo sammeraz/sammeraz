@@ -6,15 +6,24 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { CTABanner } from "@/components/sections/CTABanner";
-import { Reveal } from "@/components/motion/Reveal";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
 import { inventory } from "@/data/inventory";
-import type { Vehicle } from "@/lib/types";
+import type { Vehicle, VehicleSpecs } from "@/lib/types";
 
 const statusLabel: Record<Vehicle["status"], string> = {
   available: "Available",
   incoming: "Incoming",
   sold: "Sold",
+};
+
+const specLabels: Record<keyof VehicleSpecs, string> = {
+  chassisCode: "Chassis Code",
+  engine: "Engine",
+  drivetrain: "Drivetrain",
+  transmission: "Transmission",
+  exteriorColor: "Exterior Color",
+  auctionGrade: "Auction Grade",
 };
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -59,6 +68,9 @@ export default async function VehicleDetailPage({
   const image = vehicle.images?.[0];
   const name = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const sold = vehicle.status === "sold";
+  const specRows = (Object.keys(specLabels) as (keyof VehicleSpecs)[])
+    .filter((key) => vehicle.specs?.[key])
+    .map((key) => [specLabels[key], vehicle.specs![key] as string] as const);
 
   return (
     <>
@@ -163,6 +175,31 @@ export default async function VehicleDetailPage({
           </div>
         </Container>
       </section>
+
+      {specRows.length > 0 ? (
+        <section className="border-b border-ink/15 bg-cream-deep py-20 md:py-24">
+          <Container>
+            <Reveal className="flex items-center gap-5">
+              <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+                Specifications
+              </h2>
+              <span className="h-1 flex-1 bg-accent" />
+            </Reveal>
+
+            <RevealGroup className="mt-10 grid gap-x-12 border-t border-ink/15 sm:grid-cols-2">
+              {specRows.map(([label, value]) => (
+                <RevealItem
+                  key={label}
+                  className="flex items-center justify-between gap-6 border-b border-ink/15 py-4"
+                >
+                  <span className="text-xs uppercase tracking-[0.1em] text-ink/45">{label}</span>
+                  <span className="font-display text-sm text-ink">{value}</span>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </Container>
+        </section>
+      ) : null}
 
       <CTABanner
         title="Want a closer look before you commit?"
