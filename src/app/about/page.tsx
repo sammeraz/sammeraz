@@ -17,7 +17,7 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="About"
-        title="Built around the parts of importing that are easy to get wrong"
+        title="Focused on the details of importing that are easy to get wrong"
       />
 
       <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
