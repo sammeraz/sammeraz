@@ -67,41 +67,36 @@ export function Cursor() {
 
     document.documentElement.classList.add("cursor-none-custom");
 
+    // Deriving hover fresh from every real mousemove's own target, rather
+    // than tracking it via paired mouseover/mouseout listeners, sidesteps a
+    // whole class of ordering bugs: mouseover/mouseout can fire out of sync
+    // with mousemove (browsers don't guarantee which comes first for a
+    // given movement, and a fast flick across several elements can deliver
+    // them in an order that leaves hover stuck true), and they can also
+    // fire on their own with no real movement at all — e.g. a nav link's
+    // own classes change the instant its route becomes active (see
+    // NavLink's isActive), which alone can make a browser re-fire
+    // mouseover for whatever's still stationary underneath. mousemove has
+    // neither problem: it only ever fires on genuine pointer movement, and
+    // its target always reflects exactly what's under the pointer at that
+    // moment, so recomputing hover/label from it every time is always
+    // correct and never stale — no event-order assumptions required.
     const move = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
-    };
 
-    const over = (e: MouseEvent) => {
-      // A mouseover whose own coordinates match the pointer's last tracked
-      // position didn't come from the pointer actually moving — e.g. a nav
-      // link's own classes change the instant its route becomes active (see
-      // NavLink's isActive), and browsers re-fire mouseover for whatever's
-      // still stationary underneath when that happens. Comparing against
-      // the tracked position (rather than event order, which puts
-      // mouseover before its accompanying mousemove even on a genuine first
-      // entry) is what tells a real hover apart from that noise.
-      if (e.clientX === x.get() && e.clientY === y.get()) {
-        return;
-      }
       const target = e.target as HTMLElement;
       if (target.closest?.(TEXT_INPUT_SELECTOR)) {
         setOverText(true);
         return;
       }
+      setOverText(false);
+
       const interactive = target.closest?.(INTERACTIVE_SELECTOR) as HTMLElement | null;
       if (interactive) {
         setHover(true);
         setLabel(interactive.getAttribute("data-cursor-text"));
-      }
-    };
-
-    const out = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest?.(TEXT_INPUT_SELECTOR)) {
-        setOverText(false);
-      }
-      if (target.closest?.(INTERACTIVE_SELECTOR)) {
+      } else {
         setHover(false);
         setLabel(null);
       }
@@ -111,16 +106,12 @@ export function Cursor() {
     const up = () => setPressed(false);
 
     window.addEventListener("mousemove", move);
-    document.addEventListener("mouseover", over, true);
-    document.addEventListener("mouseout", out, true);
     window.addEventListener("mousedown", down);
     window.addEventListener("mouseup", up);
 
     return () => {
       document.documentElement.classList.remove("cursor-none-custom");
       window.removeEventListener("mousemove", move);
-      document.removeEventListener("mouseover", over, true);
-      document.removeEventListener("mouseout", out, true);
       window.removeEventListener("mousedown", down);
       window.removeEventListener("mouseup", up);
     };
