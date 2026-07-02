@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { InventoryGrid } from "@/components/inventory/InventoryGrid";
+import { InventoryBrowser } from "@/components/inventory/InventoryBrowser";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { inventory } from "@/data/inventory";
 
@@ -22,7 +22,7 @@ export default function InventoryPage() {
 
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
-          <InventoryGrid vehicles={inventory} placeholderCount={6} />
+          <InventoryBrowser vehicles={inventory} placeholderCount={6} />
         </Container>
       </section>
 

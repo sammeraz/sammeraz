@@ -96,3 +96,12 @@ export function ExpandIcon({ className = "" }: IconProps) {
     </svg>
   );
 }
+
+export function SearchIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="M15.5 15.5L20 20" />
+    </svg>
+  );
+}
