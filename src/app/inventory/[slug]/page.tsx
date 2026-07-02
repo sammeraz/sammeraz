@@ -116,10 +116,19 @@ export default async function VehicleDetailPage({
                 <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
                   {vehicle.model}
                 </h1>
-                {vehicle.trim ? (
-                  <p className="mt-2 text-sm uppercase tracking-[0.08em] text-ink/55">
-                    {vehicle.trim}
-                  </p>
+                {vehicle.trim || vehicle.mileage ? (
+                  <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    {vehicle.trim ? (
+                      <p className="text-sm uppercase tracking-[0.08em] text-ink/55">
+                        {vehicle.trim}
+                      </p>
+                    ) : null}
+                    {vehicle.mileage ? (
+                      <span className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50">
+                        {vehicle.mileage.toLocaleString()} mi
+                      </span>
+                    ) : null}
+                  </div>
                 ) : null}
               </RevealOnLoad>
 
@@ -138,11 +147,6 @@ export default async function VehicleDetailPage({
                   ) : (
                     <span className="text-base text-ink/50">Price available on request</span>
                   )}
-                  {vehicle.mileage ? (
-                    <span className="text-sm tabular-nums text-ink/50">
-                      {vehicle.mileage.toLocaleString()} mi
-                    </span>
-                  ) : null}
                 </div>
               </RevealOnLoad>
 
