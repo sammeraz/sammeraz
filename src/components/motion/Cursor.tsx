@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
@@ -40,6 +40,12 @@ const BRACKET_POSITIONS = [
   "-bottom-2 -right-2 border-b border-r",
 ];
 
+// useLayoutEffect warns on the server (SSR has no layout to measure before
+// paint) — this component is client-only in practice, so fall back to a
+// plain effect there and reserve the synchronous, pre-paint variant for the
+// browser, where it's needed below to read the DOM before it can paint.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
   const reducedMotion = useSafeReducedMotion();
@@ -48,7 +54,6 @@ export function Cursor() {
   const [overText, setOverText] = useState(false);
   const [pressed, setPressed] = useState(false);
   const pathname = usePathname();
-  const [lastPathname, setLastPathname] = useState(pathname);
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -127,10 +132,18 @@ export function Cursor() {
   // what's actually at the last known pointer position rather than
   // assuming either way, so this is correct whether the click landed on a
   // still-hovered link or moved on to something else entirely.
-  if (pathname !== lastPathname) {
-    setLastPathname(pathname);
-    const elementAtPoint =
-      typeof document !== "undefined" ? (document.elementFromPoint(x.get(), y.get()) as HTMLElement | null) : null;
+  //
+  // This has to run in a layout effect, not during render: render computes
+  // the new page but doesn't commit it to the real DOM until after this
+  // function returns, so reading elementFromPoint synchronously here would
+  // still see the outgoing page. Reading it here, guaranteed to run only
+  // after that commit, is what makes it match what's actually now on
+  // screen — the sometimes-stale-sometimes-right symptom came from that
+  // pre-commit read finding a leftover element that the new page doesn't
+  // actually have at that position.
+  useIsomorphicLayoutEffect(() => {
+    if (typeof document === "undefined") return;
+    const elementAtPoint = document.elementFromPoint(x.get(), y.get()) as HTMLElement | null;
     const interactive = elementAtPoint?.closest?.(INTERACTIVE_SELECTOR) as HTMLElement | null;
     if (interactive) {
       setHover(true);
@@ -139,7 +152,7 @@ export function Cursor() {
       setHover(false);
       setLabel(null);
     }
-  }
+  }, [pathname, x, y]);
 
   if (!active) return null;
 
