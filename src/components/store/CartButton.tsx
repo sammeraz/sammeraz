@@ -10,10 +10,12 @@ export function CartButton() {
   return (
     <motion.button
       type="button"
+      whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.88 }}
+      transition={{ type: "spring", stiffness: 400, damping: 18 }}
       onClick={open}
       aria-label={`Open cart${count > 0 ? `, ${count} items` : ""}`}
-      className="relative flex h-10 w-10 items-center justify-center text-cream/85 transition-colors hover:text-cream"
+      className="group relative flex h-10 w-10 items-center justify-center text-cream/85 transition-colors hover:text-cream"
     >
       <BagIcon className="h-5 w-5" />
       {count > 0 ? (
@@ -21,6 +23,13 @@ export function CartButton() {
           {count}
         </span>
       ) : null}
+      {/* Same underline language as the desktop nav links (see NavLink in
+          Header) — ties the cart into the header's existing hover motif
+          instead of a one-off effect just for this icon. */}
+      <span
+        aria-hidden="true"
+        className="absolute -bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-accent transition-all duration-300 ease-out group-hover:w-5"
+      />
     </motion.button>
   );
 }
