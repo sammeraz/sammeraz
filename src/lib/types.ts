@@ -10,8 +10,6 @@ export interface VehicleSpecs {
   drivetrain?: string;
   transmission?: string;
   exteriorColor?: string;
-  /** As graded on the Japanese auction sheet, e.g. "4.5". */
-  auctionGrade?: string;
 }
 
 export interface Vehicle {

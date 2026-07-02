@@ -16,7 +16,7 @@ import type { Vehicle } from "@/lib/types";
  *   price: 124500,
  *   status: "available",
  *   mileage: 42000,
- *   highlights: ["Auction grade 4.5", "One owner", "Unmodified"],
+ *   highlights: ["One owner", "Unmodified"],
  *   images: ["/inventory/bnr34-v-spec-1.jpg"],
  *   specs: {
  *     chassisCode: "BNR34",
@@ -24,7 +24,6 @@ import type { Vehicle } from "@/lib/types";
  *     drivetrain: "AWD (ATTESA E-TS)",
  *     transmission: "6-Speed Manual",
  *     exteriorColor: "Bayside Blue",
- *     auctionGrade: "4.5",
  *   },
  * }
  */
@@ -42,14 +41,13 @@ export const inventory: Vehicle[] = [
     price: 124500,
     status: "available",
     mileage: 42000,
-    highlights: ["Demo Listing", "Auction grade 4.5", "One owner"],
+    highlights: ["Demo Listing", "One owner"],
     specs: {
       chassisCode: "BNR34",
       engine: "RB26DETT 2.6L Twin-Turbo I6",
       drivetrain: "AWD (ATTESA E-TS)",
       transmission: "6-Speed Manual",
       exteriorColor: "Bayside Blue",
-      auctionGrade: "4.5",
     },
   },
   {
@@ -68,7 +66,6 @@ export const inventory: Vehicle[] = [
       drivetrain: "RWD",
       transmission: "5-Speed Manual",
       exteriorColor: "Black Mica",
-      auctionGrade: "4",
     },
   },
   {
@@ -84,7 +81,6 @@ export const inventory: Vehicle[] = [
       drivetrain: "RWD",
       transmission: "5-Speed Manual",
       exteriorColor: "Formula Red",
-      auctionGrade: "4.5",
     },
   },
 ];
