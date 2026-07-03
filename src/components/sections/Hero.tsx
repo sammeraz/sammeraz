@@ -46,7 +46,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
+      className="relative flex min-h-[560px] flex-1 items-start overflow-hidden bg-ink text-cream md:min-h-[640px] md:items-end"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
@@ -55,13 +55,6 @@ export function Hero() {
         {/* Mobile is back on the pre-video placeholder art for now — the
             video needs more work there, this isn't a permanent choice. */}
         <PlaceholderArt variant="hero" className="md:hidden" />
-        {/* PlaceholderArt's gradient is so dark it reads as flat empty
-            space over the tall gap between the header and where the text
-            starts — this diagonal sweep gives that area some presence
-            without touching the bottom-anchored layout itself. */}
-        <div className="absolute inset-0 overflow-hidden md:hidden">
-          <div className="absolute -inset-y-1/4 -left-1/4 w-3/4 rotate-[10deg] bg-gradient-to-r from-transparent via-accent/25 to-transparent" />
-        </div>
         <video
           ref={videoRef}
           className="hidden h-full w-full object-cover md:block"
