@@ -1,3 +1,7 @@
+"use client";
+
+import { useHeroFocus } from "@/lib/hero-focus-context";
+
 const items = [
   "Direct Sourcing From Japan's Auction Houses",
   "Every Car Auction-Verified, No Exceptions",
@@ -12,8 +16,14 @@ const half = [...items, ...items, ...items, ...items];
 const track = [...half, ...half];
 
 export function TrustStrip() {
+  const { focused } = useHeroFocus();
+
   return (
-    <div className="overflow-hidden bg-ink py-3">
+    <div
+      className={`overflow-hidden bg-ink py-3 transition-opacity duration-700 ${
+        focused ? "opacity-0" : "opacity-100"
+      }`}
+    >
       <div className="animate-marquee flex w-max items-center">
         {track.map((label, i) => (
           <span key={i} className="flex items-center">
