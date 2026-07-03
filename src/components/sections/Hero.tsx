@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
+import { useHeroFocus } from "@/lib/hero-focus-context";
 import { site } from "@/data/site";
 
 const easing = [0.16, 1, 0.3, 1] as const;
@@ -14,6 +15,7 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useSafeReducedMotion();
+  const { focused, toggle } = useHeroFocus();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -42,7 +44,9 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
+      onClick={toggle}
+      data-cursor
+      className="relative flex min-h-[560px] flex-1 cursor-pointer items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
@@ -65,12 +69,26 @@ export function Hero() {
         </video>
         {/* Same bottom-anchored darkening the old PlaceholderArt hero variant
             used, so the light headline stays legible over whatever's
-            underneath — footage brightness varies by frame, static art didn't. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
+            underneath — footage brightness varies by frame, static art didn't.
+            Fades out in focus mode along with the text it exists to serve. */}
+        <div
+          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent transition-opacity duration-700 ${
+            focused ? "opacity-0" : "opacity-100"
+          }`}
+        />
       </motion.div>
 
       <Container className="relative z-10 pb-16 pt-20 md:pb-24 md:pt-32">
-        <div className="max-w-3xl">
+        {/* inert (not just opacity/pointer-events) so a keyboard user tabbing
+            through can't land on the View Inventory / Start an Inquiry links
+            while they're invisible and un-clickable. stopPropagation keeps a
+            click meant for this text/these buttons from also re-triggering
+            the section's own toggle underneath it. */}
+        <div
+          inert={focused}
+          onClick={(event) => event.stopPropagation()}
+          className={`max-w-3xl transition-opacity duration-700 ${focused ? "opacity-0" : "opacity-100"}`}
+        >
           <motion.div
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}

@@ -7,6 +7,7 @@ import { Preloader } from "@/components/motion/Preloader";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { CartProvider } from "@/lib/cart-context";
 import { CartDrawer } from "@/components/store/CartDrawer";
+import { HeroFocusProvider } from "@/lib/hero-focus-context";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -42,14 +43,16 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-ink text-cream">
         <CartProvider>
-          <Preloader />
-          <Cursor />
-          <Header />
-          <main className="flex-1">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer />
-          <CartDrawer />
+          <HeroFocusProvider>
+            <Preloader />
+            <Cursor />
+            <Header />
+            <main className="flex-1">
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <Footer />
+            <CartDrawer />
+          </HeroFocusProvider>
         </CartProvider>
       </body>
     </html>

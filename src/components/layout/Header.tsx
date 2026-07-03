@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
 import { CartButton } from "@/components/store/CartButton";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
+import { useHeroFocus } from "@/lib/hero-focus-context";
 import { navLinks, site } from "@/data/site";
 
 const easing = [0.16, 1, 0.3, 1] as const;
@@ -26,6 +27,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const reducedMotion = useSafeReducedMotion();
+  const { focused } = useHeroFocus();
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
   // True for a moment right after navigation, covering the page-transition
@@ -79,9 +81,10 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+      inert={focused}
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,opacity] duration-500 ${
         solid ? "bg-ink/95 backdrop-blur-sm shadow-[0_1px_0_0] shadow-cream/10" : "bg-transparent"
-      }`}
+      } ${focused ? "pointer-events-none opacity-0" : "opacity-100"}`}
     >
       <Container className="flex h-20 items-center justify-between text-cream">
         <Logo />
