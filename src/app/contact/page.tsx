@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { InquiryForm } from "@/components/contact/InquiryForm";
+import { InquiryFormWithVehicleParam } from "@/components/contact/InquiryFormWithVehicleParam";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { site } from "@/data/site";
 
@@ -25,13 +27,7 @@ const nextSteps = [
   },
 ];
 
-export default async function ContactPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ vehicle?: string }>;
-}) {
-  const { vehicle } = await searchParams;
-
+export default function ContactPage() {
   return (
     <>
       <PageHeader
@@ -43,7 +39,9 @@ export default async function ContactPage({
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
-            <InquiryForm defaultVehicleInterest={vehicle} />
+            <Suspense fallback={<InquiryForm />}>
+              <InquiryFormWithVehicleParam />
+            </Suspense>
           </Reveal>
 
           <RevealGroup className="flex flex-col gap-12">

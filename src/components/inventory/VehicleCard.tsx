@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mileage } from "@/components/inventory/Mileage";
+import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import type { Vehicle } from "@/lib/types";
 
@@ -21,7 +22,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      className="group flex flex-col border border-ink/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-ink/25"
+      className="group flex flex-col border border-ink/10 bg-white transition-[translate,border-color] duration-300 hover:-translate-y-1 hover:border-ink/25"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
@@ -29,16 +30,13 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             src={image}
             alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
             fill
+            sizes="(min-width: 1024px) 33vw, 50vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <PlaceholderArt variant="card" />
         )}
-        {vehicle.status === "sold" ? (
-          <span className="font-display absolute left-0 top-3 bg-accent px-3.5 py-1.5 text-xs tracking-[0.14em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
-            Sold
-          </span>
-        ) : null}
+        {vehicle.status === "sold" ? <SoldBadge size="md" /> : null}
       </div>
 
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">

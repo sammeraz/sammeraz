@@ -28,7 +28,7 @@ export function CartButton() {
           instead of a one-off effect just for this icon. */}
       <span
         aria-hidden="true"
-        className="absolute -bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-accent transition-all duration-300 ease-out group-hover:w-5"
+        className="absolute -bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-accent transition-[width] duration-300 ease-out group-hover:w-5"
       />
     </motion.button>
   );

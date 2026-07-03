@@ -69,7 +69,7 @@ export function Header() {
       >
         {label}
         <span
-          className={`absolute -bottom-1 left-0 h-px bg-current transition-all duration-300 ease-out ${
+          className={`absolute -bottom-1 left-0 h-px bg-current transition-[width] duration-300 ease-out ${
             isActive ? "w-full" : "w-0 group-hover:w-full"
           }`}
         />

@@ -78,6 +78,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const [selectedMakes, setSelectedMakes] = useState<Set<string>>(new Set());
   const [selectedTransmissions, setSelectedTransmissions] = useState<Set<string>>(new Set());
   const [mileageRange, setMileageRange] = useState<[number, number]>([MILEAGE_MIN, MILEAGE_MAX]);
+  const [mileageUnit, setMileageUnit] = useState<"km" | "mi">("km");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const allMakes = useMemo(() => [...new Set(vehicles.map((v) => v.make))].sort(), [vehicles]);
@@ -102,21 +103,25 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
     return result;
   }, [searchMatches]);
 
-  const filtered = searchMatches
-    .filter((vehicle) => statusFilter === "all" || vehicle.status === statusFilter)
-    .filter((vehicle) => selectedMakes.size === 0 || selectedMakes.has(vehicle.make))
-    .filter((vehicle) => {
-      if (selectedTransmissions.size === 0) return true;
-      const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
-      return type !== null && selectedTransmissions.has(type);
-    })
-    .filter((vehicle) => {
-      if (mileageRange[0] === MILEAGE_MIN && mileageRange[1] === MILEAGE_MAX) return true;
-      if (vehicle.mileage === undefined) return false;
-      const km = milesToKm(vehicle.mileage);
-      return km >= mileageRange[0] && km <= mileageRange[1];
-    })
-    .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+  const filtered = useMemo(
+    () =>
+      searchMatches
+        .filter((vehicle) => statusFilter === "all" || vehicle.status === statusFilter)
+        .filter((vehicle) => selectedMakes.size === 0 || selectedMakes.has(vehicle.make))
+        .filter((vehicle) => {
+          if (selectedTransmissions.size === 0) return true;
+          const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
+          return type !== null && selectedTransmissions.has(type);
+        })
+        .filter((vehicle) => {
+          if (mileageRange[0] === MILEAGE_MIN && mileageRange[1] === MILEAGE_MAX) return true;
+          if (vehicle.mileage === undefined) return false;
+          const km = milesToKm(vehicle.mileage);
+          return km >= mileageRange[0] && km <= mileageRange[1];
+        })
+        .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]),
+    [searchMatches, statusFilter, selectedMakes, selectedTransmissions, mileageRange],
+  );
 
   const mileageFilterActive = mileageRange[0] !== MILEAGE_MIN || mileageRange[1] !== MILEAGE_MAX;
   const activeFilterCount = selectedMakes.size + selectedTransmissions.size + (mileageFilterActive ? 1 : 0);
@@ -211,7 +216,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                 >
                   {tab.label} <span className="text-ink/40">({counts[tab.value]})</span>
                   <span
-                    className={`absolute -bottom-1 left-0 h-px bg-accent transition-all duration-300 ease-out ${
+                    className={`absolute -bottom-1 left-0 h-px bg-accent transition-[width] duration-300 ease-out ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -283,7 +288,28 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                   ) : null}
 
                   <div className="sm:w-72">
-                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
+                      <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.04em]">
+                        <button
+                          type="button"
+                          onClick={() => setMileageUnit("km")}
+                          aria-pressed={mileageUnit === "km"}
+                          className={mileageUnit === "km" ? "text-accent" : "text-ink/35 hover:text-ink/60"}
+                        >
+                          Km
+                        </button>
+                        <span className="text-ink/25">/</span>
+                        <button
+                          type="button"
+                          onClick={() => setMileageUnit("mi")}
+                          aria-pressed={mileageUnit === "mi"}
+                          className={mileageUnit === "mi" ? "text-accent" : "text-ink/35 hover:text-ink/60"}
+                        >
+                          Mi
+                        </button>
+                      </div>
+                    </div>
                     <div className="mt-3">
                       <MileageRangeSlider
                         min={MILEAGE_MIN}
@@ -291,6 +317,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                         step={MILEAGE_STEP}
                         value={mileageRange}
                         onChange={setMileageRange}
+                        unit={mileageUnit}
                       />
                     </div>
                   </div>

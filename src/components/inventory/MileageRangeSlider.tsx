@@ -1,9 +1,19 @@
+import { kmToMiles } from "@/lib/format";
+
 interface MileageRangeSliderProps {
   min: number;
   max: number;
   step: number;
   value: [number, number];
   onChange: (value: [number, number]) => void;
+  /** Track/thumbs and the min/max/step bounds stay in km always — only the
+   * two number labels convert, so switching units never moves the handles. */
+  unit?: "km" | "mi";
+}
+
+function formatBound(km: number, unit: "km" | "mi", isMax: boolean) {
+  const value = unit === "mi" ? kmToMiles(km) : km;
+  return `${value.toLocaleString()}${isMax ? "+" : ""} ${unit}`;
 }
 
 // Both inputs stack on the same track. Each input's own body/track is made
@@ -23,7 +33,7 @@ const thumbClass =
  * buttons. Two native range inputs overlaid on one visual track — keyboard
  * and touch dragging come for free this way, which a from-scratch custom
  * drag implementation would have to rebuild by hand. */
-export function MileageRangeSlider({ min, max, step, value, onChange }: MileageRangeSliderProps) {
+export function MileageRangeSlider({ min, max, step, value, onChange, unit = "km" }: MileageRangeSliderProps) {
   const [low, high] = value;
   const lowPercent = ((low - min) / (max - min)) * 100;
   const highPercent = ((high - min) / (max - min)) * 100;
@@ -35,8 +45,8 @@ export function MileageRangeSlider({ min, max, step, value, onChange }: MileageR
   return (
     <div className="w-full max-w-xs">
       <div className="flex items-center justify-between text-xs tabular-nums text-ink/60">
-        <span>{low.toLocaleString()} km</span>
-        <span>{high >= max ? `${max.toLocaleString()}+ km` : `${high.toLocaleString()} km`}</span>
+        <span>{formatBound(low, unit, false)}</span>
+        <span>{formatBound(high, unit, high >= max)}</span>
       </div>
       <div className="relative mt-3 h-4">
         <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-ink/15" />

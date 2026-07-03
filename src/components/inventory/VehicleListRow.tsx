@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mileage } from "@/components/inventory/Mileage";
+import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import type { Vehicle } from "@/lib/types";
 
@@ -73,16 +74,13 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
                 src={images[i]}
                 alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
                 fill
+                sizes="(min-width: 640px) 300px, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
               <PlaceholderArt variant="card" label={i === 0 && incoming ? "Incoming" : ""} />
             )}
-            {sold && i === 0 ? (
-              <span className="font-display absolute left-0 top-2 bg-accent px-2.5 py-1 text-[10px] tracking-[0.12em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
-                Sold
-              </span>
-            ) : null}
+            {sold && i === 0 ? <SoldBadge size="sm" /> : null}
           </div>
         ))}
       </div>

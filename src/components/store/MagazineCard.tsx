@@ -33,6 +33,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
               src={image}
               alt={`${magazine.title} — ${magazine.issue}`}
               fill
+              sizes="(min-width: 1024px) 25vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (

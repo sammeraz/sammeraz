@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -49,16 +49,21 @@ export function Hero() {
 
           <h1 className="font-display mt-6 text-[clamp(2.75rem,7vw,5.75rem)] leading-[1.02]">
             {words.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
-                <motion.span
-                  initial={{ y: "110%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ duration: 0.85, delay: 0.15 + i * 0.06, ease: easing }}
-                  className="inline-block"
-                >
-                  {word}&nbsp;
-                </motion.span>
-              </span>
+              <Fragment key={i}>
+                <span className="inline-block overflow-hidden pb-1 align-bottom">
+                  <motion.span
+                    initial={{ y: "110%" }}
+                    animate={{ y: "0%" }}
+                    transition={{ duration: 0.85, delay: 0.15 + i * 0.06, ease: easing }}
+                    className="inline-block"
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                </span>
+                {/* Force "done right." onto its own line rather than letting
+                    "done" wrap alone with "vehicles," above it. */}
+                {i === 1 ? <br /> : null}
+              </Fragment>
             ))}
           </h1>
 

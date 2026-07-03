@@ -7,6 +7,10 @@ export function milesToKm(miles: number) {
   return Math.round(miles * MILES_TO_KM);
 }
 
+export function kmToMiles(km: number) {
+  return Math.round(km / MILES_TO_KM);
+}
+
 export function formatKm(miles: number) {
   return `${milesToKm(miles).toLocaleString()} km`;
 }

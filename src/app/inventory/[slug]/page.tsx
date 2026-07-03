@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Mileage } from "@/components/inventory/Mileage";
+import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { RevealOnLoad, RevealOnLoadGroup, RevealItem } from "@/components/motion/Reveal";
@@ -93,7 +94,13 @@ export default async function VehicleDetailPage({
             <RevealOnLoad>
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 {image ? (
-                  <Image src={image} alt={name} fill className="object-cover" />
+                  <Image
+                    src={image}
+                    alt={name}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
                 ) : (
                   <PlaceholderArt variant="card" />
                 )}
@@ -102,9 +109,7 @@ export default async function VehicleDetailPage({
                     Incoming
                   </span>
                 ) : sold ? (
-                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs tracking-[0.14em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)] md:px-5 md:py-2 md:text-sm">
-                    Sold
-                  </span>
+                  <SoldBadge size="lg" />
                 ) : null}
               </div>
             </RevealOnLoad>

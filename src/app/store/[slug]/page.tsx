@@ -83,6 +83,7 @@ export default async function MagazineDetailPage({
                     src={image}
                     alt={`${magazine.title} — ${magazine.issue}`}
                     fill
+                    sizes="(min-width: 1024px) 44vw, 100vw"
                     className="object-cover"
                   />
                 ) : (
