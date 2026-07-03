@@ -6,7 +6,6 @@ import { InventoryGrid } from "@/components/inventory/InventoryGrid";
 import { InventoryList } from "@/components/inventory/InventoryList";
 import { RevealOnLoad, revealEase } from "@/components/motion/Reveal";
 import { CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
-import { milesToKm } from "@/lib/format";
 import type { Vehicle, VehicleStatus } from "@/lib/types";
 
 interface InventoryBrowserProps {
@@ -26,10 +25,15 @@ const tabs: { value: StatusFilter; label: string }[] = [
 
 const mileageOptions = [
   { label: "Any Mileage", max: Infinity },
-  { label: "Under 40,000 km", max: 40000 },
-  { label: "Under 80,000 km", max: 80000 },
-  { label: "Under 160,000 km", max: 160000 },
+  { label: "Under 25,000 mi", max: 25000 },
+  { label: "Under 50,000 mi", max: 50000 },
+  { label: "Under 100,000 mi", max: 100000 },
 ];
+
+// On the "All" tab, group by status instead of leaving vehicles in whatever
+// order they were added to the data file — for-sale cars are what buyers
+// come to see, so they lead, then incoming, then sold.
+const statusOrder: Record<VehicleStatus, number> = { available: 0, incoming: 1, sold: 2 };
 
 function matchesQuery(vehicle: Vehicle, query: string) {
   const q = query.trim().toLowerCase();
@@ -107,10 +111,8 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
       const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
       return type !== null && selectedTransmissions.has(type);
     })
-    .filter(
-      (vehicle) =>
-        mileageMax === Infinity || (vehicle.mileage !== undefined && milesToKm(vehicle.mileage) <= mileageMax),
-    );
+    .filter((vehicle) => mileageMax === Infinity || (vehicle.mileage !== undefined && vehicle.mileage <= mileageMax))
+    .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
 
   const activeFilterCount =
     selectedMakes.size + selectedTransmissions.size + (mileageMax === Infinity ? 0 : 1);
@@ -118,6 +120,15 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   function clearAllFilters() {
     setQuery("");
     setStatusFilter("all");
+    setSelectedMakes(new Set());
+    setSelectedTransmissions(new Set());
+    setMileageMax(Infinity);
+  }
+
+  // Scoped to just the Make/Transmission/Mileage panel — leaves the search
+  // query and status tab alone, since those live outside the panel and
+  // resetting them here would be surprising.
+  function resetAdvancedFilters() {
     setSelectedMakes(new Set());
     setSelectedTransmissions(new Set());
     setMileageMax(Infinity);
@@ -215,59 +226,73 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
               transition={{ duration: 0.35, ease: revealEase }}
               className="overflow-hidden"
             >
-              <div className="flex flex-col gap-6 border-b border-ink/15 py-6 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-6">
-                {allMakes.length > 1 ? (
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Make</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {allMakes.map((make) => (
-                        <button
-                          key={make}
-                          type="button"
-                          onClick={() => setSelectedMakes((prev) => toggleInSet(prev, make))}
-                          aria-pressed={selectedMakes.has(make)}
-                          className={pillClass(selectedMakes.has(make))}
-                        >
-                          {make}
-                        </button>
-                      ))}
-                    </div>
+              <div className="border-b border-ink/15 py-6">
+                {activeFilterCount > 0 ? (
+                  <div className="mb-4 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={resetAdvancedFilters}
+                      className="font-display text-xs uppercase tracking-[0.1em] text-accent underline underline-offset-4"
+                    >
+                      Reset Filters
+                    </button>
                   </div>
                 ) : null}
 
-                {allTransmissions.length > 1 ? (
+                <div className="flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-6">
+                  {allMakes.length > 1 ? (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Make</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {allMakes.map((make) => (
+                          <button
+                            key={make}
+                            type="button"
+                            onClick={() => setSelectedMakes((prev) => toggleInSet(prev, make))}
+                            aria-pressed={selectedMakes.has(make)}
+                            className={pillClass(selectedMakes.has(make))}
+                          >
+                            {make}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {allTransmissions.length > 1 ? (
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Transmission</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {allTransmissions.map((transmission) => (
+                          <button
+                            key={transmission}
+                            type="button"
+                            onClick={() => setSelectedTransmissions((prev) => toggleInSet(prev, transmission))}
+                            aria-pressed={selectedTransmissions.has(transmission)}
+                            className={pillClass(selectedTransmissions.has(transmission))}
+                          >
+                            {transmission}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Transmission</p>
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {allTransmissions.map((transmission) => (
+                      {mileageOptions.map((option) => (
                         <button
-                          key={transmission}
+                          key={option.label}
                           type="button"
-                          onClick={() => setSelectedTransmissions((prev) => toggleInSet(prev, transmission))}
-                          aria-pressed={selectedTransmissions.has(transmission)}
-                          className={pillClass(selectedTransmissions.has(transmission))}
+                          onClick={() => setMileageMax(option.max)}
+                          aria-pressed={mileageMax === option.max}
+                          className={pillClass(mileageMax === option.max)}
                         >
-                          {transmission}
+                          {option.label}
                         </button>
                       ))}
                     </div>
-                  </div>
-                ) : null}
-
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {mileageOptions.map((option) => (
-                      <button
-                        key={option.label}
-                        type="button"
-                        onClick={() => setMileageMax(option.max)}
-                        aria-pressed={mileageMax === option.max}
-                        className={pillClass(mileageMax === option.max)}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
                   </div>
                 </div>
               </div>

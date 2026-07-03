@@ -86,13 +86,13 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   );
 
   if (incoming) {
-    return <div className="border border-ink/10 bg-white p-6 sm:p-10">{body}</div>;
+    return <div className="mx-auto w-full max-w-2xl border border-ink/10 bg-white p-6 sm:p-10">{body}</div>;
   }
 
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      className="group block border border-ink/10 bg-white p-6 transition-colors duration-300 hover:border-ink/25 sm:p-10"
+      className="group mx-auto block w-full max-w-2xl border border-ink/10 bg-white p-6 transition-colors duration-300 hover:border-ink/25 sm:p-10"
     >
       {body}
     </Link>
