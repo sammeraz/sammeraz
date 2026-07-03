@@ -1,4 +1,5 @@
-import { kmToMiles } from "@/lib/format";
+import { useState } from "react";
+import { kmToMiles, milesToKm } from "@/lib/format";
 
 interface MileageRangeSliderProps {
   min: number;
@@ -7,13 +8,80 @@ interface MileageRangeSliderProps {
   value: [number, number];
   onChange: (value: [number, number]) => void;
   /** Track/thumbs and the min/max/step bounds stay in km always — only the
-   * two number labels convert, so switching units never moves the handles. */
+   * two number labels (and what a typed value is interpreted as) convert,
+   * so switching units never moves the handles. */
   unit?: "km" | "mi";
 }
 
-function formatBound(km: number, unit: "km" | "mi", isMax: boolean) {
-  const value = unit === "mi" ? kmToMiles(km) : km;
-  return `${value.toLocaleString()}${isMax ? "+" : ""} ${unit}`;
+function kmToDisplay(km: number, unit: "km" | "mi") {
+  return unit === "mi" ? kmToMiles(km) : km;
+}
+
+function displayToKm(displayValue: number, unit: "km" | "mi") {
+  return unit === "mi" ? milesToKm(displayValue) : Math.round(displayValue);
+}
+
+/** Editable number field for one end of the range — sits right where the
+ * plain text label used to, so dragging and typing both work on the same
+ * value. Shows the live km/mi-converted number; while focused it drops the
+ * "+"/comma formatting so the raw digits are easy to overtype. */
+function BoundInput({
+  km,
+  unit,
+  showPlus,
+  onCommit,
+  ariaLabel,
+}: {
+  km: number;
+  unit: "km" | "mi";
+  showPlus: boolean;
+  onCommit: (displayValue: number) => void;
+  ariaLabel: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  const [text, setText] = useState(() => String(kmToDisplay(km, unit)));
+  // Tracks the (km, unit) pair `text` was last synced from, so a drag or
+  // unit-toggle change updates the field but active typing is never
+  // clobbered by a re-render — React's documented alternative to a
+  // setState-in-effect for "adjust state when a prop changes".
+  const [syncedKm, setSyncedKm] = useState(km);
+  const [syncedUnit, setSyncedUnit] = useState(unit);
+
+  if (!focused && (km !== syncedKm || unit !== syncedUnit)) {
+    setSyncedKm(km);
+    setSyncedUnit(unit);
+    setText(String(kmToDisplay(km, unit)));
+  }
+
+  function commit() {
+    setFocused(false);
+    const parsed = Number(text.replace(/[^0-9]/g, ""));
+    if (text.trim() !== "" && Number.isFinite(parsed)) {
+      onCommit(parsed);
+    } else {
+      setText(String(kmToDisplay(km, unit)));
+    }
+  }
+
+  return (
+    <input
+      type="text"
+      inputMode="numeric"
+      value={focused ? text : `${Number(text).toLocaleString()}${showPlus ? "+" : ""}`}
+      onFocus={(event) => {
+        setFocused(true);
+        setText(String(kmToDisplay(km, unit)));
+        event.target.select();
+      }}
+      onChange={(event) => setText(event.target.value)}
+      onBlur={commit}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") event.currentTarget.blur();
+      }}
+      aria-label={ariaLabel}
+      className="w-16 border-b border-transparent bg-transparent tabular-nums text-ink/60 outline-none transition-colors focus:border-accent focus:text-ink"
+    />
+  );
 }
 
 // Both inputs stack on the same track. Each input's own body/track is made
@@ -42,11 +110,39 @@ export function MileageRangeSlider({ min, max, step, value, onChange, unit = "km
   // underneath the other when they're close together.
   const lowOnTop = low > min + (max - min) / 2;
 
+  function commitLow(displayValue: number) {
+    const km = Math.min(Math.max(displayToKm(displayValue, unit), min), max);
+    onChange([Math.max(Math.min(km, high - step), min), high]);
+  }
+
+  function commitHigh(displayValue: number) {
+    const km = Math.min(Math.max(displayToKm(displayValue, unit), min), max);
+    onChange([low, Math.min(Math.max(km, low + step), max)]);
+  }
+
   return (
     <div className="w-full max-w-xs">
-      <div className="flex items-center justify-between text-xs tabular-nums text-ink/60">
-        <span>{formatBound(low, unit, false)}</span>
-        <span>{formatBound(high, unit, high >= max)}</span>
+      <div className="flex items-center justify-between text-xs">
+        <span className="inline-flex items-baseline gap-1">
+          <BoundInput
+            km={low}
+            unit={unit}
+            showPlus={false}
+            onCommit={commitLow}
+            ariaLabel={`Minimum mileage in ${unit === "mi" ? "miles" : "kilometers"}`}
+          />
+          <span className="text-ink/40">{unit}</span>
+        </span>
+        <span className="inline-flex items-baseline gap-1">
+          <BoundInput
+            km={high}
+            unit={unit}
+            showPlus={high >= max}
+            onCommit={commitHigh}
+            ariaLabel={`Maximum mileage in ${unit === "mi" ? "miles" : "kilometers"}`}
+          />
+          <span className="text-ink/40">{unit}</span>
+        </span>
       </div>
       <div className="relative mt-3 h-4">
         <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-ink/15" />
