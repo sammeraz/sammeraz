@@ -5,7 +5,9 @@ import { Reveal } from "@/components/motion/Reveal";
 import { inventory } from "@/data/inventory";
 
 export function InventoryPreview() {
-  const vehicles = inventory.slice(0, 8);
+  // Sold cars aren't for sale — the homepage teaser should only ever
+  // surface something a visitor could actually buy or is on its way in.
+  const vehicles = inventory.filter((vehicle) => vehicle.status !== "sold").slice(0, 8);
 
   return (
     <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
