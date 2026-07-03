@@ -326,7 +326,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                           onChange={(event) => setSelectedTransmission(event.target.value)}
                           className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
                         >
-                          <option value="">All Transmissions</option>
+                          <option value="">All</option>
                           {allTransmissions.map((transmission) => (
                             <option key={transmission} value={transmission}>
                               {transmission}
