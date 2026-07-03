@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
+import { useHeroFocus } from "@/lib/hero-focus-context";
 
 const INTERACTIVE_SELECTOR = "a, button, [role='button'], [data-cursor]";
 const TEXT_INPUT_SELECTOR = "input, textarea, select, [contenteditable='true']";
@@ -49,6 +50,7 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffec
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
   const reducedMotion = useSafeReducedMotion();
+  const { focused } = useHeroFocus();
   const [hover, setHover] = useState(false);
   const [label, setLabel] = useState<string | null>(null);
   const [overText, setOverText] = useState(false);
@@ -132,7 +134,7 @@ export function Cursor() {
   // screen — the sometimes-stale-sometimes-right symptom came from that
   // pre-commit read finding a leftover element that the new page doesn't
   // actually have at that position.
-  useIsomorphicLayoutEffect(() => {
+  const syncHoverToPointer = () => {
     if (typeof document === "undefined") return;
     const elementAtPoint = document.elementFromPoint(x.get(), y.get()) as HTMLElement | null;
     const interactive = elementAtPoint?.closest?.(INTERACTIVE_SELECTOR) as HTMLElement | null;
@@ -143,7 +145,23 @@ export function Cursor() {
       setHover(false);
       setLabel(null);
     }
-  }, [pathname, x, y]);
+  };
+
+  useIsomorphicLayoutEffect(syncHoverToPointer, [pathname, focused, x, y]);
+
+  // The Hero fullscreen toggle is the same class of bug: clicking it
+  // collapses TrustStrip's real layout height (see TrustStrip.tsx), and
+  // Hero grows to fill that space, so the button itself — bottom-anchored
+  // inside Hero — drifts down and out from under a pointer that never
+  // moved. Unlike a route change, that drift plays out over TrustStrip's
+  // own 700ms transition rather than landing in its final spot right away,
+  // so the immediate check above only catches the very start of it. Catch
+  // the end of it too, or hover stays stale for most of the animation.
+  useEffect(() => {
+    const timeout = setTimeout(syncHoverToPointer, 750);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focused]);
 
   if (!active) return null;
 
