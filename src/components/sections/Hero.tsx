@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { CloseIcon, ExpandIcon } from "@/components/ui/icons";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { useHeroFocus } from "@/lib/hero-focus-context";
@@ -45,15 +46,15 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex items-end overflow-hidden bg-ink text-cream md:min-h-[640px] md:flex-1"
+      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
         style={{ y: reducedMotion ? "0%" : parallaxY }}
       >
-        {/* No background at all on mobile for now — just the section's
-            plain bg-ink showing through. hidden (not just sourceless) so
-            the poster frame doesn't render as a fallback image either. */}
+        {/* Mobile is back on the pre-video placeholder art for now — the
+            video needs more work there, this isn't a permanent choice. */}
+        <PlaceholderArt variant="hero" className="md:hidden" />
         <video
           ref={videoRef}
           className="hidden h-full w-full object-cover md:block"
@@ -70,9 +71,11 @@ export function Hero() {
         {/* Same bottom-anchored darkening the old PlaceholderArt hero variant
             used, so the light headline stays legible over whatever's
             underneath — footage brightness varies by frame, static art didn't.
-            Fades out in focus mode along with the text it exists to serve. */}
+            Fades out in focus mode along with the text it exists to serve.
+            Desktop/video only — PlaceholderArt above already carries its own
+            built-in darkening for the mobile case. */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent transition-opacity duration-700 ${
+          className={`absolute inset-0 hidden bg-gradient-to-t from-ink via-ink/25 to-transparent transition-opacity duration-700 md:block ${
             focused ? "opacity-0" : "opacity-100"
           }`}
         />
