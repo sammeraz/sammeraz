@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { VehicleCarousel } from "@/components/inventory/VehicleCarousel";
-import { Reveal } from "@/components/motion/Reveal";
+import { RevealOnLoad } from "@/components/motion/Reveal";
 import { inventory } from "@/data/inventory";
 
 export function InventoryPreview() {
@@ -10,7 +10,11 @@ export function InventoryPreview() {
   return (
     <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
       <Container>
-        <Reveal className="flex flex-col gap-6">
+        {/* Mount-triggered, not scroll-triggered — mobile's shorter hero
+            means this heading now sits right at (or just past) the fold, so
+            a scroll-triggered fade left it sitting at opacity:0 until the
+            visitor scrolled instead of being there on load. */}
+        <RevealOnLoad className="flex flex-col gap-6">
           <div className="flex items-center gap-5">
             <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
               Featured Inventory
@@ -21,7 +25,7 @@ export function InventoryPreview() {
             New listings appear here only once real vehicle information is ready — no filler, no
             stand-in prices.
           </p>
-        </Reveal>
+        </RevealOnLoad>
       </Container>
 
       <div className="mt-14">
