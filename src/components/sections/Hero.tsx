@@ -51,12 +51,12 @@ export function Hero() {
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
         style={{ y: reducedMotion ? "0%" : parallaxY }}
       >
-        {/* No mobile source for now — under 768px the video has nothing to
-            play, so the browser just shows the poster frame as a static
-            background instead. */}
+        {/* No background at all on mobile for now — just the section's
+            plain bg-ink showing through. hidden (not just sourceless) so
+            the poster frame doesn't render as a fallback image either. */}
         <video
           ref={videoRef}
-          className="h-full w-full object-cover"
+          className="hidden h-full w-full object-cover md:block"
           autoPlay
           muted
           loop
