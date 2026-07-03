@@ -65,7 +65,7 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
             key={hasVehicles ? vehicles[i].slug : i}
             data-carousel-item
             variants={cardItem}
-            className="w-[84vw] shrink-0 snap-center sm:w-[340px] sm:snap-start"
+            className="reveal-instant-mobile w-[84vw] shrink-0 snap-center sm:w-[340px] sm:snap-start"
           >
             {hasVehicles ? <VehicleCard vehicle={vehicles[i]} /> : <ComingSoonCard />}
           </motion.div>

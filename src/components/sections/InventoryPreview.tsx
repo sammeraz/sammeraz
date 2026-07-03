@@ -10,7 +10,7 @@ export function InventoryPreview() {
   return (
     <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
       <Container>
-        <Reveal className="flex flex-col gap-6">
+        <Reveal className="reveal-instant-mobile flex flex-col gap-6">
           <div className="flex items-center gap-5">
             <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
               Featured Inventory

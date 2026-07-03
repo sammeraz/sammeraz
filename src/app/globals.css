@@ -107,6 +107,22 @@ body {
   display: none;
 }
 
+/* Framer Motion's whileInView reveals bake their `initial` (opacity:0,
+   translated) state into the server-rendered HTML. Hydration and the
+   IntersectionObserver that shows them resolve almost instantly on a fast
+   local connection, but on a real phone over a real network there's a
+   genuinely visible gap where that raw markup is all that's on screen —
+   reading as a blank white section. Forcing the visible end state here
+   avoids that without a JS/hydration-timing device check, which previously
+   caused a component swap that broke desktop's animation outright. Desktop
+   keeps the real scroll-triggered reveal untouched. */
+@media (max-width: 767px) {
+  .reveal-instant-mobile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
