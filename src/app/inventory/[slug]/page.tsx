@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { Mileage } from "@/components/inventory/Mileage";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { RevealOnLoad, RevealOnLoadGroup, RevealItem } from "@/components/motion/Reveal";
@@ -124,9 +125,11 @@ export default async function VehicleDetailPage({
                       </p>
                     ) : null}
                     {vehicle.mileage ? (
-                      <span className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50">
-                        {vehicle.mileage.toLocaleString()} mi
-                      </span>
+                      <Mileage
+                        miles={vehicle.mileage}
+                        showParenthetical
+                        className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50"
+                      />
                     ) : null}
                   </div>
                 ) : null}

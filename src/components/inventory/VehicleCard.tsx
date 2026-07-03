@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Mileage } from "@/components/inventory/Mileage";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import type { Vehicle } from "@/lib/types";
 
@@ -56,9 +57,10 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
               </p>
             ) : null}
             {!sold && vehicle.mileage ? (
-              <span className="ml-auto whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs">
-                {vehicle.mileage.toLocaleString()} mi
-              </span>
+              <Mileage
+                miles={vehicle.mileage}
+                className="ml-auto whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs"
+              />
             ) : null}
           </div>
         ) : null}

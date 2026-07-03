@@ -83,4 +83,22 @@ export const inventory: Vehicle[] = [
       exteriorColor: "Formula Red",
     },
   },
+  {
+    slug: "demo-1994-toyota-supra",
+    make: "Toyota",
+    model: "Supra",
+    year: 1994,
+    trim: "SZ (JZA80)",
+    price: 72000,
+    status: "available",
+    mileage: 55000,
+    highlights: ["Demo Listing"],
+    specs: {
+      chassisCode: "JZA80",
+      engine: "1JZ-GTE 2.5L Twin-Turbo I6",
+      drivetrain: "RWD",
+      transmission: "4-Speed Automatic",
+      exteriorColor: "Super White",
+    },
+  },
 ];

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Mileage } from "@/components/inventory/Mileage";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import type { Vehicle } from "@/lib/types";
 
@@ -39,9 +40,10 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
             <p className="text-xs uppercase tracking-[0.08em] text-ink/55 sm:text-sm">{vehicle.trim}</p>
           ) : null}
           {showPrice && vehicle.mileage ? (
-            <span className="ml-auto whitespace-nowrap text-xs tabular-nums text-ink/50 sm:text-sm">
-              {vehicle.mileage.toLocaleString()} mi
-            </span>
+            <Mileage
+              miles={vehicle.mileage}
+              className="ml-auto whitespace-nowrap text-xs tabular-nums text-ink/50 sm:text-sm"
+            />
           ) : null}
         </div>
       ) : null}
@@ -62,7 +64,7 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
       ) : null}
 
       <div
-        className={`relative aspect-[16/9] w-full overflow-hidden ${showPrice ? "mt-6" : "mt-4 sm:mt-5"}`}
+        className={`relative aspect-[4/3] w-full overflow-hidden ${showPrice ? "mt-6" : "mt-4 sm:mt-5"}`}
       >
         {image ? (
           <Image

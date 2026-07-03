@@ -6,6 +6,7 @@ import { InventoryGrid } from "@/components/inventory/InventoryGrid";
 import { InventoryList } from "@/components/inventory/InventoryList";
 import { RevealOnLoad, revealEase } from "@/components/motion/Reveal";
 import { CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
+import { milesToKm } from "@/lib/format";
 import type { Vehicle, VehicleStatus } from "@/lib/types";
 
 interface InventoryBrowserProps {
@@ -25,9 +26,9 @@ const tabs: { value: StatusFilter; label: string }[] = [
 
 const mileageOptions = [
   { label: "Any Mileage", max: Infinity },
-  { label: "Under 25,000 mi", max: 25000 },
-  { label: "Under 50,000 mi", max: 50000 },
-  { label: "Under 100,000 mi", max: 100000 },
+  { label: "Under 40,000 km", max: 40000 },
+  { label: "Under 80,000 km", max: 80000 },
+  { label: "Under 160,000 km", max: 160000 },
 ];
 
 function matchesQuery(vehicle: Vehicle, query: string) {
@@ -106,7 +107,10 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
       const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
       return type !== null && selectedTransmissions.has(type);
     })
-    .filter((vehicle) => mileageMax === Infinity || (vehicle.mileage !== undefined && vehicle.mileage <= mileageMax));
+    .filter(
+      (vehicle) =>
+        mileageMax === Infinity || (vehicle.mileage !== undefined && milesToKm(vehicle.mileage) <= mileageMax),
+    );
 
   const activeFilterCount =
     selectedMakes.size + selectedTransmissions.size + (mileageMax === Infinity ? 0 : 1);
