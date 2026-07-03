@@ -69,9 +69,13 @@ export function Hero() {
         {/* Same bottom-anchored darkening the old PlaceholderArt hero variant
             used, so the light headline stays legible over whatever's
             underneath — footage brightness varies by frame, static art didn't.
-            Fades out in focus mode along with the text it exists to serve. */}
+            Fades out in focus mode along with the text it exists to serve.
+            Noticeably heavier by default: mobile stacks badge/headline/body/
+            buttons over the video with no side column to stand clear of like
+            desktop has, so the footage needs to recede further for it all to
+            read calmly. md: drops back to the original, lighter treatment. */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent transition-opacity duration-700 ${
+          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/20 transition-opacity duration-700 md:via-ink/25 md:to-transparent ${
             focused ? "opacity-0" : "opacity-100"
           }`}
         />
