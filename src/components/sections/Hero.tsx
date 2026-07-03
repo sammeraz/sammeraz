@@ -1,10 +1,9 @@
 "use client";
 
-import { Fragment, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { site } from "@/data/site";
 
@@ -13,6 +12,7 @@ const words = site.tagline.split(" ");
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const reducedMotion = useSafeReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -24,6 +24,21 @@ export function Hero() {
   // overflow-hidden clips it back down to the hero's actual bounds.
   const parallaxY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
+  // <video autoPlay> only fires once at mount, before reducedMotion's real
+  // value is known (useSafeReducedMotion reports false until hydrated) —
+  // this corrects it afterward, freezing on the poster frame for anyone who
+  // asked the OS for reduced motion.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (reducedMotion) {
+      video.pause();
+      video.currentTime = 0;
+    } else {
+      video.play().catch(() => {});
+    }
+  }, [reducedMotion]);
+
   return (
     <section
       ref={sectionRef}
@@ -33,7 +48,25 @@ export function Hero() {
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
         style={{ y: reducedMotion ? "0%" : parallaxY }}
       >
-        <PlaceholderArt variant="hero" />
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/video/hero-poster.jpg"
+        >
+          <source src="/video/hero-desktop.webm" type="video/webm" media="(min-width: 768px)" />
+          <source src="/video/hero-desktop.mp4" type="video/mp4" media="(min-width: 768px)" />
+          <source src="/video/hero-mobile.webm" type="video/webm" />
+          <source src="/video/hero-mobile.mp4" type="video/mp4" />
+        </video>
+        {/* Same bottom-anchored darkening the old PlaceholderArt hero variant
+            used, so the light headline stays legible over whatever's
+            underneath — footage brightness varies by frame, static art didn't. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent" />
       </motion.div>
 
       <Container className="relative z-10 pb-16 pt-20 md:pb-24 md:pt-32">
