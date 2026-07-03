@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
 import { CartButton } from "@/components/store/CartButton";
+import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { useHeroFocus } from "@/lib/hero-focus-context";
 import { navLinks, site } from "@/data/site";
@@ -37,7 +38,14 @@ export function Header() {
   // white-on-nothing logo flashing illegible mid-transition.
   const [transitioning, setTransitioning] = useState(false);
 
-  useEffect(() => {
+  // Layout effect, not a plain one: a regular effect runs after the browser
+  // has already painted, so the solid default above is visible for at least
+  // one real frame even when we're actually at the top of the page — its
+  // bottom shadow line sitting flush against the Hero badge below reads as
+  // the header overlapping it. Correcting the state before paint (which is
+  // what a layout effect buys here) means that frame is never shown at all;
+  // the "start solid, correct once we know better" logic is unchanged.
+  useIsomorphicLayoutEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });

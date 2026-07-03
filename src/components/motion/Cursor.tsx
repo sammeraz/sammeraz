@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useIsFinePointer } from "@/hooks/useIsFinePointer";
+import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { useHeroFocus } from "@/lib/hero-focus-context";
 
@@ -40,12 +41,6 @@ const BRACKET_POSITIONS = [
   "-bottom-2 -left-2 border-b border-l",
   "-bottom-2 -right-2 border-b border-r",
 ];
-
-// useLayoutEffect warns on the server (SSR has no layout to measure before
-// paint) — this component is client-only in practice, so fall back to a
-// plain effect there and reserve the synchronous, pre-paint variant for the
-// browser, where it's needed below to read the DOM before it can paint.
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export function Cursor() {
   const isFinePointer = useIsFinePointer();
