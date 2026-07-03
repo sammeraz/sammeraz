@@ -15,7 +15,7 @@ export function InventoryGrid({ vehicles, placeholderCount = 3 }: InventoryGridP
   if (vehicles.length === 0) {
     return (
       <div>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-2 items-start gap-4 sm:gap-6 lg:grid-cols-3">
           {Array.from({ length: placeholderCount }).map((_, index) => (
             <ComingSoonCard key={index} />
           ))}
@@ -32,7 +32,7 @@ export function InventoryGrid({ vehicles, placeholderCount = 3 }: InventoryGridP
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+    <div className="grid grid-cols-2 items-start gap-4 sm:gap-6 lg:grid-cols-3">
       {vehicles.map((vehicle) => (
         <VehicleCard key={vehicle.slug} vehicle={vehicle} />
       ))}

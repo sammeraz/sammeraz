@@ -37,6 +37,16 @@ function matchesQuery(vehicle: Vehicle, query: string) {
   return haystack.includes(q);
 }
 
+/** Specs store free-text like "6-Speed Manual" or "5-Speed Auto" — buyers
+ * only care about the two broad categories, so collapse to that instead of
+ * listing every raw spec string as its own filter pill. */
+function transmissionType(transmission: string): "Manual" | "Automatic" | null {
+  const t = transmission.toLowerCase();
+  if (t.includes("manual")) return "Manual";
+  if (t.includes("auto")) return "Automatic";
+  return null;
+}
+
 function toggleInSet(set: Set<string>, value: string) {
   const next = new Set(set);
   if (next.has(value)) next.delete(value);
@@ -67,11 +77,12 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const allMakes = useMemo(() => [...new Set(vehicles.map((v) => v.make))].sort(), [vehicles]);
-  const allTransmissions = useMemo(
-    () =>
-      [...new Set(vehicles.map((v) => v.specs?.transmission).filter((t): t is string => Boolean(t)))].sort(),
-    [vehicles],
-  );
+  const allTransmissions = useMemo(() => {
+    const types = vehicles
+      .map((v) => (v.specs?.transmission ? transmissionType(v.specs.transmission) : null))
+      .filter((t): t is "Manual" | "Automatic" => t !== null);
+    return [...new Set(types)].sort();
+  }, [vehicles]);
 
   const searchMatches = useMemo(
     () => vehicles.filter((vehicle) => matchesQuery(vehicle, query)),
@@ -90,11 +101,11 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const filtered = searchMatches
     .filter((vehicle) => statusFilter === "all" || vehicle.status === statusFilter)
     .filter((vehicle) => selectedMakes.size === 0 || selectedMakes.has(vehicle.make))
-    .filter(
-      (vehicle) =>
-        selectedTransmissions.size === 0 ||
-        (vehicle.specs?.transmission && selectedTransmissions.has(vehicle.specs.transmission)),
-    )
+    .filter((vehicle) => {
+      if (selectedTransmissions.size === 0) return true;
+      const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
+      return type !== null && selectedTransmissions.has(type);
+    })
     .filter((vehicle) => mileageMax === Infinity || (vehicle.mileage !== undefined && vehicle.mileage <= mileageMax));
 
   const activeFilterCount =

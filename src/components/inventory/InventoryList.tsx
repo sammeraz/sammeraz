@@ -6,7 +6,7 @@ import { VehicleListRow } from "@/components/inventory/VehicleListRow";
  * no-matches states itself), so there's no placeholder branch to mirror. */
 export function InventoryList({ vehicles }: { vehicles: Vehicle[] }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8 sm:gap-10">
       {vehicles.map((vehicle) => (
         <VehicleListRow key={vehicle.slug} vehicle={vehicle} />
       ))}
