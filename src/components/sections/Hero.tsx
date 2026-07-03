@@ -45,7 +45,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
+      className="relative flex items-end overflow-hidden bg-ink text-cream md:min-h-[640px] md:flex-1"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
@@ -147,14 +147,15 @@ export function Hero() {
         </div>
       </Container>
 
-      {/* Outside the inert wrapper above so it stays clickable in both
-          states — it's the only way back once the rest of the hero has
-          faded out. */}
+      {/* Hidden on mobile — there's no video there to fullscreen right now.
+          Outside the inert wrapper above so it stays clickable in both
+          states on desktop — it's the only way back once the rest of the
+          hero has faded out. */}
       <button
         type="button"
         onClick={toggle}
         aria-label={focused ? "Exit fullscreen video" : "Fullscreen video"}
-        className="absolute bottom-6 right-6 z-20 flex h-9 w-9 items-center justify-center border border-cream/40 bg-ink/30 text-cream backdrop-blur-sm transition-colors duration-200 hover:border-cream md:bottom-8 md:right-8"
+        className="absolute bottom-6 right-6 z-20 hidden h-9 w-9 items-center justify-center border border-cream/40 bg-ink/30 text-cream backdrop-blur-sm transition-colors duration-200 hover:border-cream md:flex md:bottom-8 md:right-8"
       >
         {focused ? <CloseIcon className="h-4 w-4" /> : <ExpandIcon className="h-4 w-4" />}
       </button>
