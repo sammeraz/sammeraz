@@ -51,6 +51,9 @@ export function Hero() {
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
         style={{ y: reducedMotion ? "0%" : parallaxY }}
       >
+        {/* No mobile source for now — under 768px the video has nothing to
+            play, so the browser just shows the poster frame as a static
+            background instead. */}
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
@@ -63,19 +66,13 @@ export function Hero() {
         >
           <source src="/video/hero-desktop.webm" type="video/webm" media="(min-width: 768px)" />
           <source src="/video/hero-desktop.mp4" type="video/mp4" media="(min-width: 768px)" />
-          <source src="/video/hero-mobile.webm" type="video/webm" />
-          <source src="/video/hero-mobile.mp4" type="video/mp4" />
         </video>
         {/* Same bottom-anchored darkening the old PlaceholderArt hero variant
             used, so the light headline stays legible over whatever's
             underneath — footage brightness varies by frame, static art didn't.
-            Fades out in focus mode along with the text it exists to serve.
-            Noticeably heavier by default: mobile stacks badge/headline/body/
-            buttons over the video with no side column to stand clear of like
-            desktop has, so the footage needs to recede further for it all to
-            read calmly. md: drops back to the original, lighter treatment. */}
+            Fades out in focus mode along with the text it exists to serve. */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/20 transition-opacity duration-700 md:via-ink/25 md:to-transparent ${
+          className={`absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-transparent transition-opacity duration-700 ${
             focused ? "opacity-0" : "opacity-100"
           }`}
         />
