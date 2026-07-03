@@ -27,7 +27,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[max(80vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(92vh,640px)]"
+      className="relative flex min-h-[max(86vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(98vh,640px)]"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
