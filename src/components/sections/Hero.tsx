@@ -111,9 +111,14 @@ export function Hero() {
                     {word}&nbsp;
                   </motion.span>
                 </span>
-                {/* Force "done right." onto its own line rather than letting
-                    "done" wrap alone with "imports," above it. */}
-                {i === 1 ? <br /> : null}
+                {/* Mobile stacks every word on its own line — matches the
+                    reference layout and reads cleaner than letting words
+                    wrap wherever they happen to fit at that width. Desktop
+                    keeps the original two-line grouping: "done right."
+                    forced onto its own line rather than "done" wrapping
+                    alone with "imports," above it. */}
+                {i < words.length - 1 ? <br className="md:hidden" /> : null}
+                {i === 1 ? <br className="hidden md:block" /> : null}
               </Fragment>
             ))}
           </h1>
