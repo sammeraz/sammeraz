@@ -134,3 +134,11 @@ export function ListIcon({ className = "" }: IconProps) {
     </svg>
   );
 }
+
+export function ChevronDownIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}

@@ -6,7 +6,7 @@ import { InventoryGrid } from "@/components/inventory/InventoryGrid";
 import { InventoryList } from "@/components/inventory/InventoryList";
 import { MileageRangeSlider } from "@/components/inventory/MileageRangeSlider";
 import { RevealOnLoad, revealEase } from "@/components/motion/Reveal";
-import { CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
+import { ChevronDownIcon, CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
 import { milesToKm } from "@/lib/format";
 import type { Vehicle, VehicleStatus } from "@/lib/types";
 
@@ -17,6 +17,7 @@ interface InventoryBrowserProps {
 
 type StatusFilter = "all" | VehicleStatus;
 type ViewMode = "grid" | "list";
+type SortOption = "default" | "price-asc" | "price-desc" | "mileage-asc" | "mileage-desc" | "year-desc" | "year-asc";
 
 const tabs: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "All" },
@@ -24,6 +25,49 @@ const tabs: { value: StatusFilter; label: string }[] = [
   { value: "incoming", label: "Incoming" },
   { value: "sold", label: "Sold" },
 ];
+
+const sortOptions: { value: SortOption; label: string }[] = [
+  { value: "default", label: "Featured" },
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+  { value: "mileage-asc", label: "Mileage: Low to High" },
+  { value: "mileage-desc", label: "Mileage: High to Low" },
+  { value: "year-desc", label: "Year: Newest First" },
+  { value: "year-asc", label: "Year: Oldest First" },
+];
+
+/** Vehicles missing the sorted-on field (an incoming car with no price yet,
+ * a sold car with mileage hidden) always sink to the end of their group
+ * rather than being placed arbitrarily by a NaN comparison. */
+function compareOptional(getValue: (vehicle: Vehicle) => number | undefined, direction: "asc" | "desc") {
+  return (a: Vehicle, b: Vehicle) => {
+    const aValue = getValue(a);
+    const bValue = getValue(b);
+    if (aValue === undefined && bValue === undefined) return 0;
+    if (aValue === undefined) return 1;
+    if (bValue === undefined) return -1;
+    return direction === "asc" ? aValue - bValue : bValue - aValue;
+  };
+}
+
+function secondaryComparator(sortBy: SortOption): (a: Vehicle, b: Vehicle) => number {
+  switch (sortBy) {
+    case "price-asc":
+      return compareOptional((v) => v.price, "asc");
+    case "price-desc":
+      return compareOptional((v) => v.price, "desc");
+    case "mileage-asc":
+      return compareOptional((v) => v.mileage, "asc");
+    case "mileage-desc":
+      return compareOptional((v) => v.mileage, "desc");
+    case "year-asc":
+      return compareOptional((v) => v.year, "asc");
+    case "year-desc":
+      return compareOptional((v) => v.year, "desc");
+    default:
+      return () => 0;
+  }
+}
 
 const MILEAGE_MIN = 0;
 const MILEAGE_MAX = 200000;
@@ -80,6 +124,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const [mileageRange, setMileageRange] = useState<[number, number]>([MILEAGE_MIN, MILEAGE_MAX]);
   const [mileageUnit, setMileageUnit] = useState<"km" | "mi">("km");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [sortBy, setSortBy] = useState<SortOption>("default");
 
   const allMakes = useMemo(() => [...new Set(vehicles.map((v) => v.make))].sort(), [vehicles]);
   const allTransmissions = useMemo(() => {
@@ -119,8 +164,11 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
           const km = milesToKm(vehicle.mileage);
           return km >= mileageRange[0] && km <= mileageRange[1];
         })
-        .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]),
-    [searchMatches, statusFilter, selectedMakes, selectedTransmissions, mileageRange],
+        .sort((a, b) => {
+          const statusDiff = statusOrder[a.status] - statusOrder[b.status];
+          return statusDiff !== 0 ? statusDiff : secondaryComparator(sortBy)(a, b);
+        }),
+    [searchMatches, statusFilter, selectedMakes, selectedTransmissions, mileageRange, sortBy],
   );
 
   const mileageFilterActive = mileageRange[0] !== MILEAGE_MIN || mileageRange[1] !== MILEAGE_MAX;
@@ -132,6 +180,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
     setSelectedMakes(new Set());
     setSelectedTransmissions(new Set());
     setMileageRange([MILEAGE_MIN, MILEAGE_MAX]);
+    setSortBy("default");
   }
 
   // Scoped to just the Make/Transmission/Mileage panel — leaves the search
@@ -342,33 +391,56 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
         </div>
       ) : (
         <div className="mt-10">
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <p className="text-xs uppercase tracking-[0.08em] text-ink/40">
               {filtered.length} vehicle{filtered.length === 1 ? "" : "s"}
             </p>
-            <div className="flex items-center border border-ink/15">
-              <button
-                type="button"
-                onClick={() => setViewMode("grid")}
-                aria-label="Grid view"
-                aria-pressed={viewMode === "grid"}
-                className={`flex h-8 w-9 items-center justify-center transition-colors ${
-                  viewMode === "grid" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
-                }`}
-              >
-                <GridIcon className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("list")}
-                aria-label="List view"
-                aria-pressed={viewMode === "list"}
-                className={`flex h-8 w-9 items-center justify-center border-l border-ink/15 transition-colors ${
-                  viewMode === "list" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
-                }`}
-              >
-                <ListIcon className="h-4 w-4" />
-              </button>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <label htmlFor="sort-by" className="text-xs uppercase tracking-[0.08em] text-ink/40">
+                  Sort
+                </label>
+                <div className="relative">
+                  <select
+                    id="sort-by"
+                    value={sortBy}
+                    onChange={(event) => setSortBy(event.target.value as SortOption)}
+                    className="appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                  >
+                    {sortOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
+                </div>
+              </div>
+
+              <div className="flex items-center border border-ink/15">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("grid")}
+                  aria-label="Grid view"
+                  aria-pressed={viewMode === "grid"}
+                  className={`flex h-8 w-9 items-center justify-center transition-colors ${
+                    viewMode === "grid" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                  }`}
+                >
+                  <GridIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("list")}
+                  aria-label="List view"
+                  aria-pressed={viewMode === "list"}
+                  className={`flex h-8 w-9 items-center justify-center border-l border-ink/15 transition-colors ${
+                    viewMode === "list" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                  }`}
+                >
+                  <ListIcon className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
 
