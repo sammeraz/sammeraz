@@ -27,7 +27,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[max(86vh,560px)] items-end overflow-hidden bg-ink text-cream md:min-h-[max(98vh,640px)]"
+      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
@@ -61,7 +61,7 @@ export function Hero() {
                   </motion.span>
                 </span>
                 {/* Force "done right." onto its own line rather than letting
-                    "done" wrap alone with "vehicles," above it. */}
+                    "done" wrap alone with "imports," above it. */}
                 {i === 1 ? <br /> : null}
               </Fragment>
             ))}

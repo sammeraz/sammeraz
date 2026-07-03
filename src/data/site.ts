@@ -1,7 +1,7 @@
 export const site = {
   name: "AIM Imports",
   shortName: "AIM",
-  tagline: "Japanese vehicles, done right.",
+  tagline: "Japanese imports, done right.",
   description:
     "AIM Imports helps buyers nationwide source Japanese-market vehicles with careful documentation review, clear communication, and coordinated delivery anywhere in the U.S. from our Texas base.",
   location: "Leander, Texas",
