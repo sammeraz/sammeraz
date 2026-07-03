@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
@@ -31,12 +31,6 @@ export function Header() {
   const { focused } = useHeroFocus();
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
-  // True for a moment right after navigation, covering the page-transition
-  // fade (see PageTransition.tsx). The entering page's hero/dark background
-  // fades in from opacity 0, so a transparent header briefly sits over the
-  // plain white <body> during that window — forcing solid here avoids the
-  // white-on-nothing logo flashing illegible mid-transition.
-  const [transitioning, setTransitioning] = useState(false);
 
   // Layout effect, not a plain one: a regular effect runs after the browser
   // has already painted, so the solid default above is visible for at least
@@ -52,21 +46,21 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu and start the transition-solid window when
-  // navigation occurs, without an effect.
+  // Close the mobile menu when navigation occurs, without an effect. This
+  // used to also force the header solid for a moment to cover the entering
+  // page's fade-in (see PageTransition.tsx), back when a transparent header
+  // briefly sat over a plain white <body> during that window — body's
+  // background is dark now (see globals.css), specifically so fading content
+  // never uncovers a light gap, which made that forced-solid window
+  // redundant: it only added a second, disconnected-looking fade of its own
+  // once the timer ran out, on top of a page transition that had already
+  // finished settling.
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setMenuOpen(false);
-    setTransitioning(true);
   }
 
-  useEffect(() => {
-    if (!transitioning) return;
-    const timer = setTimeout(() => setTransitioning(false), 550);
-    return () => clearTimeout(timer);
-  }, [transitioning]);
-
-  const solid = scrolled || menuOpen || transitioning;
+  const solid = scrolled || menuOpen;
 
   function NavLink({ href, label }: { href: string; label: string }) {
     const isActive = pathname === href;
