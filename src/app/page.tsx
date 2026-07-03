@@ -11,8 +11,12 @@ export default function Home() {
       {/* Hero grows to fill whatever space TrustStrip doesn't take, so the
           pair always cover the full viewport height between them — no vh
           arithmetic that has to be re-tuned per device, immune to Hero's
-          own content reflowing taller/shorter at different widths. */}
-      <div className="flex min-h-dvh flex-col">
+          own content reflowing taller/shorter at different widths. Mobile
+          has no video to fill that height with, so forcing the full
+          viewport there just left dead space below the content instead —
+          md: only, so mobile sizes to its own content and desktop is
+          unaffected. */}
+      <div className="flex flex-col md:min-h-dvh">
         <Hero />
         <TrustStrip />
       </div>
