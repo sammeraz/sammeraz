@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mileage } from "@/components/inventory/Mileage";
 import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { transmissionAbbreviation } from "@/lib/format";
 import type { Vehicle } from "@/lib/types";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -18,6 +19,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
 
   const image = vehicle.images?.[0];
   const sold = vehicle.status === "sold";
+  const transmission = transmissionAbbreviation(vehicle.specs?.transmission);
 
   return (
     <Link
@@ -46,12 +48,17 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim || (!sold && vehicle.mileage) ? (
+        {vehicle.trim || transmission || (!sold && vehicle.mileage) ? (
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             {vehicle.trim ? (
               <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
                 {vehicle.trim}
               </p>
+            ) : null}
+            {transmission ? (
+              <span className="border border-ink/20 px-1 text-[9px] font-medium uppercase tracking-[0.08em] text-ink/55 sm:text-[10px]">
+                {transmission}
+              </span>
             ) : null}
             {!sold && vehicle.mileage ? (
               <Mileage
@@ -86,6 +93,8 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  * yet at this stage.
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
+  const transmission = transmissionAbbreviation(vehicle.specs?.transmission);
+
   return (
     <div className="flex flex-col border border-ink/10 bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -98,10 +107,19 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-ink/70 sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim ? (
-          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 sm:text-xs">
-            {vehicle.trim}
-          </p>
+        {vehicle.trim || transmission ? (
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            {vehicle.trim ? (
+              <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 sm:text-xs">
+                {vehicle.trim}
+              </p>
+            ) : null}
+            {transmission ? (
+              <span className="border border-ink/15 px-1 text-[9px] font-medium uppercase tracking-[0.08em] text-ink/40 sm:text-[10px]">
+                {transmission}
+              </span>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </div>

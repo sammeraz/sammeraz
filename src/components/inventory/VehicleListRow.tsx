@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mileage } from "@/components/inventory/Mileage";
 import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { transmissionAbbreviation } from "@/lib/format";
 import type { Vehicle } from "@/lib/types";
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -24,6 +25,7 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   const incoming = vehicle.status === "incoming";
   const showPrice = !sold && !incoming;
   const images = vehicle.images ?? [];
+  const transmission = transmissionAbbreviation(vehicle.specs?.transmission);
 
   const body = (
     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
@@ -39,10 +41,15 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.model}
         </h3>
 
-        {vehicle.trim || (showPrice && vehicle.mileage) ? (
+        {vehicle.trim || transmission || (showPrice && vehicle.mileage) ? (
           <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             {vehicle.trim ? (
               <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+            ) : null}
+            {transmission ? (
+              <span className="border border-ink/20 px-1 text-[10px] font-medium uppercase tracking-[0.08em] text-ink/55">
+                {transmission}
+              </span>
             ) : null}
             {showPrice && vehicle.mileage ? (
               <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50" />

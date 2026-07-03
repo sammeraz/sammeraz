@@ -18,3 +18,14 @@ export function formatKm(miles: number) {
 export function formatMiles(miles: number) {
   return `${miles.toLocaleString()} mi`;
 }
+
+/** Derives the common listing shorthand from a free-text transmission spec
+ * (e.g. "6-Speed Manual" -> "MT") — cards show just the abbreviation next
+ * to the trim; the full spec text stays on the detail page's spec table. */
+export function transmissionAbbreviation(transmission?: string): "MT" | "AT" | null {
+  if (!transmission) return null;
+  const lower = transmission.toLowerCase();
+  if (lower.includes("manual")) return "MT";
+  if (lower.includes("automatic")) return "AT";
+  return null;
+}
