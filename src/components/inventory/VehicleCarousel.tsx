@@ -58,7 +58,7 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-        className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 sm:pl-6 sm:pr-0 md:pl-10"
+        className="carousel-align-start no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 sm:pl-6 sm:pr-0"
       >
         {Array.from({ length: itemCount }).map((_, i) => (
           <motion.div

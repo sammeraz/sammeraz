@@ -123,6 +123,28 @@ body {
   }
 }
 
+/* The carousel bleeds off the right edge on purpose (it's what invites a
+   drag/scroll), but its left edge was a flat viewport-relative padding while
+   the heading above it sits inside Container, which centers within a
+   1280px max-width — beyond that width the two drift apart, since Container's
+   own left edge moves inward with the viewport but the carousel's didn't.
+   Mirrors Container's centering math for the left edge only; the right
+   edge is untouched so the bleed still works.
+
+   scroll-padding-left has to match: with enough cards to actually overflow,
+   snap-mandatory forces the scroll position to the nearest valid snap point
+   on load, and padding alone isn't one — the browser was "correcting"
+   scrollLeft to exactly the padding value, hiding the whole gutter behind
+   the first card. Setting scroll-padding-left tells it that inset IS the
+   true edge of the snap port, so resting at scrollLeft:0 with the gutter
+   showing is itself a valid, stable snap position. */
+@media (min-width: 768px) {
+  .carousel-align-start {
+    padding-left: max(2.5rem, calc((100vw - 1280px) / 2 + 2.5rem));
+    scroll-padding-left: max(2.5rem, calc((100vw - 1280px) / 2 + 2.5rem));
+  }
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
