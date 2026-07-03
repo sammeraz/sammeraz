@@ -145,20 +145,14 @@ body {
   }
 }
 
-/* Home-page-only section snapping (see HomeScrollSnap.tsx, which toggles
-   .snap-y-home on <html> for exactly as long as the home page is mounted).
-   `proximity`, not `mandatory` — these sections vary a lot in height, and
-   mandatory snapping would fight anyone trying to stop and read partway
-   through a tall one instead of just settling when they let go near a
-   boundary. scroll-margin-top offsets every snap target by the fixed
-   header's own height, or the header would sit on top of the first ~80px
-   of whatever section just snapped into place. */
-.snap-y-home {
-  scroll-snap-type: y proximity;
-}
-
+/* Marks each home-page section as a snap target for HomeScrollSnap.tsx,
+   which drives the actual snapping from JS rather than native CSS
+   scroll-snap-type (that fought trackpad input instead of following it —
+   see the component for why). scroll-margin-top is still real CSS: it's
+   what both the JS's target math and any plain in-page anchor scroll use
+   to offset for the fixed header's height, or either would land with the
+   header sitting on top of the first ~80px of the section. */
 .snap-section {
-  scroll-snap-align: start;
   scroll-margin-top: 5rem;
 }
 
