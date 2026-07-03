@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { CloseIcon, ExpandIcon } from "@/components/ui/icons";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { useHeroFocus } from "@/lib/hero-focus-context";
 import { site } from "@/data/site";
@@ -44,9 +45,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      onClick={toggle}
-      data-cursor
-      className="relative flex min-h-[560px] flex-1 cursor-pointer items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
+      className="relative flex min-h-[560px] flex-1 items-end overflow-hidden bg-ink text-cream md:min-h-[640px]"
     >
       <motion.div
         className="absolute inset-x-0 -top-[10%] -bottom-[10%]"
@@ -81,12 +80,9 @@ export function Hero() {
       <Container className="relative z-10 pb-16 pt-20 md:pb-24 md:pt-32">
         {/* inert (not just opacity/pointer-events) so a keyboard user tabbing
             through can't land on the View Inventory / Start an Inquiry links
-            while they're invisible and un-clickable. stopPropagation keeps a
-            click meant for this text/these buttons from also re-triggering
-            the section's own toggle underneath it. */}
+            while they're invisible and un-clickable. */}
         <div
           inert={focused}
-          onClick={(event) => event.stopPropagation()}
           className={`max-w-3xl transition-opacity duration-700 ${focused ? "opacity-0" : "opacity-100"}`}
         >
           <motion.div
@@ -149,6 +145,18 @@ export function Hero() {
           </motion.div>
         </div>
       </Container>
+
+      {/* Outside the inert wrapper above so it stays clickable in both
+          states — it's the only way back once the rest of the hero has
+          faded out. */}
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={focused ? "Exit fullscreen video" : "Fullscreen video"}
+        className="absolute bottom-6 right-6 z-20 flex h-9 w-9 items-center justify-center border border-cream/40 bg-ink/30 text-cream backdrop-blur-sm transition-colors duration-200 hover:border-cream md:bottom-8 md:right-8"
+      >
+        {focused ? <CloseIcon className="h-4 w-4" /> : <ExpandIcon className="h-4 w-4" />}
+      </button>
     </section>
   );
 }
