@@ -145,6 +145,23 @@ body {
   }
 }
 
+/* Home-page-only section snapping (see HomeScrollSnap.tsx, which toggles
+   .snap-y-home on <html> for exactly as long as the home page is mounted).
+   `proximity`, not `mandatory` — these sections vary a lot in height, and
+   mandatory snapping would fight anyone trying to stop and read partway
+   through a tall one instead of just settling when they let go near a
+   boundary. scroll-margin-top offsets every snap target by the fixed
+   header's own height, or the header would sit on top of the first ~80px
+   of whatever section just snapped into place. */
+.snap-y-home {
+  scroll-snap-type: y proximity;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  scroll-margin-top: 5rem;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
