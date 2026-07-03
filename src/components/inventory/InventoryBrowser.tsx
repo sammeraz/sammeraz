@@ -95,18 +95,6 @@ function transmissionType(transmission: string): "Manual" | "Automatic" | null {
   return null;
 }
 
-function toggleInSet(set: Set<string>, value: string) {
-  const next = new Set(set);
-  if (next.has(value)) next.delete(value);
-  else next.add(value);
-  return next;
-}
-
-const pillClass = (isActive: boolean) =>
-  `border px-3 py-1.5 text-xs uppercase tracking-[0.06em] transition-colors ${
-    isActive ? "border-accent bg-accent text-cream" : "border-ink/20 text-ink/65 hover:border-ink/40"
-  }`;
-
 /** Search + status tabs + the more detailed make/transmission/mileage panel
  * all live in their own component (rather than inline on the page) so the
  * filtering state doesn't force the whole page client-side — just this bar
@@ -119,8 +107,8 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selectedMakes, setSelectedMakes] = useState<Set<string>>(new Set());
-  const [selectedTransmissions, setSelectedTransmissions] = useState<Set<string>>(new Set());
+  const [selectedMake, setSelectedMake] = useState("");
+  const [selectedTransmission, setSelectedTransmission] = useState("");
   const [mileageRange, setMileageRange] = useState<[number, number]>([MILEAGE_MIN, MILEAGE_MAX]);
   const [mileageUnit, setMileageUnit] = useState<"km" | "mi">("km");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -152,11 +140,11 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
     () =>
       searchMatches
         .filter((vehicle) => statusFilter === "all" || vehicle.status === statusFilter)
-        .filter((vehicle) => selectedMakes.size === 0 || selectedMakes.has(vehicle.make))
+        .filter((vehicle) => selectedMake === "" || vehicle.make === selectedMake)
         .filter((vehicle) => {
-          if (selectedTransmissions.size === 0) return true;
+          if (selectedTransmission === "") return true;
           const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
-          return type !== null && selectedTransmissions.has(type);
+          return type === selectedTransmission;
         })
         .filter((vehicle) => {
           if (mileageRange[0] === MILEAGE_MIN && mileageRange[1] === MILEAGE_MAX) return true;
@@ -168,17 +156,18 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
           const statusDiff = statusOrder[a.status] - statusOrder[b.status];
           return statusDiff !== 0 ? statusDiff : secondaryComparator(sortBy)(a, b);
         }),
-    [searchMatches, statusFilter, selectedMakes, selectedTransmissions, mileageRange, sortBy],
+    [searchMatches, statusFilter, selectedMake, selectedTransmission, mileageRange, sortBy],
   );
 
   const mileageFilterActive = mileageRange[0] !== MILEAGE_MIN || mileageRange[1] !== MILEAGE_MAX;
-  const activeFilterCount = selectedMakes.size + selectedTransmissions.size + (mileageFilterActive ? 1 : 0);
+  const activeFilterCount =
+    (selectedMake ? 1 : 0) + (selectedTransmission ? 1 : 0) + (mileageFilterActive ? 1 : 0);
 
   function clearAllFilters() {
     setQuery("");
     setStatusFilter("all");
-    setSelectedMakes(new Set());
-    setSelectedTransmissions(new Set());
+    setSelectedMake("");
+    setSelectedTransmission("");
     setMileageRange([MILEAGE_MIN, MILEAGE_MAX]);
     setSortBy("default");
   }
@@ -187,8 +176,8 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   // query and status tab alone, since those live outside the panel and
   // resetting them here would be surprising.
   function resetAdvancedFilters() {
-    setSelectedMakes(new Set());
-    setSelectedTransmissions(new Set());
+    setSelectedMake("");
+    setSelectedTransmission("");
     setMileageRange([MILEAGE_MIN, MILEAGE_MAX]);
   }
 
@@ -300,38 +289,51 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                 <div className="flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-6">
                   {allMakes.length > 1 ? (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Make</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {allMakes.map((make) => (
-                          <button
-                            key={make}
-                            type="button"
-                            onClick={() => setSelectedMakes((prev) => toggleInSet(prev, make))}
-                            aria-pressed={selectedMakes.has(make)}
-                            className={pillClass(selectedMakes.has(make))}
-                          >
-                            {make}
-                          </button>
-                        ))}
+                      <label htmlFor="make-filter" className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">
+                        Make
+                      </label>
+                      <div className="relative mt-3 sm:w-40">
+                        <select
+                          id="make-filter"
+                          value={selectedMake}
+                          onChange={(event) => setSelectedMake(event.target.value)}
+                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                        >
+                          <option value="">All Makes</option>
+                          {allMakes.map((make) => (
+                            <option key={make} value={make}>
+                              {make}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
                       </div>
                     </div>
                   ) : null}
 
                   {allTransmissions.length > 1 ? (
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Transmission</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {allTransmissions.map((transmission) => (
-                          <button
-                            key={transmission}
-                            type="button"
-                            onClick={() => setSelectedTransmissions((prev) => toggleInSet(prev, transmission))}
-                            aria-pressed={selectedTransmissions.has(transmission)}
-                            className={pillClass(selectedTransmissions.has(transmission))}
-                          >
-                            {transmission}
-                          </button>
-                        ))}
+                      <label
+                        htmlFor="transmission-filter"
+                        className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50"
+                      >
+                        Transmission
+                      </label>
+                      <div className="relative mt-3 sm:w-40">
+                        <select
+                          id="transmission-filter"
+                          value={selectedTransmission}
+                          onChange={(event) => setSelectedTransmission(event.target.value)}
+                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                        >
+                          <option value="">All Transmissions</option>
+                          {allTransmissions.map((transmission) => (
+                            <option key={transmission} value={transmission}>
+                              {transmission}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
                       </div>
                     </div>
                   ) : null}
