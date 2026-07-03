@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll } from "motion/react";
+import { motion, useScroll, type Variants } from "motion/react";
 import type { Vehicle } from "@/lib/types";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
 import { ComingSoonCard } from "@/components/inventory/ComingSoonCard";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { Container } from "@/components/ui/Container";
+import { revealEase } from "@/components/motion/Reveal";
 
 interface VehicleCarouselProps {
   vehicles: Vehicle[];
@@ -15,6 +16,16 @@ interface VehicleCarouselProps {
 
 const arrowButtonClass =
   "flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream disabled:pointer-events-none disabled:opacity-30";
+
+const cardRow: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const cardItem: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: revealEase } },
+};
 
 /** On mobile, cards are centered one at a time — padding is sized to exactly
  * half the leftover width (100vw - card width, split two ways) so the active
@@ -41,24 +52,29 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
 
   return (
     <div>
-      <div
+      <motion.div
         ref={scrollerRef}
+        variants={cardRow}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
         className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 sm:pl-6 sm:pr-0 md:pl-10"
       >
         {Array.from({ length: itemCount }).map((_, i) => (
-          <div
+          <motion.div
             key={hasVehicles ? vehicles[i].slug : i}
             data-carousel-item
+            variants={cardItem}
             className="w-[84vw] shrink-0 snap-center sm:w-[340px] sm:snap-start"
           >
             {hasVehicles ? <VehicleCard vehicle={vehicles[i]} /> : <ComingSoonCard />}
-          </div>
+          </motion.div>
         ))}
         {/* Trailing spacer so the last card can snap clear of the viewport edge
             in the sm:+ bleed layout — a no-op on mobile, where the symmetric
             padding above already covers it. */}
         <div className="w-px shrink-0 md:w-6" aria-hidden="true" />
-      </div>
+      </motion.div>
 
       <Container className="mt-8 flex items-center gap-6">
         <p className="shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45">
