@@ -10,89 +10,93 @@ const currency = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-/** Large, feed-style alternative to VehicleCard's grid box: the title/price
- * block sits above one big photo, echoing the "name, accent rule, price"
- * language already used on the vehicle detail page hero. Same status rules
- * as VehicleCard throughout (no rule/price for sold or incoming, sold badge
- * on the photo, incoming placeholder art, non-clickable incoming wrapper). */
+const PHOTO_SLOTS = [0, 1, 2];
+
+/** Full-width row alternative to VehicleCard's grid box: details sit on the
+ * left, a three-photo strip fills the rest of the row on the right (stacks
+ * below the details on mobile, where there's no room to sit side by side).
+ * Same status rules as VehicleCard throughout (no rule/price for sold or
+ * incoming, sold badge on the lead photo, incoming placeholder art,
+ * non-clickable incoming wrapper). */
 export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   const sold = vehicle.status === "sold";
   const incoming = vehicle.status === "incoming";
   const showPrice = !sold && !incoming;
-  const image = vehicle.images?.[0];
+  const images = vehicle.images ?? [];
 
   const body = (
-    <div>
-      <p
-        className={`text-xs font-medium uppercase tracking-[0.08em] sm:text-sm ${incoming ? "text-ink/55" : "text-ink/60"}`}
-      >
-        {vehicle.year} {vehicle.make}
-      </p>
-      <h3
-        className={`font-display mt-1 text-[clamp(1.75rem,4vw,3rem)] leading-[1.02] ${incoming ? "text-ink/70" : "text-accent"}`}
-      >
-        {vehicle.model}
-      </h3>
+    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+      <div className="sm:w-72 sm:shrink-0">
+        <p
+          className={`text-xs font-medium uppercase tracking-[0.08em] ${incoming ? "text-ink/55" : "text-ink/60"}`}
+        >
+          {vehicle.year} {vehicle.make}
+        </p>
+        <h3
+          className={`font-display mt-1 text-2xl leading-[1.02] sm:text-3xl ${incoming ? "text-ink/70" : "text-accent"}`}
+        >
+          {vehicle.model}
+        </h3>
 
-      {vehicle.trim || (showPrice && vehicle.mileage) ? (
-        <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          {vehicle.trim ? (
-            <p className="text-xs uppercase tracking-[0.08em] text-ink/55 sm:text-sm">{vehicle.trim}</p>
-          ) : null}
-          {showPrice && vehicle.mileage ? (
-            <Mileage
-              miles={vehicle.mileage}
-              className="ml-auto whitespace-nowrap text-xs tabular-nums text-ink/50 sm:text-sm"
-            />
-          ) : null}
-        </div>
-      ) : null}
-
-      {showPrice ? (
-        <div className="mt-4">
-          <span className="block h-1 w-16 bg-accent" />
-          <div className="mt-4">
-            {vehicle.price ? (
-              <span className="font-display text-xl text-ink sm:text-2xl">
-                Offered at: {currency.format(vehicle.price)}
-              </span>
-            ) : (
-              <span className="text-sm text-ink/50">Price available on request</span>
-            )}
+        {vehicle.trim || (showPrice && vehicle.mileage) ? (
+          <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            {vehicle.trim ? (
+              <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+            ) : null}
+            {showPrice && vehicle.mileage ? (
+              <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50" />
+            ) : null}
           </div>
-        </div>
-      ) : null}
-
-      <div
-        className={`relative aspect-[4/3] w-full overflow-hidden ${showPrice ? "mt-6" : "mt-4 sm:mt-5"}`}
-      >
-        {image ? (
-          <Image
-            src={image}
-            alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <PlaceholderArt variant="card" label={incoming ? "Incoming" : ""} />
-        )}
-        {sold ? (
-          <span className="font-display absolute left-0 top-4 bg-accent px-4 py-2 text-xs tracking-[0.14em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)] sm:px-5 sm:py-2.5 sm:text-sm sm:tracking-[0.16em]">
-            Sold
-          </span>
         ) : null}
+
+        {showPrice ? (
+          <div className="mt-4">
+            <span className="block h-1 w-12 bg-accent" />
+            <div className="mt-3">
+              {vehicle.price ? (
+                <span className="font-display text-lg text-ink sm:text-xl">
+                  Offered at: {currency.format(vehicle.price)}
+                </span>
+              ) : (
+                <span className="text-sm text-ink/50">Price available on request</span>
+              )}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 sm:flex-1 sm:gap-3">
+        {PHOTO_SLOTS.map((i) => (
+          <div key={i} className="relative aspect-[4/3] overflow-hidden">
+            {images[i] ? (
+              <Image
+                src={images[i]}
+                alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <PlaceholderArt variant="card" label={i === 0 && incoming ? "Incoming" : ""} />
+            )}
+            {sold && i === 0 ? (
+              <span className="font-display absolute left-0 top-2 bg-accent px-2.5 py-1 text-[10px] tracking-[0.12em] text-cream shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
+                Sold
+              </span>
+            ) : null}
+          </div>
+        ))}
       </div>
     </div>
   );
 
   if (incoming) {
-    return <div className="mx-auto w-full max-w-2xl border border-ink/10 bg-white p-6 sm:p-10">{body}</div>;
+    return <div className="border border-ink/10 bg-white p-5 sm:p-6">{body}</div>;
   }
 
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      className="group mx-auto block w-full max-w-2xl border border-ink/10 bg-white p-6 transition-colors duration-300 hover:border-ink/25 sm:p-10"
+      className="group block border border-ink/10 bg-white p-5 transition-colors duration-300 hover:border-ink/25 sm:p-6"
     >
       {body}
     </Link>

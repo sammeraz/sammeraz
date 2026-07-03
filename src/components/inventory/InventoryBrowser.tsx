@@ -4,8 +4,10 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { InventoryGrid } from "@/components/inventory/InventoryGrid";
 import { InventoryList } from "@/components/inventory/InventoryList";
+import { MileageRangeSlider } from "@/components/inventory/MileageRangeSlider";
 import { RevealOnLoad, revealEase } from "@/components/motion/Reveal";
 import { CloseIcon, GridIcon, ListIcon, SearchIcon, SlidersIcon } from "@/components/ui/icons";
+import { milesToKm } from "@/lib/format";
 import type { Vehicle, VehicleStatus } from "@/lib/types";
 
 interface InventoryBrowserProps {
@@ -23,12 +25,9 @@ const tabs: { value: StatusFilter; label: string }[] = [
   { value: "sold", label: "Sold" },
 ];
 
-const mileageOptions = [
-  { label: "Any Mileage", max: Infinity },
-  { label: "Under 25,000 mi", max: 25000 },
-  { label: "Under 50,000 mi", max: 50000 },
-  { label: "Under 100,000 mi", max: 100000 },
-];
+const MILEAGE_MIN = 0;
+const MILEAGE_MAX = 200000;
+const MILEAGE_STEP = 5000;
 
 // On the "All" tab, group by status instead of leaving vehicles in whatever
 // order they were added to the data file — for-sale cars are what buyers
@@ -78,7 +77,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedMakes, setSelectedMakes] = useState<Set<string>>(new Set());
   const [selectedTransmissions, setSelectedTransmissions] = useState<Set<string>>(new Set());
-  const [mileageMax, setMileageMax] = useState(Infinity);
+  const [mileageRange, setMileageRange] = useState<[number, number]>([MILEAGE_MIN, MILEAGE_MAX]);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const allMakes = useMemo(() => [...new Set(vehicles.map((v) => v.make))].sort(), [vehicles]);
@@ -111,18 +110,23 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
       const type = vehicle.specs?.transmission ? transmissionType(vehicle.specs.transmission) : null;
       return type !== null && selectedTransmissions.has(type);
     })
-    .filter((vehicle) => mileageMax === Infinity || (vehicle.mileage !== undefined && vehicle.mileage <= mileageMax))
+    .filter((vehicle) => {
+      if (mileageRange[0] === MILEAGE_MIN && mileageRange[1] === MILEAGE_MAX) return true;
+      if (vehicle.mileage === undefined) return false;
+      const km = milesToKm(vehicle.mileage);
+      return km >= mileageRange[0] && km <= mileageRange[1];
+    })
     .sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
 
-  const activeFilterCount =
-    selectedMakes.size + selectedTransmissions.size + (mileageMax === Infinity ? 0 : 1);
+  const mileageFilterActive = mileageRange[0] !== MILEAGE_MIN || mileageRange[1] !== MILEAGE_MAX;
+  const activeFilterCount = selectedMakes.size + selectedTransmissions.size + (mileageFilterActive ? 1 : 0);
 
   function clearAllFilters() {
     setQuery("");
     setStatusFilter("all");
     setSelectedMakes(new Set());
     setSelectedTransmissions(new Set());
-    setMileageMax(Infinity);
+    setMileageRange([MILEAGE_MIN, MILEAGE_MAX]);
   }
 
   // Scoped to just the Make/Transmission/Mileage panel — leaves the search
@@ -131,7 +135,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   function resetAdvancedFilters() {
     setSelectedMakes(new Set());
     setSelectedTransmissions(new Set());
-    setMileageMax(Infinity);
+    setMileageRange([MILEAGE_MIN, MILEAGE_MAX]);
   }
 
   // Nothing posted yet at all — skip the search/filter chrome entirely and
@@ -278,20 +282,16 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                     </div>
                   ) : null}
 
-                  <div>
+                  <div className="sm:w-72">
                     <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {mileageOptions.map((option) => (
-                        <button
-                          key={option.label}
-                          type="button"
-                          onClick={() => setMileageMax(option.max)}
-                          aria-pressed={mileageMax === option.max}
-                          className={pillClass(mileageMax === option.max)}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
+                    <div className="mt-3">
+                      <MileageRangeSlider
+                        min={MILEAGE_MIN}
+                        max={MILEAGE_MAX}
+                        step={MILEAGE_STEP}
+                        value={mileageRange}
+                        onChange={setMileageRange}
+                      />
                     </div>
                   </div>
                 </div>
