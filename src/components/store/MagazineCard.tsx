@@ -26,7 +26,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
 
   return (
     <article className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1">
-      <Link href={`/store/${magazine.slug}`} data-cursor-text="View Details" className="contents">
+      <Link href={`/store/${magazine.slug}`} className="contents">
         <div className="relative aspect-[3/4] w-full overflow-hidden">
           {image ? (
             <Image

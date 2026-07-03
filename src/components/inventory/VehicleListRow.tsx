@@ -92,7 +92,6 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      data-cursor-text="View Details"
       className="group block border border-ink/10 bg-white p-6 transition-colors duration-300 hover:border-ink/25 sm:p-10"
     >
       {body}

@@ -23,9 +23,6 @@ export function PlaceholderArt({ variant = "card", label, className = "" }: Plac
       {/* Diagonal glare, the way light catches a body panel in a studio shot */}
       <div className="absolute -inset-y-1/4 -left-1/3 w-2/3 rotate-12 bg-gradient-to-r from-transparent via-cream/[0.06] to-transparent" />
 
-      {/* Red rim-light, low and off-center rather than dead-center */}
-      <div className="absolute -bottom-1/3 -right-1/4 h-3/4 w-3/4 rounded-full bg-accent/20 blur-3xl" />
-
       {/* Dark vignette to pull focus inward like a lens falloff */}
       <div className="absolute inset-0 bg-radial-vignette" />
 

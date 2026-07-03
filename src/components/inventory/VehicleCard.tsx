@@ -21,7 +21,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      data-cursor-text="View Details"
       className="group flex flex-col border border-ink/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-ink/25"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
