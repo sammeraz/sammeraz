@@ -57,15 +57,13 @@ const faqs: FAQItem[] = [
 export default function FAQPage() {
   return (
     <>
-      <div className="snap-section">
-        <PageHeader
-          eyebrow="FAQ"
-          title="Questions We Hear Before Someone Buys"
-          description="The honest answers, upfront — if something's missing, ask us directly."
-        />
-      </div>
+      <PageHeader
+        eyebrow="FAQ"
+        title="Questions We Hear Before Someone Buys"
+        description="The honest answers, upfront — if something's missing, ask us directly."
+      />
 
-      <section className="snap-section border-t border-ink/15 bg-cream py-24 md:py-32">
+      <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
         <Container>
           <Reveal>
             <FAQAccordion items={faqs} />
@@ -73,12 +71,10 @@ export default function FAQPage() {
         </Container>
       </section>
 
-      <div className="snap-section">
-        <CTABanner
-          title="Still have a question?"
-          description="Whatever it is, ask us directly — we'd rather answer it now than have it come up after you've committed."
-        />
-      </div>
+      <CTABanner
+        title="Still have a question?"
+        description="Whatever it is, ask us directly — we'd rather answer it now than have it come up after you've committed."
+      />
     </>
   );
 }

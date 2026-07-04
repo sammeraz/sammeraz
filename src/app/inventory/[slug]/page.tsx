@@ -69,123 +69,117 @@ export default async function VehicleDetailPage({
 
   return (
     <>
-      {/* Breadcrumb strip merged into the same snap-section as the detail
-          block below it, not its own stop — on its own it's just a sliver
-          of dark space with a back-link, so a paginated jump would waste a
-          full wheel tick revealing almost nothing. */}
-      <div className="snap-section">
-        {/* Dark strip, not just a breadcrumb bar: the header is transparent
-            with light text at scroll-top, on the assumption every page opens
-            on a dark surface (Hero/PageHeader elsewhere) — this keeps that
-            assumption true here too instead of stranding white nav text over
-            a white section. */}
-        <section className="bg-ink pb-6 pt-24 md:pt-32">
-          <Container>
-            <RevealOnLoad>
-              <Link
-                href="/inventory"
-                className="font-display inline-flex items-center gap-2 text-xs text-cream/60 transition-colors hover:text-accent-soft"
-              >
-                <ArrowLeftIcon className="h-3.5 w-3.5" />
-                Back to Inventory
-              </Link>
-            </RevealOnLoad>
-          </Container>
-        </section>
+      {/* Dark strip, not just a breadcrumb bar: the header is transparent
+          with light text at scroll-top, on the assumption every page opens
+          on a dark surface (Hero/PageHeader elsewhere) — this keeps that
+          assumption true here too instead of stranding white nav text over
+          a white section. */}
+      <section className="bg-ink pb-6 pt-24 md:pt-32">
+        <Container>
+          <RevealOnLoad>
+            <Link
+              href="/inventory"
+              className="font-display inline-flex items-center gap-2 text-xs text-cream/60 transition-colors hover:text-accent-soft"
+            >
+              <ArrowLeftIcon className="h-3.5 w-3.5" />
+              Back to Inventory
+            </Link>
+          </RevealOnLoad>
+        </Container>
+      </section>
 
-        <section className="border-b border-ink/15 bg-cream pb-20 pt-12">
-          <Container>
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <section className="border-b border-ink/15 bg-cream pb-20 pt-12">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <RevealOnLoad>
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                {image ? (
+                  <Image
+                    src={image}
+                    alt={name}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <PlaceholderArt variant="card" />
+                )}
+                {vehicle.status === "incoming" ? (
+                  <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
+                    Incoming
+                  </span>
+                ) : sold ? (
+                  <SoldBadge size="lg" />
+                ) : null}
+              </div>
+            </RevealOnLoad>
+
+            <div>
               <RevealOnLoad>
-                <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  {image ? (
-                    <Image
-                      src={image}
-                      alt={name}
-                      fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <PlaceholderArt variant="card" />
-                  )}
-                  {vehicle.status === "incoming" ? (
-                    <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
-                      Incoming
+                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
+                  {vehicle.year} {vehicle.make}
+                </p>
+                <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
+                  {vehicle.model}
+                </h1>
+                {vehicle.trim || vehicle.mileage ? (
+                  <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    {vehicle.trim ? (
+                      <p className="text-sm uppercase tracking-[0.08em] text-ink/55">
+                        {vehicle.trim}
+                      </p>
+                    ) : null}
+                    {vehicle.mileage ? (
+                      <Mileage
+                        miles={vehicle.mileage}
+                        showParenthetical
+                        className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50"
+                      />
+                    ) : null}
+                  </div>
+                ) : null}
+              </RevealOnLoad>
+
+              <RevealOnLoad delay={0.1}>
+                <span className="mt-6 block h-1 w-16 bg-accent" />
+              </RevealOnLoad>
+
+              <RevealOnLoad delay={0.16}>
+                <div className="mt-6 flex flex-wrap items-baseline gap-4">
+                  {sold ? (
+                    <span className="font-display text-2xl text-ink md:text-3xl">Sold</span>
+                  ) : vehicle.price ? (
+                    <span className="font-display text-2xl text-ink md:text-3xl">
+                      Offered at: {currency.format(vehicle.price)}
                     </span>
-                  ) : sold ? (
-                    <SoldBadge size="lg" />
-                  ) : null}
+                  ) : (
+                    <span className="text-base text-ink/50">Price available on request</span>
+                  )}
                 </div>
               </RevealOnLoad>
 
-              <div>
-                <RevealOnLoad>
-                  <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
-                    {vehicle.year} {vehicle.make}
-                  </p>
-                  <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
-                    {vehicle.model}
-                  </h1>
-                  {vehicle.trim || vehicle.mileage ? (
-                    <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      {vehicle.trim ? (
-                        <p className="text-sm uppercase tracking-[0.08em] text-ink/55">
-                          {vehicle.trim}
-                        </p>
-                      ) : null}
-                      {vehicle.mileage ? (
-                        <Mileage
-                          miles={vehicle.mileage}
-                          showParenthetical
-                          className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50"
-                        />
-                      ) : null}
-                    </div>
-                  ) : null}
-                </RevealOnLoad>
+              <RevealOnLoad delay={0.22}>
+                <div className="mt-6">
+                  <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
+                    {sold ? "Ask About Similar Cars" : "Ask About This Car"}
+                  </Button>
+                </div>
+              </RevealOnLoad>
 
-                <RevealOnLoad delay={0.1}>
-                  <span className="mt-6 block h-1 w-16 bg-accent" />
-                </RevealOnLoad>
-
-                <RevealOnLoad delay={0.16}>
-                  <div className="mt-6 flex flex-wrap items-baseline gap-4">
-                    {sold ? (
-                      <span className="font-display text-2xl text-ink md:text-3xl">Sold</span>
-                    ) : vehicle.price ? (
-                      <span className="font-display text-2xl text-ink md:text-3xl">
-                        Offered at: {currency.format(vehicle.price)}
-                      </span>
-                    ) : (
-                      <span className="text-base text-ink/50">Price available on request</span>
-                    )}
-                  </div>
-                </RevealOnLoad>
-
-                <RevealOnLoad delay={0.22}>
-                  <div className="mt-6">
-                    <Button href={`/contact?vehicle=${encodeURIComponent(name)}`} variant="dark">
-                      {sold ? "Ask About Similar Cars" : "Ask About This Car"}
-                    </Button>
-                  </div>
-                </RevealOnLoad>
-
-                <RevealOnLoad delay={0.3}>
-                  <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
-                    {sold
-                      ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
-                      : "Every vehicle we offer is reviewed against its auction sheet and import eligibility before it's listed. Ask us for the full condition report, shipping timeline, and landed cost for this car."}
-                  </p>
-                </RevealOnLoad>
-              </div>
+              <RevealOnLoad delay={0.3}>
+                <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
+                  {sold
+                    ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
+                    : "Every vehicle we offer is reviewed against its auction sheet and import eligibility before it's listed. Ask us for the full condition report, shipping timeline, and landed cost for this car."}
+                </p>
+              </RevealOnLoad>
             </div>
-          </Container>
-        </section>
-      </div>
+          </div>
+        </Container>
+      </section>
 
       {specRows.length > 0 ? (
-        <section className="snap-section border-b border-ink/15 bg-cream-deep py-20 md:py-24">
+        <section className="border-b border-ink/15 bg-cream-deep py-20 md:py-24">
           <Container>
             <RevealOnLoad delay={0.34} className="flex items-center gap-5">
               <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
@@ -209,12 +203,10 @@ export default async function VehicleDetailPage({
         </section>
       ) : null}
 
-      <div className="snap-section">
-        <CTABanner
-          title="Want a closer look before you commit?"
-          description="We'll walk you through the auction sheet, condition grade, and everything it takes to get this car to your driveway."
-        />
-      </div>
+      <CTABanner
+        title="Want a closer look before you commit?"
+        description="We'll walk you through the auction sheet, condition grade, and everything it takes to get this car to your driveway."
+      />
     </>
   );
 }

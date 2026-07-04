@@ -15,14 +15,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <div className="snap-section">
-        <PageHeader
-          eyebrow="About"
-          title="Focused on the details of importing that are easy to get wrong"
-        />
-      </div>
+      <PageHeader
+        eyebrow="About"
+        title="Focused on the details of importing that are easy to get wrong"
+      />
 
-      <section className="snap-section border-t border-ink/15 bg-cream py-24 md:py-32">
+      <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
         <Container>
           <Reveal className="flex items-center gap-5">
             <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">Our Approach</h2>
@@ -44,15 +42,9 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <div className="snap-section">
-        <ValuesGrid />
-      </div>
-      <div className="snap-section">
-        <ProcessSteps />
-      </div>
-      <div className="snap-section">
-        <CTABanner />
-      </div>
+      <ValuesGrid />
+      <ProcessSteps />
+      <CTABanner />
     </>
   );
 }
