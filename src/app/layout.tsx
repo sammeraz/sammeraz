@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/motion/Cursor";
 import { Preloader } from "@/components/motion/Preloader";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { ScrollSnap } from "@/components/motion/ScrollSnap";
 import { CartProvider } from "@/lib/cart-context";
 import { CartDrawer } from "@/components/store/CartDrawer";
 import { HeroFocusProvider } from "@/lib/hero-focus-context";
@@ -46,6 +47,7 @@ export default function RootLayout({
           <HeroFocusProvider>
             <Preloader />
             <Cursor />
+            <ScrollSnap />
             <Header />
             <main className="flex-1">
               <PageTransition>{children}</PageTransition>

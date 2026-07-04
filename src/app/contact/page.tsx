@@ -30,13 +30,15 @@ const nextSteps = [
 export default function ContactPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Contact"
-        title="Start an Inquiry"
-        description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
-      />
+      <div className="snap-section">
+        <PageHeader
+          eyebrow="Contact"
+          title="Start an Inquiry"
+          description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
+        />
+      </div>
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
+      <section className="snap-section border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
           <Reveal>
             <Suspense fallback={<InquiryForm />}>

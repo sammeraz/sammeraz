@@ -13,22 +13,30 @@ export const metadata: Metadata = {
 export default function StorePage() {
   return (
     <>
-      <PageHeader
-        eyebrow="Store"
-        title="JDM Magazine Back-Issues"
-        description="Original Japanese car magazines, sourced alongside the vehicles — Option, Best Motoring, and more, while stock lasts."
-      />
+      <div className="snap-section">
+        <PageHeader
+          eyebrow="Store"
+          title="JDM Magazine Back-Issues"
+          description="Original Japanese car magazines, sourced alongside the vehicles — Option, Best Motoring, and more, while stock lasts."
+        />
+      </div>
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
+      {/* snap-scrollable: grows with the catalog, so it's routinely taller
+          than the viewport — marks it for ScrollSnap to let it scroll
+          natively instead of jumping straight past whatever doesn't fit on
+          the first screen. */}
+      <section className="snap-section snap-scrollable border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
           <MagazineGrid magazines={magazines} placeholderCount={8} />
         </Container>
       </section>
 
-      <CTABanner
-        title="Looking for a specific issue?"
-        description="We source magazines alongside every vehicle shipment. Tell us the title or era you're after and we'll keep an eye out."
-      />
+      <div className="snap-section">
+        <CTABanner
+          title="Looking for a specific issue?"
+          description="We source magazines alongside every vehicle shipment. Tell us the title or era you're after and we'll keep an eye out."
+        />
+      </div>
     </>
   );
 }

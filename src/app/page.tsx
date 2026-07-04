@@ -4,12 +4,10 @@ import { InventoryPreview } from "@/components/sections/InventoryPreview";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { AboutTeaser } from "@/components/sections/AboutTeaser";
 import { CTABanner } from "@/components/sections/CTABanner";
-import { HomeScrollSnap } from "@/components/motion/HomeScrollSnap";
 
 export default function Home() {
   return (
     <>
-      <HomeScrollSnap />
       {/* Hero grows to fill whatever space TrustStrip doesn't take, so the
           pair always cover the full viewport height between them — no vh
           arithmetic that has to be re-tuned per device, immune to Hero's

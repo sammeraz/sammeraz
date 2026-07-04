@@ -11,9 +11,11 @@ export const metadata: Metadata = {
 export default function CheckoutPage() {
   return (
     <>
-      <PageHeader eyebrow="Checkout" title="Complete Your Order" />
+      <div className="snap-section">
+        <PageHeader eyebrow="Checkout" title="Complete Your Order" />
+      </div>
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
+      <section className="snap-section border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
           <CheckoutForm />
         </Container>
