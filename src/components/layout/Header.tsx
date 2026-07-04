@@ -84,8 +84,16 @@ export function Header() {
   return (
     <header
       inert={focused}
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,opacity] duration-500 ${
-        solid ? "bg-ink/95 backdrop-blur-sm shadow-[0_1px_0_0] shadow-cream/10" : "bg-transparent"
+      // Plain bg-ink, not the translucent/blurred fill this used to have:
+      // that read as a visibly distinct panel (rather than blending into
+      // whatever's behind it) any time it sat over another already-dark
+      // surface at less than full opacity — most noticeably the mobile
+      // menu's own solid bg-ink dropdown, where the mismatch showed up as a
+      // clearly separate lighter band across the header's own height. Flat,
+      // fully opaque ink matches that dropdown (and every other dark
+      // surface on the site) exactly, so there's no tone left to clash.
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,opacity] duration-500 ${
+        solid ? "bg-ink" : "bg-transparent"
       } ${focused ? "pointer-events-none opacity-0" : "opacity-100"}`}
     >
       <Container className="flex h-20 items-center justify-between text-cream">
