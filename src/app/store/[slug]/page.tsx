@@ -76,18 +76,13 @@ export default async function MagazineDetailPage({
 
       <section className="border-b border-ink/15 bg-cream pb-14 pt-10">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[420px_1fr] lg:gap-12">
+          <div className="grid gap-8 lg:grid-cols-[320px_1fr] lg:gap-12">
             <Reveal>
               <PhotoGallery
                 images={images}
                 alt={`${magazine.title} — ${magazine.issue}`}
                 aspectClassName="aspect-[3/4]"
                 placeholderSlides={MAGAZINE_PLACEHOLDER_SLIDES}
-                badge={
-                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
-                    {conditionLabel[magazine.condition]}
-                  </span>
-                }
               />
             </Reveal>
 
@@ -107,6 +102,7 @@ export default async function MagazineDetailPage({
 
               <Reveal delay={0.16}>
                 <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
+                  <span className="font-medium text-ink">{conditionLabel[magazine.condition]} condition.</span>{" "}
                   {magazine.description ??
                     "An original back-issue, sourced alongside our vehicle shipments straight from Japan."}
                 </p>
