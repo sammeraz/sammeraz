@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${oswald.variable} h-full scroll-smooth antialiased`}>
       <body className="flex min-h-full flex-col bg-ink text-cream">
         <CartProvider>
           <HeroFocusProvider>

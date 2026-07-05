@@ -8,7 +8,7 @@ import { SoldBadge } from "@/components/inventory/SoldBadge";
 import { PhotoGallery } from "@/components/ui/PhotoGallery";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { RevealOnLoad, RevealOnLoadGroup, RevealItem } from "@/components/motion/Reveal";
-import { ArrowLeftIcon } from "@/components/ui/icons";
+import { ArrowLeftIcon, ChevronDownIcon } from "@/components/ui/icons";
 import { inventory } from "@/data/inventory";
 import type { VehicleSpecs } from "@/lib/types";
 
@@ -178,13 +178,25 @@ export default async function VehicleDetailPage({
                     : "Every vehicle we offer is reviewed against its auction sheet and import eligibility before it's listed. Ask us for the full condition report, shipping timeline, and landed cost for this car."}
                 </p>
               </RevealOnLoad>
+
+              {specRows.length > 0 ? (
+                <RevealOnLoad delay={0.36}>
+                  <a
+                    href="#specifications"
+                    className="mt-6 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.1em] text-ink/50 transition-colors hover:text-accent"
+                  >
+                    See full specs below
+                    <ChevronDownIcon className="h-3.5 w-3.5 animate-bounce" />
+                  </a>
+                </RevealOnLoad>
+              ) : null}
             </div>
           </div>
         </Container>
       </section>
 
       {specRows.length > 0 ? (
-        <section className="border-b border-ink/15 bg-cream-deep py-20 md:py-24">
+        <section id="specifications" className="scroll-mt-24 border-b border-ink/15 bg-cream-deep py-20 md:py-24">
           <Container>
             <RevealOnLoad delay={0.34} className="flex items-center gap-5">
               <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
