@@ -14,28 +14,36 @@ interface VehicleGalleryProps {
   badge?: ReactNode;
 }
 
+/** Stand-in slide labels shown (with the same click-to-switch gallery
+ * mechanic as real photos) whenever a vehicle has no photography yet, so the
+ * multi-photo UX is visible on demo listings instead of collapsing to a
+ * single flat placeholder. Swap out for real photos as they come in. */
+const PLACEHOLDER_SLIDES = ["Front 3/4", "Rear 3/4", "Interior", "Engine Bay"];
+
 /** Main photo plus a thumbnail strip beneath it to quick-switch between the
- * rest — falls back to the existing single-image (or placeholder) treatment
- * whenever a vehicle has zero or one photo, so nothing changes for the
- * common case until real multi-photo listings exist. */
+ * rest — falls back to the existing single-image treatment whenever a
+ * vehicle has exactly one real photo, and to a labeled placeholder gallery
+ * when it has none. */
 export function VehicleGallery({ images, name, badge }: VehicleGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const reducedMotion = useSafeReducedMotion();
+  const hasPhotos = images.length > 0;
+  const slides = hasPhotos ? images : PLACEHOLDER_SLIDES;
   const active = images[activeIndex];
 
   return (
     <div>
       <div className="relative aspect-[4/3] w-full overflow-hidden">
-        {active ? (
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              initial={reducedMotion ? undefined : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={reducedMotion ? undefined : { opacity: 0 }}
-              transition={{ duration: 0.3, ease: revealEase }}
-              className="absolute inset-0"
-            >
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={hasPhotos ? active : slides[activeIndex]}
+            initial={reducedMotion ? undefined : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reducedMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.3, ease: revealEase }}
+            className="absolute inset-0"
+          >
+            {hasPhotos ? (
               <Image
                 src={active}
                 alt={name}
@@ -44,30 +52,34 @@ export function VehicleGallery({ images, name, badge }: VehicleGalleryProps) {
                 className="object-cover"
                 priority={activeIndex === 0}
               />
-            </motion.div>
-          </AnimatePresence>
-        ) : (
-          <PlaceholderArt variant="card" />
-        )}
+            ) : (
+              <PlaceholderArt variant="card" label={slides[activeIndex]} />
+            )}
+          </motion.div>
+        </AnimatePresence>
         {badge}
       </div>
 
-      {images.length > 1 ? (
+      {slides.length > 1 ? (
         <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-6">
-          {images.map((src, index) => {
+          {slides.map((slide, index) => {
             const isActive = index === activeIndex;
             return (
               <button
-                key={src}
+                key={slide}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                aria-label={`View photo ${index + 1} of ${images.length}`}
+                aria-label={`View photo ${index + 1} of ${slides.length}`}
                 aria-current={isActive}
                 className={`relative aspect-[4/3] overflow-hidden border transition-colors duration-200 ${
                   isActive ? "border-accent" : "border-ink/15 hover:border-ink/40"
                 }`}
               >
-                <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+                {hasPhotos ? (
+                  <Image src={slide} alt="" fill sizes="120px" className="object-cover" />
+                ) : (
+                  <PlaceholderArt variant="card" label={slide} />
+                )}
                 {!isActive ? <span className="absolute inset-0 bg-ink/20" /> : null}
               </button>
             );
