@@ -53,7 +53,7 @@ export function ProcessSteps({ heading = "How It Works", tightTop = false }: Pro
               transition={{ duration: 0.55, delay: index * 0.08, ease: easing }}
               className="group relative flex items-start gap-5 border-b border-ink/15 py-7 md:gap-10"
             >
-              <span className="font-display relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-cream-deep text-lg text-ink transition-colors duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
+              <span className="font-display relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-cream-deep text-lg text-ink transition-[transform,border-color,color,box-shadow] duration-300 group-hover:scale-110 group-hover:border-accent group-hover:text-accent group-hover:shadow-[0_0_0_6px_rgba(211,38,26,0.12)]">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:gap-10">
