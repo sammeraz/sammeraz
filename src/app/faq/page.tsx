@@ -65,7 +65,7 @@ export default function FAQPage() {
 
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
-          <Reveal>
+          <Reveal className="reveal-instant">
             <FAQAccordion items={faqs} />
           </Reveal>
         </Container>

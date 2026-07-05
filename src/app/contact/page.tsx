@@ -38,21 +38,21 @@ export default function ContactPage() {
 
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
-          <Reveal>
+          <Reveal className="reveal-instant">
             <Suspense fallback={<InquiryForm />}>
               <InquiryFormWithVehicleParam />
             </Suspense>
           </Reveal>
 
-          <RevealGroup className="flex flex-col gap-12">
+          <RevealGroup className="reveal-instant flex flex-col gap-12">
             <div className="flex flex-col gap-7 border-t border-ink/15 pt-8">
-              <RevealItem>
+              <RevealItem className="reveal-instant">
                 <span className="font-display text-sm text-accent">What Happens Next</span>
               </RevealItem>
               {nextSteps.map((step, index) => (
                 <RevealItem
                   key={step.title}
-                  className="flex gap-4 border-b border-ink/15 pb-7 last:border-b-0 last:pb-0"
+                  className="reveal-instant flex gap-4 border-b border-ink/15 pb-7 last:border-b-0 last:pb-0"
                 >
                   <span className="font-display text-lg text-accent">
                     {String(index + 1).padStart(2, "0")}
@@ -65,7 +65,7 @@ export default function ContactPage() {
               ))}
             </div>
 
-            <RevealItem className="flex flex-col gap-3 border-t border-ink/15 pt-8">
+            <RevealItem className="reveal-instant flex flex-col gap-3 border-t border-ink/15 pt-8">
               <span className="font-display text-sm text-ink/45">Direct</span>
               <a
                 href={`mailto:${site.email}`}

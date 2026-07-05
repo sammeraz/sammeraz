@@ -21,11 +21,11 @@ export default function FinancingPage() {
 
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container className="flex flex-col items-start gap-6">
-          <Reveal className="flex w-full items-center gap-5">
+          <Reveal className="reveal-instant flex w-full items-center gap-5">
             <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">Coming Soon</h2>
             <span className="h-1 flex-1 bg-accent" />
           </Reveal>
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} className="reveal-instant">
             <p className="max-w-2xl text-base leading-relaxed text-ink/65">
               Imported vehicles don&apos;t always fit standard auto loans — specialty and
               collector-vehicle financing works differently. We&apos;re putting a lending
@@ -33,7 +33,7 @@ export default function FinancingPage() {
               cash. Details land here once it&apos;s official.
             </p>
           </Reveal>
-          <Reveal delay={0.18}>
+          <Reveal delay={0.18} className="reveal-instant">
             <Button href="/contact" variant="outline-dark">
               Ask About Financing
             </Button>

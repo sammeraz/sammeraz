@@ -29,7 +29,7 @@ export default function AboutPage() {
 
       <section className="border-t border-ink/15 bg-cream pb-16 pt-12 md:pb-20">
         <Container>
-          <Reveal>
+          <Reveal className="reveal-instant">
             <p className="font-display max-w-2xl text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.18] text-ink">
               Buying a car you&apos;ve never seen, from a country you&apos;ve never been to,
               takes more trust than most transactions.
