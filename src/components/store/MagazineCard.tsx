@@ -14,8 +14,9 @@ const currency = new Intl.NumberFormat("en-US", {
 });
 
 export function MagazineCard({ magazine }: { magazine: Magazine }) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const image = magazine.images?.[0];
+  const inCart = items.some((item) => item.slug === magazine.slug);
 
   return (
     <article className="group flex h-full flex-col bg-white transition-transform duration-300 hover:-translate-y-1">
@@ -32,6 +33,11 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
           ) : (
             <PlaceholderArt variant="card" />
           )}
+          {inCart ? (
+            <span className="font-display absolute left-0 top-3 bg-ink px-3 py-1 text-xs text-cream">
+              In Cart
+            </span>
+          ) : null}
         </div>
 
         <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">
