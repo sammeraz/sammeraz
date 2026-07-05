@@ -45,21 +45,19 @@ export const values = [
   {
     title: "Transparency",
     description:
-      "You see the same auction sheets and condition reports we do — no smoothing over rust, accident history, or mileage discrepancies.",
+      "Same auction sheets and condition reports we see — no smoothing over rust, accidents, or mileage.",
   },
   {
     title: "Diligence",
-    description:
-      "Every vehicle is checked for import eligibility and compliance before it's offered, not after money has changed hands.",
+    description: "Import eligibility and compliance checked before you're ever asked to commit.",
   },
   {
     title: "Communication",
-    description:
-      "Sourcing a car from across the Pacific takes time. You'll always know what stage your vehicle is at and what happens next.",
+    description: "You'll always know what stage your car is at, and what happens next.",
   },
   {
     title: "Documentation",
     description:
-      "Title, customs, and registration paperwork is handled deliberately, so the only surprise at delivery is how good the car looks.",
+      "Title, customs, and registration handled deliberately — the only surprise is how good the car looks.",
   },
 ];

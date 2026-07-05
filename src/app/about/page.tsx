@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { ValuesGrid } from "@/components/sections/ValuesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
@@ -12,32 +13,49 @@ export const metadata: Metadata = {
     "AIM Imports is a Leander, Texas-based JDM importer focused on transparent sourcing, careful documentation, and clear communication.",
 };
 
+const highlights = [
+  "Auction Sheets Reviewed Line-by-Line",
+  "25-Year Import Eligibility Checked",
+  "Nationwide Delivery",
+];
+
 export default function AboutPage() {
   return (
     <>
-      <PageHeader
-        eyebrow="About"
-        title="We handle the details most importers get wrong."
-      />
+      <PageHeader eyebrow="About" title="We handle the details most importers get wrong." />
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
-        <Container>
-          <Reveal className="flex items-center gap-5">
-            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">Our Approach</h2>
-            <span className="h-1 flex-1 bg-accent" />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="font-display mt-6 max-w-3xl text-[clamp(1.5rem,3.5vw,2.25rem)] leading-[1.15] text-ink">
-              Buying a car you&apos;ve never seen, from a country you&apos;ve never been to, takes
-              more trust than most transactions.
+      <section className="border-t border-ink/15 bg-cream pb-16 pt-12 md:pb-20">
+        <Container className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+          <Reveal className="order-2 md:order-1">
+            <p className="font-display max-w-lg text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.18] text-ink">
+              Buying a car you&apos;ve never seen, from a country you&apos;ve never been to,
+              takes more trust than most transactions.
             </p>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink/65">
-              We treat documentation and communication as the product, not an afterthought —
-              reviewing every auction sheet line by line and staying in touch from sourcing
-              through delivery, anywhere in the country.
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
+              That&apos;s why documentation and communication come first here, not as an
+              afterthought.
             </p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {highlights.map((item) => (
+                <li
+                  key={item}
+                  className="border border-ink/15 px-3 py-1.5 text-xs uppercase tracking-[0.06em] text-ink/60"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal
+            y={36}
+            className="relative order-1 aspect-[4/5] w-full overflow-hidden md:order-2"
+          >
+            <PlaceholderArt variant="panel" label="AIM Imports" />
+            <div className="absolute bottom-0 right-0 flex flex-col items-end bg-ink px-4 py-3 text-cream">
+              <span className="font-display text-3xl leading-none text-accent-soft">25</span>
+              <span className="text-[10px] uppercase tracking-[0.14em]">Year Import Rule</span>
+            </div>
           </Reveal>
         </Container>
       </section>
