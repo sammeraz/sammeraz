@@ -45,8 +45,9 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
-        <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
+        <h3 className="relative inline-block w-fit font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
+          <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-[width] duration-300 ease-out group-hover:w-full" />
         </h3>
         {/* Transmission reads as part of the trim spec, not its own boxed
             chip — a bordered tag sharing a row with mileage read as clutter,
@@ -91,8 +92,6 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  * yet at this stage.
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
-  const transmission = transmissionAbbreviation(vehicle.specs?.transmission);
-
   return (
     <div className="flex flex-col border border-ink/10 bg-white">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -105,9 +104,9 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-ink/70 sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim || transmission ? (
+        {vehicle.trim ? (
           <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 sm:text-xs">
-            {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
+            {vehicle.trim}
           </p>
         ) : null}
       </div>

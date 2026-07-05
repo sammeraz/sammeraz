@@ -25,7 +25,7 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   const incoming = vehicle.status === "incoming";
   const showPrice = !sold && !incoming;
   const images = vehicle.images ?? [];
-  const transmission = transmissionAbbreviation(vehicle.specs?.transmission);
+  const transmission = incoming ? null : transmissionAbbreviation(vehicle.specs?.transmission);
 
   const body = (
     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
@@ -36,9 +36,10 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.year} {vehicle.make}
         </p>
         <h3
-          className={`font-display mt-1 text-2xl leading-[1.02] sm:text-3xl ${incoming ? "text-ink/70" : "text-accent"}`}
+          className={`relative mt-1 inline-block w-fit font-display text-2xl leading-[1.02] sm:text-3xl ${incoming ? "text-ink/70" : "text-accent"}`}
         >
           {vehicle.model}
+          <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-[width] duration-300 ease-out group-hover:w-full" />
         </h3>
 
         {/* Transmission reads as part of the trim spec, not its own boxed
