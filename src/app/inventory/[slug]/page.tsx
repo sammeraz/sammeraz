@@ -183,10 +183,10 @@ export default async function VehicleDetailPage({
                 <RevealOnLoad delay={0.36}>
                   <a
                     href="#specifications"
-                    className="mt-6 inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.1em] text-ink/50 transition-colors hover:text-accent"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.1em] text-ink/50 transition-colors hover:text-accent"
                   >
                     See full specs below
-                    <ChevronDownIcon className="h-3.5 w-3.5 animate-bounce" />
+                    <ChevronDownIcon className="h-4 w-4 animate-bounce" />
                   </a>
                 </RevealOnLoad>
               ) : null}
