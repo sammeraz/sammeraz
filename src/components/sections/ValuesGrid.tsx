@@ -91,7 +91,7 @@ export function ValuesGrid({ heading = "What We Believe" }: ValuesGridProps) {
               </div>
               <div className="flex flex-col p-8 md:p-10">
                 <div className="flex items-start justify-between gap-4">
-                  <span className="font-display text-5xl leading-none text-ink/10">
+                  <span className="font-display text-6xl leading-none text-ink/10">
                     {activeNumber}
                   </span>
                   <button
@@ -104,10 +104,10 @@ export function ValuesGrid({ heading = "What We Believe" }: ValuesGridProps) {
                   </button>
                 </div>
                 <span className="mt-2 block h-1 w-10 bg-accent" />
-                <h3 className="font-display mt-4 text-3xl leading-none text-ink">
+                <h3 className="font-display mt-4 text-4xl leading-none text-ink">
                   {active.title}
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-ink/65">{active.detail}</p>
+                <p className="mt-4 text-base leading-relaxed text-ink/65">{active.detail}</p>
               </div>
             </motion.div>
           </motion.div>
