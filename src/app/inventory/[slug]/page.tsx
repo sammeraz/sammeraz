@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Mileage } from "@/components/inventory/Mileage";
 import { SoldBadge } from "@/components/inventory/SoldBadge";
-import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { VehicleGallery } from "@/components/inventory/VehicleGallery";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { RevealOnLoad, RevealOnLoadGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
@@ -60,7 +59,7 @@ export default async function VehicleDetailPage({
   const vehicle = getVehicle(slug);
   if (!vehicle) notFound();
 
-  const image = vehicle.images?.[0];
+  const images = vehicle.images ?? [];
   const name = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
   const sold = vehicle.status === "sold";
   const specRows = (Object.keys(specLabels) as (keyof VehicleSpecs)[])
@@ -92,26 +91,19 @@ export default async function VehicleDetailPage({
         <Container>
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <RevealOnLoad>
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
-                {image ? (
-                  <Image
-                    src={image}
-                    alt={name}
-                    fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                ) : (
-                  <PlaceholderArt variant="card" />
-                )}
-                {vehicle.status === "incoming" ? (
-                  <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
-                    Incoming
-                  </span>
-                ) : sold ? (
-                  <SoldBadge size="lg" />
-                ) : null}
-              </div>
+              <VehicleGallery
+                images={images}
+                name={name}
+                badge={
+                  vehicle.status === "incoming" ? (
+                    <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">
+                      Incoming
+                    </span>
+                  ) : sold ? (
+                    <SoldBadge size="lg" />
+                  ) : null
+                }
+              />
             </RevealOnLoad>
 
             <div>
