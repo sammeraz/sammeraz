@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
+import { getStripe } from "@/lib/stripe";
+import { magazines } from "@/data/magazines";
 
 interface CheckoutItem {
   slug: string;
-  title: string;
   quantity: number;
-  price: number;
 }
 
 interface CheckoutPayload {
@@ -45,12 +45,52 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
   }
 
-  // TODO: wire this up to a real payment processor (Stripe is the standard
-  // choice — create a PaymentIntent/Checkout Session here) once an account
-  // and API keys are available. For now, orders are only logged server-side
-  // so the checkout flow has a working endpoint to submit to; no payment is
-  // actually collected yet.
-  console.log("New AIM Imports store order:", payload);
+  // Price and title come from our own catalog, keyed only by slug — never
+  // from the client's submitted item — so a tampered request body can't
+  // check out at an arbitrary price.
+  const lineItems = items
+    .map((item) => {
+      const magazine = magazines.find((candidate) => candidate.slug === item.slug);
+      if (!magazine) return null;
+      const quantity = Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1;
+      return { magazine, quantity };
+    })
+    .filter((item): item is { magazine: (typeof magazines)[number]; quantity: number } => item !== null);
 
-  return NextResponse.json({ ok: true });
+  if (lineItems.length === 0) {
+    return NextResponse.json(
+      { error: "Those items are no longer available. Refresh your cart and try again." },
+      { status: 400 },
+    );
+  }
+
+  const origin = new URL(request.url).origin;
+
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: lineItems.map(({ magazine, quantity }) => ({
+        quantity,
+        price_data: {
+          currency: "usd",
+          unit_amount: Math.round(magazine.price * 100),
+          product_data: { name: `${magazine.title} — ${magazine.issue}` },
+        },
+      })),
+      customer_email: email,
+      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/checkout`,
+      metadata: { name, address, city, state, zip },
+    });
+
+    if (!session.url) {
+      throw new Error("Stripe did not return a Checkout URL.");
+    }
+
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    console.error("Stripe Checkout Session creation failed:", error);
+    return NextResponse.json({ error: "Payment setup failed. Please try again." }, { status: 502 });
+  }
 }

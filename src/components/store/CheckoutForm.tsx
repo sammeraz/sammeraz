@@ -5,7 +5,7 @@ import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
 import { useCart } from "@/lib/cart-context";
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "submitting" | "error";
 
 const inputClass =
   "w-full border-b border-ink/20 bg-transparent py-3 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent";
@@ -19,7 +19,7 @@ const currency = new Intl.NumberFormat("en-US", {
 });
 
 export function CheckoutForm() {
-  const { items, subtotal, clear } = useCart();
+  const { items, subtotal } = useCart();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -37,45 +37,25 @@ export function CheckoutForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          items: items.map((item) => ({
-            slug: item.slug,
-            title: item.title,
-            quantity: item.quantity,
-            price: item.price,
-          })),
+          // Only slug + quantity: price and title come from the server's own
+          // catalog, never from the client, so there's nothing to tamper with.
+          items: items.map((item) => ({ slug: item.slug, quantity: item.quantity })),
         }),
       });
 
-      if (!response.ok) {
-        const body = await response.json().catch(() => null);
+      const body = await response.json().catch(() => null);
+      if (!response.ok || !body?.url) {
         throw new Error(body?.error ?? "Something went wrong. Please try again.");
       }
 
-      setStatus("success");
-      clear();
-      form.reset();
+      // Cart is cleared on the success page instead, once payment is
+      // actually confirmed — clearing here would lose it if the customer
+      // abandons Stripe's page and comes back.
+      window.location.href = body.url;
     } catch (error) {
       setStatus("error");
       setErrorMessage(error instanceof Error ? error.message : "Something went wrong.");
     }
-  }
-
-  if (status === "success") {
-    return (
-      <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-        <h3 className="font-display text-2xl text-ink">Order received</h3>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
-          Thanks for your order — we&apos;ll follow up by email with payment and shipping details
-          shortly.
-        </p>
-        <Link
-          href="/store"
-          className="font-display mt-6 inline-block text-xs text-accent underline underline-offset-4"
-        >
-          Back to the store
-        </Link>
-      </div>
-    );
   }
 
   if (items.length === 0) {
@@ -149,11 +129,10 @@ export function CheckoutForm() {
           disabled={status === "submitting"}
           className="font-display mt-2 inline-flex items-center justify-center border border-ink bg-ink px-7 py-3.5 text-sm text-cream transition-colors duration-200 hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {status === "submitting" ? "Placing Order…" : "Place Order"}
+          {status === "submitting" ? "Redirecting to Payment…" : "Continue to Payment"}
         </motion.button>
         <p className="text-xs leading-relaxed text-ink/45">
-          Payment isn&apos;t collected online yet — we&apos;ll follow up by email to arrange
-          payment before shipping.
+          You&apos;ll enter payment details on Stripe&apos;s secure payment page next.
         </p>
       </form>
 
