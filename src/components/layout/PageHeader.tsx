@@ -14,7 +14,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ eyebrow, title, description }: PageHeaderProps) {
   return (
-    <section className="relative flex h-[46vh] min-h-[360px] items-end overflow-hidden bg-ink text-cream">
+    <section className="relative flex min-h-[max(360px,46vh)] items-start overflow-hidden bg-ink text-cream">
       <div className="absolute inset-0">
         <PlaceholderArt variant="hero" />
       </div>

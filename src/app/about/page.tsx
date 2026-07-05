@@ -21,7 +21,11 @@ const highlights = [
 export default function AboutPage() {
   return (
     <>
-      <PageHeader eyebrow="About" title="We handle the details most importers get wrong." />
+      <PageHeader
+        eyebrow="About"
+        title="We handle the details most importers get wrong."
+        description="Transparent sourcing, careful documentation, and clear communication — from auction sheet to the day your car arrives."
+      />
 
       <section className="border-t border-ink/15 bg-cream pb-16 pt-12 md:pb-20">
         <Container>
