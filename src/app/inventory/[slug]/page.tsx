@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Mileage } from "@/components/inventory/Mileage";
 import { SoldBadge } from "@/components/inventory/SoldBadge";
-import { VehicleGallery } from "@/components/inventory/VehicleGallery";
+import { PhotoGallery } from "@/components/ui/PhotoGallery";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { RevealOnLoad, RevealOnLoadGroup, RevealItem } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
@@ -25,6 +25,17 @@ const currency = new Intl.NumberFormat("en-US", {
   currency: "USD",
   maximumFractionDigits: 0,
 });
+
+const VEHICLE_PLACEHOLDER_SLIDES = [
+  "Front 3/4",
+  "Rear 3/4",
+  "Side Profile",
+  "Interior",
+  "Dashboard",
+  "Engine Bay",
+  "Wheels",
+  "Trunk",
+];
 
 function getVehicle(slug: string) {
   return inventory.find((vehicle) => vehicle.slug === slug);
@@ -91,9 +102,11 @@ export default async function VehicleDetailPage({
         <Container>
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <RevealOnLoad>
-              <VehicleGallery
+              <PhotoGallery
                 images={images}
-                name={name}
+                alt={name}
+                aspectClassName="aspect-[4/3]"
+                placeholderSlides={VEHICLE_PLACEHOLDER_SLIDES}
                 badge={
                   vehicle.status === "incoming" ? (
                     <span className="font-display absolute left-0 top-4 bg-ink/75 px-4 py-1.5 text-xs text-cream">

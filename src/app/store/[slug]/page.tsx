@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
-import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
+import { PhotoGallery } from "@/components/ui/PhotoGallery";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal } from "@/components/motion/Reveal";
 import { ArrowLeftIcon } from "@/components/ui/icons";
@@ -17,6 +16,8 @@ const conditionLabel: Record<Magazine["condition"], string> = {
   good: "Good",
   fair: "Fair",
 };
+
+const MAGAZINE_PLACEHOLDER_SLIDES = ["Front Cover", "Back Cover", "Contents Page", "Feature Spread"];
 
 function getMagazine(slug: string) {
   return magazines.find((magazine) => magazine.slug === slug);
@@ -50,7 +51,7 @@ export default async function MagazineDetailPage({
   const magazine = getMagazine(slug);
   if (!magazine) notFound();
 
-  const image = magazine.images?.[0];
+  const images = magazine.images ?? [];
 
   return (
     <>
@@ -73,26 +74,21 @@ export default async function MagazineDetailPage({
         </Container>
       </section>
 
-      <section className="border-b border-ink/15 bg-cream pb-20 pt-12">
+      <section className="border-b border-ink/15 bg-cream pb-14 pt-10">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1fr] lg:gap-16">
+          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
             <Reveal>
-              <div className="relative aspect-[3/4] w-full overflow-hidden">
-                {image ? (
-                  <Image
-                    src={image}
-                    alt={`${magazine.title} — ${magazine.issue}`}
-                    fill
-                    sizes="(min-width: 1024px) 44vw, 100vw"
-                    className="object-cover"
-                  />
-                ) : (
-                  <PlaceholderArt variant="card" />
-                )}
-                <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
-                  {conditionLabel[magazine.condition]}
-                </span>
-              </div>
+              <PhotoGallery
+                images={images}
+                alt={`${magazine.title} — ${magazine.issue}`}
+                aspectClassName="aspect-[3/4]"
+                placeholderSlides={MAGAZINE_PLACEHOLDER_SLIDES}
+                badge={
+                  <span className="font-display absolute left-0 top-4 bg-accent px-4 py-1.5 text-xs text-cream">
+                    {conditionLabel[magazine.condition]}
+                  </span>
+                }
+              />
             </Reveal>
 
             <div>
@@ -100,24 +96,24 @@ export default async function MagazineDetailPage({
                 <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
                   {magazine.issue}
                 </p>
-                <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
+                <h1 className="font-display mt-1 text-[clamp(1.75rem,4.5vw,3rem)] leading-[1.02] text-accent">
                   {magazine.title}
                 </h1>
               </Reveal>
 
               <Reveal delay={0.1}>
-                <span className="mt-6 block h-1 w-16 bg-accent" />
+                <span className="mt-4 block h-1 w-14 bg-accent" />
               </Reveal>
 
               <Reveal delay={0.16}>
-                <p className="mt-6 max-w-md text-sm leading-relaxed text-ink/60">
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
                   {magazine.description ??
                     "An original back-issue, sourced alongside our vehicle shipments straight from Japan."}
                 </p>
               </Reveal>
 
-              <Reveal delay={0.24}>
-                <div className="mt-8">
+              <Reveal delay={0.22}>
+                <div className="mt-6">
                   <MagazineBuyBox magazine={magazine} />
                 </div>
               </Reveal>
