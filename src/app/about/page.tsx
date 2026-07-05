@@ -20,7 +20,7 @@ export default function AboutPage() {
         title="Focused on the details of importing that are easy to get wrong"
       />
 
-      <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
           <Reveal className="flex items-center gap-5">
             <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">Our Approach</h2>

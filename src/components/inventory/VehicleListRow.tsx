@@ -41,11 +41,15 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.model}
         </h3>
 
-        {vehicle.trim || transmission || (showPrice && vehicle.mileage) ? (
-          <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            {vehicle.trim ? (
-              <p className="text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
-            ) : null}
+        {vehicle.trim ? (
+          <p className="mt-2 text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+        ) : null}
+        {/* Its own row, separate from trim: trim text varies enough in
+            length that sharing a wrappable row with it left the tag sitting
+            in a different spot on every other listing. Pinned here, it's
+            always the same position regardless of trim. */}
+        {transmission || (showPrice && vehicle.mileage) ? (
+          <div className={`flex items-baseline gap-x-3 ${vehicle.trim ? "mt-1" : "mt-2"}`}>
             {transmission ? (
               <span className="border border-ink/20 px-1 text-[10px] font-medium uppercase tracking-[0.08em] text-ink/55">
                 {transmission}

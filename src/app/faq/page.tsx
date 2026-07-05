@@ -63,7 +63,7 @@ export default function FAQPage() {
         description="The honest answers, upfront — if something's missing, ask us directly."
       />
 
-      <section className="border-t border-ink/15 bg-cream py-24 md:py-32">
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
         <Container>
           <Reveal>
             <FAQAccordion items={faqs} />
