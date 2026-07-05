@@ -14,7 +14,7 @@ const currency = new Intl.NumberFormat("en-US", {
 });
 
 export function MagazineCard({ magazine }: { magazine: Magazine }) {
-  const { addItem, items } = useCart();
+  const { addItem, removeItem, items } = useCart();
   const image = magazine.images?.[0];
   const inCart = items.some((item) => item.slug === magazine.slug);
 
@@ -59,14 +59,25 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
         <span className="font-display text-sm text-ink sm:text-base">
           {currency.format(magazine.price)}
         </span>
-        <motion.button
-          type="button"
-          whileTap={{ scale: 0.94 }}
-          onClick={() => addItem(magazine)}
-          className="font-display border border-ink px-4 py-1.5 text-xs text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream"
-        >
-          Add to Cart
-        </motion.button>
+        {inCart ? (
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.94 }}
+            onClick={() => removeItem(magazine.slug)}
+            className="font-display border border-ink/30 px-4 py-1.5 text-xs text-ink/60 transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-cream"
+          >
+            Remove from Cart
+          </motion.button>
+        ) : (
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.94 }}
+            onClick={() => addItem(magazine)}
+            className="font-display border border-ink px-4 py-1.5 text-xs text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream"
+          >
+            Add to Cart
+          </motion.button>
+        )}
       </div>
     </article>
   );
