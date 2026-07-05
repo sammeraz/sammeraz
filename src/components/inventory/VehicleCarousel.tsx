@@ -8,6 +8,7 @@ import { ComingSoonCard } from "@/components/inventory/ComingSoonCard";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { Container } from "@/components/ui/Container";
 import { revealEase } from "@/components/motion/Reveal";
+import { useStartsInViewport } from "@/hooks/useStartsInViewport";
 
 interface VehicleCarouselProps {
   vehicles: Vehicle[];
@@ -38,6 +39,7 @@ const cardItem: Variants = {
  * regardless. */
 export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const [inViewRef, startsInViewport] = useStartsInViewport<HTMLDivElement>();
   const hasVehicles = vehicles.length > 0;
   const itemCount = hasVehicles ? vehicles.length : placeholderCount;
   const { scrollXProgress } = useScroll({ container: scrollerRef });
@@ -53,10 +55,14 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
   return (
     <div>
       <motion.div
-        ref={scrollerRef}
+        ref={(node) => {
+          scrollerRef.current = node;
+          inViewRef.current = node;
+        }}
         variants={cardRow}
         initial="hidden"
-        whileInView="show"
+        animate={startsInViewport ? "show" : undefined}
+        whileInView={startsInViewport ? undefined : "show"}
         viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
         className="carousel-align-start no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 pt-2 sm:pl-6 sm:pr-0"
       >

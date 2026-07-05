@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/motion/Reveal";
+import { useStartsInViewport } from "@/hooks/useStartsInViewport";
 import { processSteps } from "@/data/site";
 
 interface ProcessStepsProps {
@@ -16,6 +17,41 @@ interface ProcessStepsProps {
 }
 
 const easing = [0.16, 1, 0.3, 1] as const;
+
+/** Own component (not inlined in the .map below) so each row gets its own
+ * useStartsInViewport hook instance — steps above the fold animate in
+ * immediately on mount, the rest still reveal as the user scrolls to them. */
+function ProcessStepRow({
+  step,
+  index,
+}: {
+  step: (typeof processSteps)[number];
+  index: number;
+}) {
+  const [ref, startsInViewport] = useStartsInViewport<HTMLDivElement>();
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -18 }}
+      animate={startsInViewport ? { opacity: 1, x: 0 } : undefined}
+      whileInView={startsInViewport ? undefined : { opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: easing }}
+      className="group relative flex items-start gap-5 border-b border-ink/15 py-7 md:gap-10"
+    >
+      <span className="font-display relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-cream-deep text-lg text-ink transition-[transform,border-color,color,box-shadow] duration-300 group-hover:scale-110 group-hover:border-accent group-hover:text-accent group-hover:shadow-[0_0_0_6px_rgba(211,38,26,0.12)]">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:gap-10">
+        <h3 className="font-display shrink-0 text-2xl leading-none text-ink md:w-56">
+          {step.title}
+        </h3>
+        <p className="max-w-xl text-sm leading-relaxed text-ink/60">{step.description}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 export function ProcessSteps({ heading = "How It Works", tightTop = false }: ProcessStepsProps) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -45,24 +81,7 @@ export function ProcessSteps({ heading = "How It Works", tightTop = false }: Pro
           />
 
           {processSteps.map((step, index) => (
-            <motion.div
-              key={step.title}
-              initial={{ opacity: 0, x: -18 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-              transition={{ duration: 0.55, delay: index * 0.08, ease: easing }}
-              className="group relative flex items-start gap-5 border-b border-ink/15 py-7 md:gap-10"
-            >
-              <span className="font-display relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-cream-deep text-lg text-ink transition-[transform,border-color,color,box-shadow] duration-300 group-hover:scale-110 group-hover:border-accent group-hover:text-accent group-hover:shadow-[0_0_0_6px_rgba(211,38,26,0.12)]">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:gap-10">
-                <h3 className="font-display shrink-0 text-2xl leading-none text-ink md:w-56">
-                  {step.title}
-                </h3>
-                <p className="max-w-xl text-sm leading-relaxed text-ink/60">{step.description}</p>
-              </div>
-            </motion.div>
+            <ProcessStepRow key={step.title} step={step} index={index} />
           ))}
         </div>
       </Container>

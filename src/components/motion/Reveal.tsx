@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from "motion/react";
 import { type ReactNode } from "react";
+import { useStartsInViewport } from "@/hooks/useStartsInViewport";
 
 export const revealEase = [0.16, 1, 0.3, 1] as const;
 
@@ -22,12 +23,17 @@ interface RevealProps {
   className?: string;
 }
 
-/** Fades/slides a single block in once it scrolls into view. */
+/** Fades/slides a single block in — immediately if it's already on screen
+ * at mount, otherwise once it scrolls into view. */
 export function Reveal({ children, delay = 0, y = 26, className }: RevealProps) {
+  const [ref, startsInViewport] = useStartsInViewport<HTMLDivElement>();
+
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={startsInViewport ? { opacity: 1, y: 0 } : undefined}
+      whileInView={startsInViewport ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
       transition={{ duration: 0.7, delay, ease: revealEase }}
       className={className}
@@ -37,13 +43,18 @@ export function Reveal({ children, delay = 0, y = 26, className }: RevealProps) 
   );
 }
 
-/** Wraps a grid/row; each RevealItem child staggers in behind it. */
+/** Wraps a grid/row; each RevealItem child staggers in behind it — on mount
+ * if already on screen, otherwise once it scrolls into view. */
 export function RevealGroup({ children, className }: { children: ReactNode; className?: string }) {
+  const [ref, startsInViewport] = useStartsInViewport<HTMLDivElement>();
+
   return (
     <motion.div
+      ref={ref}
       variants={container}
       initial="hidden"
-      whileInView="show"
+      animate={startsInViewport ? "show" : undefined}
+      whileInView={startsInViewport ? undefined : "show"}
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
       className={className}
     >
