@@ -45,9 +45,8 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
-        <h3 className="relative inline-block w-fit font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
+        <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
-          <span className="absolute -bottom-1 left-0 h-px w-full bg-ink/40 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
         </h3>
         {/* Transmission reads as part of the trim spec, not its own boxed
             chip — a bordered tag sharing a row with mileage read as clutter,
