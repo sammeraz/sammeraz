@@ -41,23 +41,19 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
           {vehicle.model}
         </h3>
 
-        {vehicle.trim ? (
-          <p className="mt-2 text-xs uppercase tracking-[0.08em] text-ink/55">{vehicle.trim}</p>
+        {/* Transmission reads as part of the trim spec, not its own boxed
+            chip — a bordered tag sharing a row with mileage read as clutter,
+            and folded into plain text here it can never end up in a
+            different spot from one listing to the next the way a separate,
+            wrappable element could. */}
+        {vehicle.trim || transmission ? (
+          <p className="mt-2 text-xs uppercase tracking-[0.08em] text-ink/55">
+            {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
+          </p>
         ) : null}
-        {/* Its own row, separate from trim: trim text varies enough in
-            length that sharing a wrappable row with it left the tag sitting
-            in a different spot on every other listing. Pinned here, it's
-            always the same position regardless of trim. */}
-        {transmission || (showPrice && vehicle.mileage) ? (
-          <div className={`flex items-baseline gap-x-3 ${vehicle.trim ? "mt-1" : "mt-2"}`}>
-            {transmission ? (
-              <span className="border border-ink/20 px-1 text-[10px] font-medium uppercase tracking-[0.08em] text-ink/55">
-                {transmission}
-              </span>
-            ) : null}
-            {showPrice && vehicle.mileage ? (
-              <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50" />
-            ) : null}
+        {showPrice && vehicle.mileage ? (
+          <div className={`text-right ${vehicle.trim || transmission ? "mt-1" : "mt-2"}`}>
+            <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50" />
           </div>
         ) : null}
 

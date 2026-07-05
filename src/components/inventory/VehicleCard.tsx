@@ -48,29 +48,22 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim ? (
+        {/* Transmission reads as part of the trim spec, not its own boxed
+            chip — a bordered tag sharing a row with mileage read as clutter,
+            and folded into plain text here it can never end up in a
+            different spot from one card to the next the way a separate,
+            wrappable element could. */}
+        {vehicle.trim || transmission ? (
           <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
-            {vehicle.trim}
+            {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
           </p>
         ) : null}
-        {/* Its own row, separate from trim: trim text varies enough in length
-            that sharing a wrappable row with it (the previous layout) left
-            the tag sitting in a different spot on every other card — right
-            after a short trim, or dropped to a second line after a long one.
-            Pinned here, it's always the same position regardless of trim. */}
-        {transmission || (!sold && vehicle.mileage) ? (
-          <div className="flex items-baseline gap-x-2">
-            {transmission ? (
-              <span className="border border-ink/20 px-1 text-[9px] font-medium uppercase tracking-[0.08em] text-ink/55 sm:text-[10px]">
-                {transmission}
-              </span>
-            ) : null}
-            {!sold && vehicle.mileage ? (
-              <Mileage
-                miles={vehicle.mileage}
-                className="ml-auto whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs"
-              />
-            ) : null}
+        {!sold && vehicle.mileage ? (
+          <div className="text-right">
+            <Mileage
+              miles={vehicle.mileage}
+              className="whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs"
+            />
           </div>
         ) : null}
 
@@ -112,15 +105,10 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-ink/70 sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {vehicle.trim ? (
+        {vehicle.trim || transmission ? (
           <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 sm:text-xs">
-            {vehicle.trim}
+            {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
           </p>
-        ) : null}
-        {transmission ? (
-          <span className="w-fit border border-ink/15 px-1 text-[9px] font-medium uppercase tracking-[0.08em] text-ink/40 sm:text-[10px]">
-            {transmission}
-          </span>
         ) : null}
       </div>
     </div>
