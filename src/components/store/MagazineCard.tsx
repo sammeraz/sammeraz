@@ -7,13 +7,6 @@ import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { useCart } from "@/lib/cart-context";
 import type { Magazine } from "@/lib/types";
 
-const conditionLabel: Record<Magazine["condition"], string> = {
-  new: "New",
-  "like-new": "Like New",
-  good: "Good",
-  fair: "Fair",
-};
-
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
@@ -39,9 +32,6 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
           ) : (
             <PlaceholderArt variant="card" />
           )}
-          <span className="font-display absolute left-0 top-3 bg-accent px-3 py-1 text-xs text-cream">
-            {conditionLabel[magazine.condition]}
-          </span>
         </div>
 
         <div className="flex flex-1 flex-col gap-1 pt-3 sm:pt-5">

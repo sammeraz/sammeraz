@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { PhotoGallery } from "@/components/ui/PhotoGallery";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { Reveal } from "@/components/motion/Reveal";
-import { ArrowLeftIcon } from "@/components/ui/icons";
+import { ArrowLeftIcon, ShieldCheckIcon, DocumentCheckIcon, ClockIcon } from "@/components/ui/icons";
 import { MagazineBuyBox } from "@/components/store/MagazineBuyBox";
 import { magazines } from "@/data/magazines";
 import type { Magazine } from "@/lib/types";
@@ -76,7 +76,7 @@ export default async function MagazineDetailPage({
 
       <section className="border-b border-ink/15 bg-cream pb-14 pt-10">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+          <div className="grid gap-8 lg:grid-cols-[420px_1fr] lg:gap-12">
             <Reveal>
               <PhotoGallery
                 images={images}
@@ -115,6 +115,23 @@ export default async function MagazineDetailPage({
               <Reveal delay={0.22}>
                 <div className="mt-6">
                   <MagazineBuyBox magazine={magazine} />
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.28}>
+                <div className="mt-8 flex flex-col gap-3 border-t border-ink/15 pt-6">
+                  <div className="flex items-center gap-2.5">
+                    <ShieldCheckIcon className="h-4 w-4 shrink-0 text-ink/40" />
+                    <p className="text-xs text-ink/60">Authenticity guaranteed on every issue</p>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <DocumentCheckIcon className="h-4 w-4 shrink-0 text-ink/40" />
+                    <p className="text-xs text-ink/60">Inspected page-by-page before it ships</p>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <ClockIcon className="h-4 w-4 shrink-0 text-ink/40" />
+                    <p className="text-xs text-ink/60">Ships from Leander, TX in 3–5 business days</p>
+                  </div>
                 </div>
               </Reveal>
             </div>
