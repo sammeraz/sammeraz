@@ -84,12 +84,12 @@ export function ValuesGrid({ heading = "What We Believe" }: ValuesGridProps) {
               role="dialog"
               aria-modal="true"
               aria-label={active.title}
-              className="grid max-h-[85vh] w-full max-w-3xl overflow-y-auto bg-white shadow-2xl sm:grid-cols-2"
+              className="grid max-h-[88vh] w-full max-w-5xl overflow-y-auto bg-white shadow-2xl sm:grid-cols-2"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-auto">
                 <PlaceholderArt variant="panel" label={active.title} />
               </div>
-              <div className="flex flex-col p-8 md:p-10">
+              <div className="flex flex-col p-8 md:p-12">
                 <div className="flex items-start justify-between gap-4">
                   <span className="font-display text-6xl leading-none text-ink/10">
                     {activeNumber}
