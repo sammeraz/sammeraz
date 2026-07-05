@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Cursor } from "@/components/motion/Cursor";
 import { Preloader } from "@/components/motion/Preloader";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { CartProvider } from "@/lib/cart-context";
@@ -44,6 +45,7 @@ export default function RootLayout({
         <CartProvider>
           <HeroFocusProvider>
             <Preloader />
+            <Cursor />
             <Header />
             <main className="flex-1">
               <PageTransition>{children}</PageTransition>
