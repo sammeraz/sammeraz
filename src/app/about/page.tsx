@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
-import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
 import { ValuesGrid } from "@/components/sections/ValuesGrid";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { CTABanner } from "@/components/sections/CTABanner";
@@ -45,14 +44,6 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-          </Reveal>
-
-          <Reveal delay={0.1} className="relative mt-8 aspect-[4/5] w-36 overflow-hidden sm:w-44">
-            <PlaceholderArt variant="panel" label="AIM Imports" />
-            <div className="absolute bottom-0 right-0 flex flex-col items-end bg-ink px-2 py-1.5 text-cream">
-              <span className="font-display text-lg leading-none text-accent-soft">25</span>
-              <span className="text-[7px] uppercase tracking-[0.1em]">Year Rule</span>
-            </div>
           </Reveal>
         </Container>
       </section>
