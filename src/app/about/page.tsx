@@ -43,8 +43,8 @@ export default function AboutPage() {
       </section>
 
       <ValuesGrid />
-      <ProcessSteps />
-      <CTABanner />
+      <ProcessSteps tightTop />
+      <CTABanner tightTop />
     </>
   );
 }

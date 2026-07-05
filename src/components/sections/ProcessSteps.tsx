@@ -4,11 +4,16 @@ import { processSteps } from "@/data/site";
 
 interface ProcessStepsProps {
   heading?: string;
+  /** Tighter top padding for when this follows another already-padded
+   * content section (e.g. on About) instead of a full-bleed hero/carousel,
+   * where the two sections' padding would otherwise stack into a much
+   * bigger gap than the rest of the page uses. */
+  tightTop?: boolean;
 }
 
-export function ProcessSteps({ heading = "How It Works" }: ProcessStepsProps) {
+export function ProcessSteps({ heading = "How It Works", tightTop = false }: ProcessStepsProps) {
   return (
-    <section className="bg-cream-deep py-24 md:py-32">
+    <section className={`bg-cream-deep pb-24 md:pb-32 ${tightTop ? "pt-12" : "pt-24 md:pt-32"}`}>
       <Container>
         <Reveal className="flex items-center gap-5">
           <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">{heading}</h2>
