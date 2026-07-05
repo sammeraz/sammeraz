@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { PlaceholderArt } from "@/components/ui/PlaceholderArt";
-import { ChevronLeftIcon, ChevronRightIcon } from "@/components/ui/icons";
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon, ExpandIcon } from "@/components/ui/icons";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { revealEase } from "@/components/motion/Reveal";
 
@@ -28,6 +28,7 @@ interface PhotoGalleryProps {
  * labeled placeholder gallery when there are none. */
 export function PhotoGallery({ images, alt, aspectClassName, placeholderSlides, badge }: PhotoGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
   const reducedMotion = useSafeReducedMotion();
   const hasPhotos = images.length > 0;
   const slides = hasPhotos ? images : placeholderSlides;
@@ -59,17 +60,29 @@ export function PhotoGallery({ images, alt, aspectClassName, placeholderSlides, 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [slides.length]);
 
+  useEffect(() => {
+    if (!isExpanded) return;
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsExpanded(false);
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isExpanded]);
+
   return (
     <div>
       <div className={`relative w-full overflow-hidden ${aspectClassName}`}>
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div
+          <motion.button
             key={hasPhotos ? active : slides[activeIndex]}
+            type="button"
+            onClick={() => setIsExpanded(true)}
+            aria-label={`View larger photo${slides.length > 1 ? ` (${activeIndex + 1} of ${slides.length})` : ""}`}
             initial={reducedMotion ? undefined : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reducedMotion ? undefined : { opacity: 0 }}
             transition={{ duration: 0.3, ease: revealEase }}
-            className="absolute inset-0"
+            className="absolute inset-0 block w-full text-left"
           >
             {hasPhotos ? (
               <Image
@@ -83,7 +96,13 @@ export function PhotoGallery({ images, alt, aspectClassName, placeholderSlides, 
             ) : (
               <PlaceholderArt variant="card" label={slides[activeIndex]} />
             )}
-          </motion.div>
+            <span
+              aria-hidden="true"
+              className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center bg-ink/50 text-cream transition-colors duration-200 hover:bg-ink/75"
+            >
+              <ExpandIcon className="h-4 w-4" />
+            </span>
+          </motion.button>
         </AnimatePresence>
         {badge}
 
@@ -135,6 +154,79 @@ export function PhotoGallery({ images, alt, aspectClassName, placeholderSlides, 
           })}
         </div>
       ) : null}
+
+      <AnimatePresence>
+        {isExpanded ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setIsExpanded(false)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/90 p-4 md:p-10"
+          >
+            <button
+              type="button"
+              onClick={() => setIsExpanded(false)}
+              aria-label="Close"
+              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center text-cream/70 transition-colors hover:text-cream"
+            >
+              <CloseIcon className="h-6 w-6" />
+            </button>
+
+            {!isFirst ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  goTo(activeIndex - 1);
+                }}
+                aria-label="Previous photo"
+                className="absolute left-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-cream/70 transition-colors hover:text-cream md:left-6"
+              >
+                <ChevronLeftIcon className="h-6 w-6" />
+              </button>
+            ) : null}
+            {!isLast ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  goTo(activeIndex + 1);
+                }}
+                aria-label="Next photo"
+                className="absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-cream/70 transition-colors hover:text-cream md:right-6"
+              >
+                <ChevronRightIcon className="h-6 w-6" />
+              </button>
+            ) : null}
+
+            <motion.div
+              key={hasPhotos ? active : slides[activeIndex]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              onClick={(event) => event.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${alt} — enlarged photo`}
+              className="relative h-full max-h-[85vh] w-full max-w-5xl"
+            >
+              {hasPhotos ? (
+                <Image src={active} alt={alt} fill sizes="100vw" className="object-contain" />
+              ) : (
+                <PlaceholderArt variant="panel" label={slides[activeIndex]} />
+              )}
+            </motion.div>
+
+            {slides.length > 1 ? (
+              <span className="absolute bottom-5 left-1/2 -translate-x-1/2 text-xs tracking-[0.08em] text-cream/60">
+                {activeIndex + 1} / {slides.length}
+              </span>
+            ) : null}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
