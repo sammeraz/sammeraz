@@ -17,7 +17,7 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="About"
-        title="Focused on the details of importing that are easy to get wrong"
+        title="We handle the details most importers get wrong."
       />
 
       <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
