@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent, type MouseEvent } from "react";
+import { useEffect, useId, useRef, useSyncExternalStore, type KeyboardEvent, type MouseEvent } from "react";
 import { formatKm, formatMiles } from "@/lib/format";
 
 interface MileageProps {
@@ -11,6 +11,31 @@ interface MileageProps {
   showParenthetical?: boolean;
 }
 
+// Only one mileage popup should ever be open at once — module-scoped so
+// opening one instance can close whichever other instance (on this or
+// another vehicle) is currently revealed, without prop-drilling shared
+// state through every card/row that renders a Mileage.
+let openId: string | null = null;
+const listeners = new Set<() => void>();
+
+function setOpenId(id: string | null) {
+  openId = id;
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function getSnapshot() {
+  return openId;
+}
+
+function getServerSnapshot() {
+  return null;
+}
+
 /** Km is the primary figure everywhere (JDM odometers read in km). Card and
  * list rows are tight on space, so the mile equivalent for US buyers surfaces
  * as a small popup instead: real :hover devices get it on hover, and it's
@@ -18,7 +43,23 @@ interface MileageProps {
  * the tap has to stop that link's navigation to work as a peek rather than
  * a click-through). */
 export function Mileage({ miles, className = "", showParenthetical = false }: MileageProps) {
-  const [revealed, setRevealed] = useState(false);
+  const id = useId();
+  const activeId = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const revealed = activeId === id;
+  const ref = useRef<HTMLSpanElement>(null);
+
+  // Capture phase so this still fires even though the toggle below calls
+  // stopPropagation — otherwise a tap on another mileage (or anywhere else)
+  // would never reach a plain bubble-phase document listener.
+  useEffect(() => {
+    if (!revealed) return;
+    function handleClick(event: globalThis.MouseEvent) {
+      if (ref.current?.contains(event.target as Node)) return;
+      setOpenId(null);
+    }
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
+  }, [revealed]);
 
   if (showParenthetical) {
     return (
@@ -31,11 +72,12 @@ export function Mileage({ miles, className = "", showParenthetical = false }: Mi
   function toggle(event: MouseEvent | KeyboardEvent) {
     event.preventDefault();
     event.stopPropagation();
-    setRevealed((prev) => !prev);
+    setOpenId(revealed ? null : id);
   }
 
   return (
     <span
+      ref={ref}
       role="button"
       tabIndex={0}
       aria-expanded={revealed}
