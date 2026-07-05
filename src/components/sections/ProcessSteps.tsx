@@ -1,5 +1,9 @@
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll } from "motion/react";
 import { Container } from "@/components/ui/Container";
-import { RevealGroup, RevealItem, Reveal } from "@/components/motion/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { processSteps } from "@/data/site";
 
 interface ProcessStepsProps {
@@ -11,7 +15,15 @@ interface ProcessStepsProps {
   tightTop?: boolean;
 }
 
+const easing = [0.16, 1, 0.3, 1] as const;
+
 export function ProcessSteps({ heading = "How It Works", tightTop = false }: ProcessStepsProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ["start end", "end start"],
+  });
+
   return (
     <section className={`bg-cream-deep ${tightTop ? "pb-16 pt-12 md:pb-20" : "pb-24 pt-24 md:pb-32 md:pt-32"}`}>
       <Container>
@@ -20,22 +32,39 @@ export function ProcessSteps({ heading = "How It Works", tightTop = false }: Pro
           <span className="h-1 flex-1 bg-accent" />
         </Reveal>
 
-        <RevealGroup className="mt-14 border-t border-ink/15">
+        <div ref={trackRef} className="relative mt-14 border-t border-ink/15">
+          {/* Static track behind the markers, plus a scroll-filled accent
+              line on top of it — the line reads as "progress" down the
+              steps as the section scrolls through view, echoing the actual
+              step-by-step process it's illustrating. */}
+          <div aria-hidden="true" className="absolute bottom-14 left-7 top-14 w-px bg-ink/15" />
+          <motion.div
+            aria-hidden="true"
+            style={{ scaleY: scrollYProgress }}
+            className="absolute bottom-14 left-7 top-14 w-px origin-top bg-accent"
+          />
+
           {processSteps.map((step, index) => (
-            <RevealItem
+            <motion.div
               key={step.title}
-              className="flex flex-col gap-2 border-b border-ink/15 py-7 md:flex-row md:items-center md:gap-10"
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease: easing }}
+              className="group relative flex items-start gap-5 border-b border-ink/15 py-7 md:gap-10"
             >
-              <span className="font-display w-14 shrink-0 text-lg text-accent">
+              <span className="font-display relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-ink/15 bg-cream-deep text-lg text-ink transition-colors duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-cream">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="font-display shrink-0 text-2xl leading-none text-ink md:w-64">
-                {step.title}
-              </h3>
-              <p className="max-w-xl text-sm leading-relaxed text-ink/60">{step.description}</p>
-            </RevealItem>
+              <div className="flex flex-1 flex-col gap-1.5 md:flex-row md:items-center md:gap-10">
+                <h3 className="font-display shrink-0 text-2xl leading-none text-ink md:w-56">
+                  {step.title}
+                </h3>
+                <p className="max-w-xl text-sm leading-relaxed text-ink/60">{step.description}</p>
+              </div>
+            </motion.div>
           ))}
-        </RevealGroup>
+        </div>
       </Container>
     </section>
   );
