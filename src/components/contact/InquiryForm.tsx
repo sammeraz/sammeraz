@@ -92,10 +92,10 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
           </label>
           <select id="budget" name="budget" defaultValue="" className={`${inputClass} appearance-none`}>
             <option value="">Not sure yet</option>
-            <option value="under-50k">Under $50,000</option>
+            <option value="under-25k">Under $25,000</option>
+            <option value="25k-50k">$25,000 – $50,000</option>
             <option value="50k-100k">$50,000 – $100,000</option>
-            <option value="100k-200k">$100,000 – $200,000</option>
-            <option value="200k-plus">$200,000+</option>
+            <option value="100k-plus">$100,000+</option>
           </select>
         </div>
       </div>
