@@ -25,9 +25,9 @@ export default function AboutPage() {
       <PageHeader eyebrow="About" title="We handle the details most importers get wrong." />
 
       <section className="border-t border-ink/15 bg-cream pb-16 pt-12 md:pb-20">
-        <Container className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
-          <Reveal className="order-2 md:order-1">
-            <p className="font-display max-w-lg text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.18] text-ink">
+        <Container>
+          <Reveal>
+            <p className="font-display max-w-2xl text-[clamp(1.4rem,2.8vw,2rem)] leading-[1.18] text-ink">
               Buying a car you&apos;ve never seen, from a country you&apos;ve never been to,
               takes more trust than most transactions.
             </p>
@@ -47,14 +47,11 @@ export default function AboutPage() {
             </ul>
           </Reveal>
 
-          <Reveal
-            y={36}
-            className="relative order-1 aspect-[4/5] w-full overflow-hidden md:order-2"
-          >
+          <Reveal delay={0.1} className="relative mt-8 aspect-[4/5] w-36 overflow-hidden sm:w-44">
             <PlaceholderArt variant="panel" label="AIM Imports" />
-            <div className="absolute bottom-0 right-0 flex flex-col items-end bg-ink px-4 py-3 text-cream">
-              <span className="font-display text-3xl leading-none text-accent-soft">25</span>
-              <span className="text-[10px] uppercase tracking-[0.14em]">Year Import Rule</span>
+            <div className="absolute bottom-0 right-0 flex flex-col items-end bg-ink px-2 py-1.5 text-cream">
+              <span className="font-display text-lg leading-none text-accent-soft">25</span>
+              <span className="text-[7px] uppercase tracking-[0.1em]">Year Rule</span>
             </div>
           </Reveal>
         </Container>
