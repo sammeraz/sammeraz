@@ -15,7 +15,7 @@ export default function StorePage() {
     <>
       <PageHeader
         eyebrow="Store"
-        title="JDM Magazine Back-Issues"
+        title="JDM Magazines"
         description="Original Japanese car magazines, sourced alongside the vehicles — Option, Best Motoring, and more, while stock lasts."
       />
 
