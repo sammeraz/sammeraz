@@ -48,22 +48,24 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
-        {/* Transmission reads as part of the trim spec, not its own boxed
-            chip — a bordered tag sharing a row with mileage read as clutter,
-            and folded into plain text here it can never end up in a
-            different spot from one card to the next the way a separate,
-            wrappable element could. */}
-        {vehicle.trim || transmission ? (
-          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55 sm:text-xs">
-            {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
-          </p>
-        ) : null}
-        {!sold && vehicle.mileage ? (
-          <div className="text-right">
-            <Mileage
-              miles={vehicle.mileage}
-              className="whitespace-nowrap text-[10px] tabular-nums text-ink/50 dark:text-cream/50 sm:text-xs"
-            />
+        {vehicle.trim || transmission || (!sold && vehicle.mileage) ? (
+          <div className="flex items-baseline gap-2">
+            {/* Transmission reads as part of the trim spec, not its own boxed
+                chip — a bordered tag sharing a row with mileage read as
+                clutter, and folded into plain text here it can never end up
+                in a different spot from one card to the next the way a
+                separate, wrappable element could. */}
+            {vehicle.trim || transmission ? (
+              <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55 sm:text-xs">
+                {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
+              </p>
+            ) : null}
+            {!sold && vehicle.mileage ? (
+              <Mileage
+                miles={vehicle.mileage}
+                className="ml-auto whitespace-nowrap text-[10px] tabular-nums text-ink/50 dark:text-cream/50 sm:text-xs"
+              />
+            ) : null}
           </div>
         ) : null}
 
