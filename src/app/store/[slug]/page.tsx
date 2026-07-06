@@ -74,7 +74,7 @@ export default async function MagazineDetailPage({
         </Container>
       </section>
 
-      <section className="border-b border-ink/15 bg-cream pb-14 pt-10">
+      <section className="border-b border-ink/15 bg-cream pb-14 pt-10 dark:border-cream/15 dark:bg-ink">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[320px_1fr] lg:gap-12">
             <Reveal>
@@ -88,7 +88,7 @@ export default async function MagazineDetailPage({
 
             <div>
               <Reveal>
-                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
+                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60 dark:text-cream/60">
                   {magazine.issue}
                 </p>
                 <h1 className="font-display mt-1 text-[clamp(1.75rem,4.5vw,3rem)] leading-[1.02] text-accent">
@@ -101,8 +101,8 @@ export default async function MagazineDetailPage({
               </Reveal>
 
               <Reveal delay={0.16}>
-                <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60">
-                  <span className="font-medium text-ink">{conditionLabel[magazine.condition]} condition.</span>{" "}
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/60 dark:text-cream/60">
+                  <span className="font-medium text-ink dark:text-cream">{conditionLabel[magazine.condition]} condition.</span>{" "}
                   {magazine.description ??
                     "An original back-issue, sourced alongside our vehicle shipments straight from Japan."}
                 </p>
@@ -115,18 +115,18 @@ export default async function MagazineDetailPage({
               </Reveal>
 
               <Reveal delay={0.28}>
-                <div className="mt-8 flex flex-col gap-3 border-t border-ink/15 pt-6">
+                <div className="mt-8 flex flex-col gap-3 border-t border-ink/15 pt-6 dark:border-cream/15">
                   <div className="flex items-center gap-2.5">
-                    <ShieldCheckIcon className="h-4 w-4 shrink-0 text-ink/40" />
-                    <p className="text-xs text-ink/60">Authenticity guaranteed on every issue</p>
+                    <ShieldCheckIcon className="h-4 w-4 shrink-0 text-ink/40 dark:text-cream/40" />
+                    <p className="text-xs text-ink/60 dark:text-cream/60">Authenticity guaranteed on every issue</p>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <DocumentCheckIcon className="h-4 w-4 shrink-0 text-ink/40" />
-                    <p className="text-xs text-ink/60">Inspected page-by-page before it ships</p>
+                    <DocumentCheckIcon className="h-4 w-4 shrink-0 text-ink/40 dark:text-cream/40" />
+                    <p className="text-xs text-ink/60 dark:text-cream/60">Inspected page-by-page before it ships</p>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <ClockIcon className="h-4 w-4 shrink-0 text-ink/40" />
-                    <p className="text-xs text-ink/60">Ships from Leander, TX in 3–5 business days</p>
+                    <ClockIcon className="h-4 w-4 shrink-0 text-ink/40 dark:text-cream/40" />
+                    <p className="text-xs text-ink/60 dark:text-cream/60">Ships from Leander, TX in 3–5 business days</p>
                   </div>
                 </div>
               </Reveal>

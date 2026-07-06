@@ -48,17 +48,17 @@ export function CheckoutSuccess() {
 
   if (status === "checking") {
     return (
-      <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-        <p className="text-sm text-ink/60">Confirming your payment…</p>
+      <div className="border border-ink/10 bg-white px-8 py-12 text-center dark:border-cream/10 dark:bg-ink-soft">
+        <p className="text-sm text-ink/60 dark:text-cream/60">Confirming your payment…</p>
       </div>
     );
   }
 
   if (status === "paid") {
     return (
-      <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-        <h3 className="font-display text-2xl text-ink">Order received</h3>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+      <div className="border border-ink/10 bg-white px-8 py-12 text-center dark:border-cream/10 dark:bg-ink-soft">
+        <h3 className="font-display text-2xl text-ink dark:text-cream">Order received</h3>
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-cream/65">
           Thanks for your order — a confirmation is on its way to your email, and we&apos;ll
           follow up with shipping details shortly.
         </p>
@@ -73,9 +73,9 @@ export function CheckoutSuccess() {
   }
 
   return (
-    <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-      <h3 className="font-display text-2xl text-ink">We couldn&apos;t confirm that payment</h3>
-      <p className="mt-3 text-sm leading-relaxed text-ink/65">
+    <div className="border border-ink/10 bg-white px-8 py-12 text-center dark:border-cream/10 dark:bg-ink-soft">
+      <h3 className="font-display text-2xl text-ink dark:text-cream">We couldn&apos;t confirm that payment</h3>
+      <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-cream/65">
         If you completed payment on Stripe&apos;s page, contact us and we&apos;ll sort it out —
         otherwise your cart is still waiting.
       </p>

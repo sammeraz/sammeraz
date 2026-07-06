@@ -6,9 +6,9 @@ import { motion } from "motion/react";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
-  "w-full border-b border-ink/20 bg-transparent py-3 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent";
+  "w-full border-b border-ink/20 bg-transparent py-3 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent dark:border-cream/20 dark:text-cream dark:placeholder:text-cream/35";
 
-const labelClass = "text-xs font-medium uppercase tracking-[0.14em] text-ink/50";
+const labelClass = "text-xs font-medium uppercase tracking-[0.14em] text-ink/50 dark:text-cream/50";
 
 export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest?: string }) {
   const [status, setStatus] = useState<Status>("idle");
@@ -44,9 +44,9 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
 
   if (status === "success") {
     return (
-      <div className="border border-ink/10 bg-white px-8 py-12 text-center">
-        <h3 className="font-display text-2xl text-ink">Inquiry received</h3>
-        <p className="mt-3 text-sm leading-relaxed text-ink/65">
+      <div className="border border-ink/10 bg-white px-8 py-12 text-center dark:border-cream/10 dark:bg-ink-soft">
+        <h3 className="font-display text-2xl text-ink dark:text-cream">Inquiry received</h3>
+        <p className="mt-3 text-sm leading-relaxed text-ink/65 dark:text-cream/65">
           Thanks for reaching out — we&apos;ll review what you&apos;re looking for and get back
           to you shortly.
         </p>
@@ -82,7 +82,7 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
       <div className="grid gap-7 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label htmlFor="phone" className={labelClass}>
-            Phone <span className="normal-case text-ink/35">(optional)</span>
+            Phone <span className="normal-case text-ink/35 dark:text-cream/35">(optional)</span>
           </label>
           <input id="phone" name="phone" type="tel" className={inputClass} placeholder="(xxx) xxx-xxxx" />
         </div>
@@ -102,7 +102,7 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
 
       <div className="flex flex-col gap-2">
         <label htmlFor="vehicleInterest" className={labelClass}>
-          Vehicle of Interest <span className="normal-case text-ink/35">(optional)</span>
+          Vehicle of Interest <span className="normal-case text-ink/35 dark:text-cream/35">(optional)</span>
         </label>
         <input
           id="vehicleInterest"
@@ -134,7 +134,7 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
         type="submit"
         whileTap={{ scale: 0.97 }}
         disabled={status === "submitting"}
-        className="font-display mt-2 inline-flex items-center justify-center border border-ink bg-ink px-7 py-3.5 text-sm text-cream transition-colors duration-200 hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+        className="font-display mt-2 inline-flex items-center justify-center border border-ink bg-ink px-7 py-3.5 text-sm text-cream transition-colors duration-200 hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50 dark:border-cream dark:bg-cream dark:text-ink"
       >
         {status === "submitting" ? "Sending…" : "Send Inquiry"}
       </motion.button>

@@ -13,7 +13,7 @@ export default function CheckoutPage() {
     <>
       <PageHeader eyebrow="Checkout" title="Complete Your Order" />
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 dark:border-cream/15 dark:bg-ink md:pb-28">
         <Container>
           <CheckoutForm />
         </Container>

@@ -9,10 +9,15 @@ import { useIsFinePointer } from "@/hooks/useIsFinePointer";
 type Variant = "dark" | "light" | "outline-light" | "outline-dark";
 
 const variantClasses: Record<Variant, string> = {
-  dark: "border border-ink bg-ink text-cream hover:border-accent hover:bg-accent",
+  // "dark"/"outline-dark" sit on the site's light sections, which flip to
+  // dark surfaces in dark mode — the button needs the inverse treatment
+  // there to keep popping against its (now dark) background. "light"/
+  // "outline-light" only ever sit on the header/hero/footer, which are
+  // already dark in both modes, so they're untouched.
+  dark: "border border-ink bg-ink text-cream hover:border-accent hover:bg-accent dark:border-cream dark:bg-cream dark:text-ink",
   light: "border border-cream bg-cream text-ink hover:border-accent hover:bg-accent hover:text-cream",
   "outline-light": "border border-cream text-cream hover:bg-cream hover:text-ink",
-  "outline-dark": "border border-ink text-ink hover:bg-ink hover:text-cream",
+  "outline-dark": "border border-ink text-ink hover:bg-ink hover:text-cream dark:border-cream dark:text-cream dark:hover:bg-cream dark:hover:text-ink",
 };
 
 const base =

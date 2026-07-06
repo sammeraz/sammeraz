@@ -15,21 +15,21 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="border-t border-ink/15">
+    <div className="border-t border-ink/15 dark:border-cream/15">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         return (
-          <div key={item.question} className="border-b border-ink/15">
+          <div key={item.question} className="border-b border-ink/15 dark:border-cream/15">
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : index)}
               aria-expanded={isOpen}
               className="group flex w-full items-center justify-between gap-6 py-6 text-left"
             >
-              <span className="font-display text-lg text-ink transition-colors group-hover:text-accent md:text-xl">
+              <span className="font-display text-lg text-ink transition-colors group-hover:text-accent dark:text-cream md:text-xl">
                 {item.question}
               </span>
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-ink/20 text-ink transition-colors group-hover:border-accent group-hover:text-accent">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-ink/20 text-ink transition-colors group-hover:border-accent group-hover:text-accent dark:border-cream/20 dark:text-cream">
                 {isOpen ? <MinusIcon className="h-3.5 w-3.5" /> : <PlusIcon className="h-3.5 w-3.5" />}
               </span>
             </button>
@@ -42,7 +42,7 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
                   transition={{ duration: 0.3, ease: easing }}
                   className="overflow-hidden"
                 >
-                  <p className="max-w-2xl pb-6 text-sm leading-relaxed text-ink/65">{item.answer}</p>
+                  <p className="max-w-2xl pb-6 text-sm leading-relaxed text-ink/65 dark:text-cream/65">{item.answer}</p>
                 </motion.div>
               ) : null}
             </AnimatePresence>

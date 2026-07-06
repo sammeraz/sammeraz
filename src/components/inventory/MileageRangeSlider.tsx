@@ -79,7 +79,7 @@ function BoundInput({
         if (event.key === "Enter") event.currentTarget.blur();
       }}
       aria-label={ariaLabel}
-      className="w-16 border-b border-transparent bg-transparent tabular-nums text-ink/60 outline-none transition-colors focus:border-accent focus:text-ink"
+      className="w-16 border-b border-transparent bg-transparent tabular-nums text-ink/60 outline-none transition-colors focus:border-accent focus:text-ink dark:text-cream/60 dark:focus:text-cream"
     />
   );
 }
@@ -94,8 +94,8 @@ const thumbClass =
   "pointer-events-none " +
   "[&::-webkit-slider-runnable-track]:h-1 [&::-webkit-slider-runnable-track]:bg-transparent " +
   "[&::-moz-range-track]:h-1 [&::-moz-range-track]:bg-transparent " +
-  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-ink [&::-webkit-slider-thumb]:bg-cream [&::-webkit-slider-thumb]:shadow-[0_2px_6px_rgba(0,0,0,0.35)] " +
-  "[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-ink [&::-moz-range-thumb]:bg-cream [&::-moz-range-thumb]:shadow-[0_2px_6px_rgba(0,0,0,0.35)]";
+  "[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-ink [&::-webkit-slider-thumb]:bg-cream [&::-webkit-slider-thumb]:shadow-[0_2px_6px_rgba(0,0,0,0.35)] dark:[&::-webkit-slider-thumb]:border-cream dark:[&::-webkit-slider-thumb]:bg-ink " +
+  "[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-ink [&::-moz-range-thumb]:bg-cream [&::-moz-range-thumb]:shadow-[0_2px_6px_rgba(0,0,0,0.35)] dark:[&::-moz-range-thumb]:border-cream dark:[&::-moz-range-thumb]:bg-ink";
 
 /** Drag-between-two-numbers mileage filter, replacing the old preset pill
  * buttons. Two native range inputs overlaid on one visual track — keyboard
@@ -131,7 +131,7 @@ export function MileageRangeSlider({ min, max, step, value, onChange, unit = "km
             onCommit={commitLow}
             ariaLabel={`Minimum mileage in ${unit === "mi" ? "miles" : "kilometers"}`}
           />
-          <span className="text-ink/40">{unit}</span>
+          <span className="text-ink/40 dark:text-cream/40">{unit}</span>
         </span>
         <span className="inline-flex items-baseline gap-1">
           <BoundInput
@@ -141,11 +141,11 @@ export function MileageRangeSlider({ min, max, step, value, onChange, unit = "km
             onCommit={commitHigh}
             ariaLabel={`Maximum mileage in ${unit === "mi" ? "miles" : "kilometers"}`}
           />
-          <span className="text-ink/40">{unit}</span>
+          <span className="text-ink/40 dark:text-cream/40">{unit}</span>
         </span>
       </div>
       <div className="relative mt-3 h-4">
-        <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-ink/15" />
+        <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-ink/15 dark:bg-cream/15" />
         <div
           className="absolute top-1/2 h-1 -translate-y-1/2 bg-accent"
           style={{ left: `${lowPercent}%`, right: `${100 - highPercent}%` }}

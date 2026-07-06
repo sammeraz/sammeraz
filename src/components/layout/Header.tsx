@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/layout/Logo";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { CartButton } from "@/components/store/CartButton";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
@@ -111,6 +112,7 @@ export function Header() {
               {site.inquiryCta}
             </Button>
           </div>
+          <ThemeToggle />
           <CartButton />
 
           <motion.button

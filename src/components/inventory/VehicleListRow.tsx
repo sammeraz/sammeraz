@@ -31,12 +31,12 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
     <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
       <div className="sm:w-72 sm:shrink-0">
         <p
-          className={`text-xs font-medium uppercase tracking-[0.08em] ${incoming ? "text-ink/55" : "text-ink/60"}`}
+          className={`text-xs font-medium uppercase tracking-[0.08em] dark:text-cream/60 ${incoming ? "text-ink/55" : "text-ink/60"}`}
         >
           {vehicle.year} {vehicle.make}
         </p>
         <h3
-          className={`mt-1 font-display text-2xl leading-[1.02] sm:text-3xl ${incoming ? "text-ink/70" : "text-accent"}`}
+          className={`mt-1 font-display text-2xl leading-[1.02] sm:text-3xl ${incoming ? "text-ink/70 dark:text-cream/70" : "text-accent"}`}
         >
           {vehicle.model}
         </h3>
@@ -47,13 +47,13 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
             different spot from one listing to the next the way a separate,
             wrappable element could. */}
         {vehicle.trim || transmission ? (
-          <p className="mt-2 text-xs uppercase tracking-[0.08em] text-ink/55">
+          <p className="mt-2 text-xs uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55">
             {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
           </p>
         ) : null}
         {showPrice && vehicle.mileage ? (
           <div className={`text-right ${vehicle.trim || transmission ? "mt-1" : "mt-2"}`}>
-            <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50" />
+            <Mileage miles={vehicle.mileage} className="whitespace-nowrap text-xs tabular-nums text-ink/50 dark:text-cream/50" />
           </div>
         ) : null}
 
@@ -62,11 +62,11 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
             <span className="block h-1 w-12 bg-accent" />
             <div className="mt-3">
               {vehicle.price ? (
-                <span className="font-display text-lg text-ink sm:text-xl">
+                <span className="font-display text-lg text-ink dark:text-cream sm:text-xl">
                   Offered at: {currency.format(vehicle.price)}
                 </span>
               ) : (
-                <span className="text-sm text-ink/50">Price available on request</span>
+                <span className="text-sm text-ink/50 dark:text-cream/50">Price available on request</span>
               )}
             </div>
           </div>
@@ -95,13 +95,13 @@ export function VehicleListRow({ vehicle }: { vehicle: Vehicle }) {
   );
 
   if (incoming) {
-    return <div className="border border-ink/10 bg-white p-5 sm:p-6">{body}</div>;
+    return <div className="border border-ink/10 bg-white p-5 dark:border-cream/10 dark:bg-ink-soft sm:p-6">{body}</div>;
   }
 
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      className="group block border border-ink/10 bg-white p-5 transition-colors duration-300 hover:border-ink/25 sm:p-6"
+      className="group block border border-ink/10 bg-white p-5 transition-colors duration-300 hover:border-ink/25 dark:border-cream/10 dark:bg-ink-soft dark:hover:border-cream/25 sm:p-6"
     >
       {body}
     </Link>

@@ -10,16 +10,16 @@ export function InventoryPreview() {
   const vehicles = inventory.filter((vehicle) => vehicle.status !== "sold").slice(0, 8);
 
   return (
-    <section className="bg-cream pb-24 pt-14 md:pb-32 md:pt-20">
+    <section className="bg-cream pb-24 pt-14 dark:bg-ink md:pb-32 md:pt-20">
       <Container>
         <Reveal className="reveal-instant-mobile flex flex-col gap-6">
           <div className="flex items-center gap-5">
-            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+            <h2 className="font-display shrink-0 text-3xl text-ink dark:text-cream md:text-4xl">
               Featured Inventory
             </h2>
             <span className="h-1 flex-1 bg-accent" />
           </div>
-          <p className="max-w-lg text-sm leading-relaxed text-ink/60">
+          <p className="max-w-lg text-sm leading-relaxed text-ink/60 dark:text-cream/60">
             New listings appear here only once real vehicle information is ready — no filler, no
             stand-in prices.
           </p>

@@ -158,3 +158,20 @@ export function ChevronRightIcon({ className = "" }: IconProps) {
     </svg>
   );
 }
+
+export function SunIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <circle cx="12" cy="12" r="4.5" />
+      <path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" />
+    </svg>
+  );
+}
+
+export function MoonIcon({ className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" className={`${base} ${className}`}>
+      <path d="M20 13.5A8 8 0 1110.5 4a6.5 6.5 0 009.5 9.5z" />
+    </svg>
+  );
+}

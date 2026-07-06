@@ -21,9 +21,9 @@ export function MagazineGrid({ magazines, placeholderCount = 3 }: MagazineGridPr
           ))}
         </RevealGroup>
         <Reveal delay={0.15}>
-          <p className="mt-10 text-center text-sm text-ink/55">
+          <p className="mt-10 text-center text-sm text-ink/55 dark:text-cream/55">
             Looking for a specific issue?{" "}
-            <Link href="/contact" className="text-ink underline underline-offset-4 hover:text-accent">
+            <Link href="/contact" className="text-ink underline underline-offset-4 hover:text-accent dark:text-cream">
               Start an inquiry
             </Link>{" "}
             and we&apos;ll let you know what we can track down.

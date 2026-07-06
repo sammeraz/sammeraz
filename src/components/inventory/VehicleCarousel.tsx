@@ -16,7 +16,7 @@ interface VehicleCarouselProps {
 }
 
 const arrowButtonClass =
-  "flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream disabled:pointer-events-none disabled:opacity-30";
+  "flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream disabled:pointer-events-none disabled:opacity-30 dark:border-cream dark:text-cream dark:hover:text-cream";
 
 const cardRow: Variants = {
   hidden: {},
@@ -83,10 +83,10 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
       </motion.div>
 
       <Container className="mt-8 flex items-center gap-6">
-        <p className="shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45">
+        <p className="shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45 dark:text-cream/45">
           Drag or scroll to browse
         </p>
-        <div className="h-px flex-1 bg-ink/10">
+        <div className="h-px flex-1 bg-ink/10 dark:bg-cream/10">
           <motion.div
             aria-hidden="true"
             className="h-px origin-left bg-accent"

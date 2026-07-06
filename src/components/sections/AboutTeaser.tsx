@@ -5,11 +5,11 @@ import { Reveal } from "@/components/motion/Reveal";
 
 export function AboutTeaser() {
   return (
-    <section className="bg-cream py-24 md:py-32">
+    <section className="bg-cream py-24 dark:bg-ink md:py-32">
       <Container className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
         <Reveal delay={0.1} className="order-2 flex flex-col items-start gap-6 md:order-1">
           <div className="flex w-full items-center gap-4">
-            <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+            <h2 className="font-display shrink-0 text-3xl text-ink dark:text-cream md:text-4xl">
               Why AIM Imports
             </h2>
             <span className="h-1 flex-1 bg-accent" />
@@ -17,7 +17,7 @@ export function AboutTeaser() {
           <p className="font-display text-lg text-accent">
             The full story on the car, not just the photos.
           </p>
-          <p className="max-w-md text-base leading-relaxed text-ink/65">
+          <p className="max-w-md text-base leading-relaxed text-ink/65 dark:text-cream/65">
             Importing from Japan rewards patience and good information. We handle sourcing,
             verification, and paperwork so you can decide with confidence on a car you may never
             see in person before it arrives.

@@ -24,7 +24,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/inventory/${vehicle.slug}`}
-      className="group flex flex-col border border-ink/10 bg-white transition-[translate,border-color] duration-300 hover:-translate-y-1 hover:border-ink/25"
+      className="group flex flex-col border border-ink/10 bg-white transition-[translate,border-color] duration-300 hover:-translate-y-1 hover:border-ink/25 dark:border-cream/10 dark:bg-ink-soft dark:hover:border-cream/25"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         {image ? (
@@ -42,7 +42,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
       </div>
 
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
-        <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 sm:text-sm">
+        <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 dark:text-cream/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
         <h3 className="font-display text-xl leading-none text-accent sm:text-2xl md:text-3xl">
@@ -54,7 +54,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             different spot from one card to the next the way a separate,
             wrappable element could. */}
         {vehicle.trim || transmission ? (
-          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 sm:text-xs">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55 sm:text-xs">
             {[vehicle.trim, transmission].filter(Boolean).join(" · ")}
           </p>
         ) : null}
@@ -62,19 +62,19 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           <div className="text-right">
             <Mileage
               miles={vehicle.mileage}
-              className="whitespace-nowrap text-[10px] tabular-nums text-ink/50 sm:text-xs"
+              className="whitespace-nowrap text-[10px] tabular-nums text-ink/50 dark:text-cream/50 sm:text-xs"
             />
           </div>
         ) : null}
 
         {sold ? null : (
-          <div className="mt-3 border-t border-ink/15 pt-3">
+          <div className="mt-3 border-t border-ink/15 pt-3 dark:border-cream/15">
             {vehicle.price ? (
-              <span className="font-display text-sm text-ink sm:text-base">
+              <span className="font-display text-sm text-ink dark:text-cream sm:text-base">
                 Offered at: {currency.format(vehicle.price)}
               </span>
             ) : (
-              <span className="text-sm text-ink/50">Price available on request</span>
+              <span className="text-sm text-ink/50 dark:text-cream/50">Price available on request</span>
             )}
           </div>
         )}
@@ -92,19 +92,19 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
  */
 function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
-    <div className="flex flex-col border border-ink/10 bg-white">
+    <div className="flex flex-col border border-ink/10 bg-white dark:border-cream/10 dark:bg-ink-soft">
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Incoming" />
       </div>
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
-        <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 sm:text-sm">
+        <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 dark:text-cream/55 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
-        <h3 className="font-display text-xl leading-none text-ink/70 sm:text-2xl md:text-3xl">
+        <h3 className="font-display text-xl leading-none text-ink/70 dark:text-cream/70 sm:text-2xl md:text-3xl">
           {vehicle.model}
         </h3>
         {vehicle.trim ? (
-          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 sm:text-xs">
+          <p className="text-[10px] uppercase tracking-[0.08em] text-ink/40 dark:text-cream/40 sm:text-xs">
             {vehicle.trim}
           </p>
         ) : null}

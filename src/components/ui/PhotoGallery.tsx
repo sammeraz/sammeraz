@@ -140,7 +140,7 @@ export function PhotoGallery({ images, alt, aspectClassName, placeholderSlides, 
                 aria-label={`View photo ${index + 1} of ${slides.length}`}
                 aria-current={isActive}
                 className={`relative overflow-hidden border transition-colors duration-200 ${aspectClassName} ${
-                  isActive ? "border-accent" : "border-ink/15 hover:border-ink/40"
+                  isActive ? "border-accent" : "border-ink/15 hover:border-ink/40 dark:border-cream/15 dark:hover:border-cream/40"
                 }`}
               >
                 {hasPhotos ? (

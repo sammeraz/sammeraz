@@ -20,7 +20,7 @@ export default function InventoryPage() {
         description="Available, incoming, and recently sourced Japanese vehicles. New public inventory will appear here only when real vehicle information is ready."
       />
 
-      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 md:pb-28">
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 dark:border-cream/15 dark:bg-ink md:pb-28">
         <Container>
           <InventoryBrowser vehicles={inventory} placeholderCount={6} />
         </Container>

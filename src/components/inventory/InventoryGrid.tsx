@@ -20,9 +20,9 @@ export function InventoryGrid({ vehicles, placeholderCount = 3 }: InventoryGridP
             <ComingSoonCard key={index} />
           ))}
         </div>
-        <p className="mt-10 text-center text-sm text-ink/55">
+        <p className="mt-10 text-center text-sm text-ink/55 dark:text-cream/55">
           Have a specific vehicle in mind?{" "}
-          <Link href="/contact" className="text-ink underline underline-offset-4 hover:text-accent">
+          <Link href="/contact" className="text-ink underline underline-offset-4 hover:text-accent dark:text-cream">
             Start an inquiry
           </Link>{" "}
           and we&apos;ll let you know what&apos;s realistic to source.

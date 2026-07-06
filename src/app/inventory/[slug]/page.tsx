@@ -98,7 +98,7 @@ export default async function VehicleDetailPage({
         </Container>
       </section>
 
-      <section className="border-b border-ink/15 bg-cream pb-20 pt-12">
+      <section className="border-b border-ink/15 bg-cream pb-20 pt-12 dark:border-cream/15 dark:bg-ink">
         <Container>
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
             <RevealOnLoad>
@@ -121,7 +121,7 @@ export default async function VehicleDetailPage({
 
             <div>
               <RevealOnLoad>
-                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60">
+                <p className="text-sm font-medium uppercase tracking-[0.08em] text-ink/60 dark:text-cream/60">
                   {vehicle.year} {vehicle.make}
                 </p>
                 <h1 className="font-display mt-1 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] text-accent">
@@ -130,7 +130,7 @@ export default async function VehicleDetailPage({
                 {vehicle.trim || vehicle.mileage ? (
                   <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     {vehicle.trim ? (
-                      <p className="text-sm uppercase tracking-[0.08em] text-ink/55">
+                      <p className="text-sm uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55">
                         {vehicle.trim}
                       </p>
                     ) : null}
@@ -138,7 +138,7 @@ export default async function VehicleDetailPage({
                       <Mileage
                         miles={vehicle.mileage}
                         showParenthetical
-                        className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50"
+                        className="ml-auto whitespace-nowrap text-sm tabular-nums text-ink/50 dark:text-cream/50"
                       />
                     ) : null}
                   </div>
@@ -152,13 +152,13 @@ export default async function VehicleDetailPage({
               <RevealOnLoad delay={0.16}>
                 <div className="mt-6 flex flex-wrap items-baseline gap-4">
                   {sold ? (
-                    <span className="font-display text-2xl text-ink md:text-3xl">Sold</span>
+                    <span className="font-display text-2xl text-ink dark:text-cream md:text-3xl">Sold</span>
                   ) : vehicle.price ? (
-                    <span className="font-display text-2xl text-ink md:text-3xl">
+                    <span className="font-display text-2xl text-ink dark:text-cream md:text-3xl">
                       Offered at: {currency.format(vehicle.price)}
                     </span>
                   ) : (
-                    <span className="text-base text-ink/50">Price available on request</span>
+                    <span className="text-base text-ink/50 dark:text-cream/50">Price available on request</span>
                   )}
                 </div>
               </RevealOnLoad>
@@ -172,7 +172,7 @@ export default async function VehicleDetailPage({
               </RevealOnLoad>
 
               <RevealOnLoad delay={0.3}>
-                <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60">
+                <p className="mt-8 max-w-md text-sm leading-relaxed text-ink/60 dark:text-cream/60">
                   {sold
                     ? "This car has already found a home, but it's a good example of what we can source — tell us what you're after and we'll go find your version of it."
                     : "Every vehicle we offer is reviewed against its auction sheet and import eligibility before it's listed. Ask us for the full condition report, shipping timeline, and landed cost for this car."}
@@ -183,7 +183,7 @@ export default async function VehicleDetailPage({
                 <RevealOnLoad delay={0.36}>
                   <a
                     href="#specifications"
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.1em] text-ink/50 transition-colors hover:text-accent"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.1em] text-ink/50 transition-colors hover:text-accent dark:text-cream/50"
                   >
                     See full specs below
                     <ChevronDownIcon className="h-4 w-4 animate-bounce" />
@@ -196,23 +196,23 @@ export default async function VehicleDetailPage({
       </section>
 
       {specRows.length > 0 ? (
-        <section id="specifications" className="scroll-mt-24 border-b border-ink/15 bg-cream-deep py-20 md:py-24">
+        <section id="specifications" className="scroll-mt-24 border-b border-ink/15 bg-cream-deep py-20 dark:border-cream/15 dark:bg-sand md:py-24">
           <Container>
             <RevealOnLoad delay={0.34} className="flex items-center gap-5">
-              <h2 className="font-display shrink-0 text-3xl text-ink md:text-4xl">
+              <h2 className="font-display shrink-0 text-3xl text-ink dark:text-cream md:text-4xl">
                 Specifications
               </h2>
               <span className="h-1 flex-1 bg-accent" />
             </RevealOnLoad>
 
-            <RevealOnLoadGroup delay={0.4} className="mt-10 grid gap-x-12 border-t border-ink/15 sm:grid-cols-2">
+            <RevealOnLoadGroup delay={0.4} className="mt-10 grid gap-x-12 border-t border-ink/15 dark:border-cream/15 sm:grid-cols-2">
               {specRows.map(([label, value]) => (
                 <RevealItem
                   key={label}
-                  className="flex items-center justify-between gap-6 border-b border-ink/15 py-4"
+                  className="flex items-center justify-between gap-6 border-b border-ink/15 py-4 dark:border-cream/15"
                 >
-                  <span className="text-xs uppercase tracking-[0.1em] text-ink/45">{label}</span>
-                  <span className="font-display text-sm text-ink">{value}</span>
+                  <span className="text-xs uppercase tracking-[0.1em] text-ink/45 dark:text-cream/45">{label}</span>
+                  <span className="font-display text-sm text-ink dark:text-cream">{value}</span>
                 </RevealItem>
               ))}
             </RevealOnLoadGroup>

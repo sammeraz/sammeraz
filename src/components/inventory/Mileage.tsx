@@ -64,7 +64,7 @@ export function Mileage({ miles, className = "", showParenthetical = false }: Mi
   if (showParenthetical) {
     return (
       <span className={className}>
-        {formatKm(miles)} <span className="text-ink/40">({formatMiles(miles)})</span>
+        {formatKm(miles)} <span className="text-ink/40 dark:text-cream/40">({formatMiles(miles)})</span>
       </span>
     );
   }
@@ -86,7 +86,7 @@ export function Mileage({ miles, className = "", showParenthetical = false }: Mi
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") toggle(event);
       }}
-      className={`group/mileage relative inline-block cursor-help underline decoration-dotted decoration-1 underline-offset-2 decoration-ink/25 ${className}`}
+      className={`group/mileage relative inline-block cursor-help underline decoration-dotted decoration-1 underline-offset-2 decoration-ink/25 dark:decoration-cream/25 ${className}`}
     >
       {formatKm(miles)}
       <span

@@ -193,24 +193,24 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
   return (
     <div>
       <RevealOnLoad>
-        <div className="flex flex-col gap-6 border-b border-ink/15 pb-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-6 border-b border-ink/15 pb-8 dark:border-cream/15 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3 sm:max-w-md sm:flex-1">
             <div className="relative min-w-0 flex-1">
-              <SearchIcon className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40" />
+              <SearchIcon className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40 dark:text-cream/40" />
               <input
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 aria-label="Search inventory"
                 placeholder="Search make, model, year…"
-                className="w-full border-b border-ink/20 bg-transparent py-3 pl-6 pr-6 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent"
+                className="w-full border-b border-ink/20 bg-transparent py-3 pl-6 pr-6 text-sm text-ink placeholder:text-ink/35 outline-none transition-colors focus:border-accent dark:border-cream/20 dark:text-cream dark:placeholder:text-cream/35"
               />
               {query ? (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label="Clear search"
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-ink/40 transition-colors hover:text-accent"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-ink/40 transition-colors hover:text-accent dark:text-cream/40"
                 >
                   <CloseIcon className="h-3.5 w-3.5" />
                 </button>
@@ -224,8 +224,8 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
               aria-expanded={filtersOpen}
               className={`flex shrink-0 items-center gap-1.5 border px-3 py-2.5 text-xs uppercase tracking-[0.08em] transition-colors ${
                 filtersOpen || activeFilterCount > 0
-                  ? "border-ink text-ink"
-                  : "border-ink/20 text-ink/65 hover:border-ink/40"
+                  ? "border-ink text-ink dark:border-cream dark:text-cream"
+                  : "border-ink/20 text-ink/65 hover:border-ink/40 dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40"
               }`}
             >
               <SlidersIcon className="h-3.5 w-3.5" />
@@ -248,11 +248,11 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                   whileTap={{ scale: 0.94 }}
                   onClick={() => setStatusFilter(tab.value)}
                   aria-pressed={isActive}
-                  className={`group relative font-display text-xs uppercase tracking-[0.08em] transition-opacity hover:opacity-100 ${
+                  className={`group relative font-display text-xs uppercase tracking-[0.08em] transition-opacity hover:opacity-100 dark:text-cream ${
                     isActive ? "text-ink opacity-100" : "text-ink opacity-55"
                   }`}
                 >
-                  {tab.label} <span className="text-ink/40">({counts[tab.value]})</span>
+                  {tab.label} <span className="text-ink/40 dark:text-cream/40">({counts[tab.value]})</span>
                   <span
                     className={`absolute -bottom-1 left-0 h-px bg-accent transition-[width] duration-300 ease-out ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
@@ -273,7 +273,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
               transition={{ duration: 0.35, ease: revealEase }}
               className="overflow-hidden"
             >
-              <div className="border-b border-ink/15 py-6">
+              <div className="border-b border-ink/15 py-6 dark:border-cream/15">
                 {activeFilterCount > 0 ? (
                   <div className="mb-4 flex justify-end">
                     <button
@@ -289,7 +289,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                 <div className="flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:gap-x-12 sm:gap-y-6">
                   {allMakes.length > 1 ? (
                     <div>
-                      <label htmlFor="make-filter" className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">
+                      <label htmlFor="make-filter" className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50 dark:text-cream/50">
                         Make
                       </label>
                       <div className="relative mt-3 sm:w-40">
@@ -297,7 +297,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                           id="make-filter"
                           value={selectedMake}
                           onChange={(event) => setSelectedMake(event.target.value)}
-                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                         >
                           <option value="">All Makes</option>
                           {allMakes.map((make) => (
@@ -306,7 +306,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                             </option>
                           ))}
                         </select>
-                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
+                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40 dark:text-cream/40" />
                       </div>
                     </div>
                   ) : null}
@@ -315,7 +315,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                     <div>
                       <label
                         htmlFor="transmission-filter"
-                        className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50"
+                        className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50 dark:text-cream/50"
                       >
                         Transmission
                       </label>
@@ -324,7 +324,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                           id="transmission-filter"
                           value={selectedTransmission}
                           onChange={(event) => setSelectedTransmission(event.target.value)}
-                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                          className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                         >
                           <option value="">All</option>
                           {allTransmissions.map((transmission) => (
@@ -333,29 +333,29 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                             </option>
                           ))}
                         </select>
-                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
+                        <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40 dark:text-cream/40" />
                       </div>
                     </div>
                   ) : null}
 
                   <div className="sm:w-72">
                     <div className="flex items-center gap-2">
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50">Mileage</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/50 dark:text-cream/50">Mileage</p>
                       <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.04em]">
                         <button
                           type="button"
                           onClick={() => setMileageUnit("km")}
                           aria-pressed={mileageUnit === "km"}
-                          className={mileageUnit === "km" ? "text-accent" : "text-ink/35 hover:text-ink/60"}
+                          className={mileageUnit === "km" ? "text-accent" : "text-ink/35 hover:text-ink/60 dark:text-cream/35 dark:hover:text-cream/60"}
                         >
                           Km
                         </button>
-                        <span className="text-ink/25">/</span>
+                        <span className="text-ink/25 dark:text-cream/25">/</span>
                         <button
                           type="button"
                           onClick={() => setMileageUnit("mi")}
                           aria-pressed={mileageUnit === "mi"}
-                          className={mileageUnit === "mi" ? "text-accent" : "text-ink/35 hover:text-ink/60"}
+                          className={mileageUnit === "mi" ? "text-accent" : "text-ink/35 hover:text-ink/60 dark:text-cream/35 dark:hover:text-cream/60"}
                         >
                           Mi
                         </button>
@@ -381,8 +381,8 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
 
       {hasNoMatches ? (
         <div className="py-16 text-center">
-          <p className="font-display text-xl text-ink/70">No vehicles match your search</p>
-          <p className="mt-2 text-sm text-ink/50">Try a different term, or clear the filters below.</p>
+          <p className="font-display text-xl text-ink/70 dark:text-cream/70">No vehicles match your search</p>
+          <p className="mt-2 text-sm text-ink/50 dark:text-cream/50">Try a different term, or clear the filters below.</p>
           <button
             type="button"
             onClick={clearAllFilters}
@@ -394,12 +394,12 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
       ) : (
         <div className="mt-10">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs uppercase tracking-[0.08em] text-ink/40">
+            <p className="text-xs uppercase tracking-[0.08em] text-ink/40 dark:text-cream/40">
               {filtered.length} vehicle{filtered.length === 1 ? "" : "s"}
             </p>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <label htmlFor="sort-by" className="text-xs uppercase tracking-[0.08em] text-ink/40">
+                <label htmlFor="sort-by" className="text-xs uppercase tracking-[0.08em] text-ink/40 dark:text-cream/40">
                   Sort
                 </label>
                 <div className="relative">
@@ -407,7 +407,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                     id="sort-by"
                     value={sortBy}
                     onChange={(event) => setSortBy(event.target.value as SortOption)}
-                    className="appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink"
+                    className="appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -415,18 +415,20 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                       </option>
                     ))}
                   </select>
-                  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40" />
+                  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-ink/40 dark:text-cream/40" />
                 </div>
               </div>
 
-              <div className="flex items-center border border-ink/15">
+              <div className="flex items-center border border-ink/15 dark:border-cream/15">
                 <button
                   type="button"
                   onClick={() => setViewMode("grid")}
                   aria-label="Grid view"
                   aria-pressed={viewMode === "grid"}
                   className={`flex h-8 w-9 items-center justify-center transition-colors ${
-                    viewMode === "grid" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                    viewMode === "grid"
+                      ? "bg-ink text-cream dark:bg-cream dark:text-ink"
+                      : "text-ink/45 hover:text-ink dark:text-cream/45 dark:hover:text-cream"
                   }`}
                 >
                   <GridIcon className="h-4 w-4" />
@@ -436,8 +438,10 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                   onClick={() => setViewMode("list")}
                   aria-label="List view"
                   aria-pressed={viewMode === "list"}
-                  className={`flex h-8 w-9 items-center justify-center border-l border-ink/15 transition-colors ${
-                    viewMode === "list" ? "bg-ink text-cream" : "text-ink/45 hover:text-ink"
+                  className={`flex h-8 w-9 items-center justify-center border-l border-ink/15 transition-colors dark:border-cream/15 ${
+                    viewMode === "list"
+                      ? "bg-ink text-cream dark:bg-cream dark:text-ink"
+                      : "text-ink/45 hover:text-ink dark:text-cream/45 dark:hover:text-cream"
                   }`}
                 >
                   <ListIcon className="h-4 w-4" />

@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: `dark:` utilities activate under a `.dark`
+   ancestor (toggled by ThemeProvider), not just OS preference — an
+   explicit site toggle needs to be able to override system settings. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   /* Black / white / red — the classic JDM racing-livery palette (Type-R
      red, Nismo, Mugen) rather than a warm paper tone. Ink is near-black,
