@@ -10,12 +10,15 @@
      red, Nismo, Mugen) rather than a warm paper tone. Ink is near-black,
      cream is now a clean white, sand is repurposed as a dark charcoal for
      secondary dark surfaces (mobile nav, filter panels). Red is used
-     confidently and often, not just as a rare accent. */
+     confidently and often, not just as a rare accent. Ink-soft and sand
+     carry a faint warm cast pulled from the accent red rather than sitting
+     perfectly neutral — the palette has no other hue in it, so a flat grey
+     read as generic default-UI-theme grey instead of part of this one. */
   --color-ink: #0d0d0d;
-  --color-ink-soft: #1c1c1c;
+  --color-ink-soft: #221c1b;
   --color-cream: #ffffff;
   --color-cream-deep: #f2f2f2;
-  --color-sand: #262626;
+  --color-sand: #2d2523;
   --color-accent: #d3261a;
   --color-accent-soft: #e8483d;
 
