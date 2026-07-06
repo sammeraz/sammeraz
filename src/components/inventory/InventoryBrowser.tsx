@@ -397,7 +397,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
             <p className="text-xs uppercase tracking-[0.08em] text-ink/40 dark:text-cream/40">
               {filtered.length} vehicle{filtered.length === 1 ? "" : "s"}
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">
                 <label htmlFor="sort-by" className="text-xs uppercase tracking-[0.08em] text-ink/40 dark:text-cream/40">
                   Sort

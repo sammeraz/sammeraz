@@ -83,7 +83,7 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
       </motion.div>
 
       <Container className="mt-8 flex items-center gap-6">
-        <p className="shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45 dark:text-cream/45">
+        <p className="hidden shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45 dark:text-cream/45 sm:block">
           Drag or scroll to browse
         </p>
         <div className="h-px flex-1 bg-ink/10 dark:bg-cream/10">
