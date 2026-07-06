@@ -6,7 +6,7 @@ export function ComingSoonMagazineCard() {
       <div className="relative aspect-[3/4] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Coming Soon" />
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-5 sm:p-7">
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
         <h3 className="font-display text-base leading-none text-ink/35 dark:text-cream/35 sm:text-xl">
           Issue Details
         </h3>

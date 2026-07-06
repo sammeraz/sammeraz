@@ -40,7 +40,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
           ) : null}
         </div>
 
-        <div className="flex flex-1 flex-col gap-1 p-5 sm:p-7">
+        <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
           <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55 sm:text-xs">
             {magazine.issue}
           </p>
@@ -55,7 +55,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
         </div>
       </Link>
 
-      <div className="mt-3 flex flex-col gap-2 border-t border-ink/15 px-5 pb-5 pt-3 dark:border-cream/15 sm:flex-row sm:items-center sm:justify-between sm:px-7 sm:pb-7">
+      <div className="mt-3 flex flex-col gap-2 border-t border-ink/15 px-3 pb-3 pt-3 dark:border-cream/15 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:pb-5">
         <span className="font-display text-sm text-ink dark:text-cream sm:text-base">
           {currency.format(magazine.price)}
         </span>
