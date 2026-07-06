@@ -36,7 +36,7 @@ export function MagazineGrid({ magazines, placeholderCount = 3 }: MagazineGridPr
   return (
     <RevealGroup className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
       {magazines.map((magazine) => (
-        <RevealItem key={magazine.slug}>
+        <RevealItem key={magazine.slug} className="self-start">
           <MagazineCard magazine={magazine} />
         </RevealItem>
       ))}
