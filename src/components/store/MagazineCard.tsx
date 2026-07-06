@@ -48,7 +48,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
             {magazine.title}
           </h3>
           {magazine.description ? (
-            <p className="mt-2 hidden text-sm leading-relaxed text-ink/60 dark:text-cream/60 sm:block">
+            <p className="mt-2 hidden text-sm leading-relaxed text-ink/60 dark:text-cream/60 sm:line-clamp-2">
               {magazine.description}
             </p>
           ) : null}
