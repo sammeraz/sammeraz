@@ -41,7 +41,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         {vehicle.status === "sold" ? <SoldBadge size="md" /> : null}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
+      <div className="flex flex-1 flex-col gap-1 p-5 sm:p-7">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/70 dark:text-cream/70 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
@@ -96,7 +96,7 @@ function IncomingVehicleCard({ vehicle }: { vehicle: Vehicle }) {
       <div className="relative aspect-[4/3] w-full overflow-hidden">
         <PlaceholderArt variant="card" label="Incoming" />
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-5">
+      <div className="flex flex-1 flex-col gap-1 p-5 sm:p-7">
         <p className="text-xs font-medium uppercase tracking-[0.04em] text-ink/55 dark:text-cream/55 sm:text-sm">
           {vehicle.year} {vehicle.make}
         </p>
