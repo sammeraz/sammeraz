@@ -44,7 +44,7 @@ export function MagazineCard({ magazine }: { magazine: Magazine }) {
           <p className="text-[10px] uppercase tracking-[0.08em] text-ink/55 dark:text-cream/55 sm:text-xs">
             {magazine.issue}
           </p>
-          <h3 className="font-display text-lg leading-none text-accent sm:text-xl md:text-2xl">
+          <h3 className="font-display -ml-1 text-lg leading-none text-accent sm:text-xl md:text-2xl">
             {magazine.title}
           </h3>
           {magazine.description ? (
