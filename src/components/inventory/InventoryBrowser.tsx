@@ -19,6 +19,13 @@ type StatusFilter = "all" | VehicleStatus;
 type ViewMode = "grid" | "list";
 type SortOption = "default" | "price-asc" | "price-desc" | "mileage-asc" | "mileage-desc" | "year-desc" | "year-asc";
 
+/* A <select>'s open popup is native browser/OS chrome, not something our
+   `dark:` utilities reliably reach — without an explicit color pair here,
+   some engines still render each <option> row's text in the closed
+   control's dark-mode color against that row's default white background,
+   making it unreadable. */
+const optionClass = "bg-white text-ink dark:bg-ink dark:text-cream";
+
 const tabs: { value: StatusFilter; label: string }[] = [
   { value: "all", label: "All" },
   { value: "available", label: "Available" },
@@ -299,9 +306,9 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                           onChange={(event) => setSelectedMake(event.target.value)}
                           className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                         >
-                          <option value="">All Makes</option>
+                          <option value="" className={optionClass}>All Makes</option>
                           {allMakes.map((make) => (
-                            <option key={make} value={make}>
+                            <option key={make} value={make} className={optionClass}>
                               {make}
                             </option>
                           ))}
@@ -326,9 +333,9 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                           onChange={(event) => setSelectedTransmission(event.target.value)}
                           className="w-full appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                         >
-                          <option value="">All</option>
+                          <option value="" className={optionClass}>All</option>
                           {allTransmissions.map((transmission) => (
-                            <option key={transmission} value={transmission}>
+                            <option key={transmission} value={transmission} className={optionClass}>
                               {transmission}
                             </option>
                           ))}
@@ -410,7 +417,7 @@ export function InventoryBrowser({ vehicles, placeholderCount = 3 }: InventoryBr
                     className="appearance-none border border-ink/20 bg-transparent py-2 pl-3 pr-7 text-xs uppercase tracking-[0.06em] text-ink/65 outline-none transition-colors hover:border-ink/40 focus:border-ink dark:border-cream/20 dark:text-cream/65 dark:hover:border-cream/40 dark:focus:border-cream"
                   >
                     {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value} className={optionClass}>
                         {option.label}
                       </option>
                     ))}

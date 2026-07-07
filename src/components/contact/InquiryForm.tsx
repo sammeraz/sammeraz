@@ -10,6 +10,13 @@ const inputClass =
 
 const labelClass = "text-xs font-medium uppercase tracking-[0.14em] text-ink/50 dark:text-cream/50";
 
+/* A <select>'s open popup is native browser/OS chrome, not something our
+   `dark:` utilities reliably reach — `color-scheme` alone doesn't force
+   every engine to theme each <option> row's background, so without an
+   explicit color pair here the near-white text some engines still apply
+   can land on that row's default white background and disappear. */
+const optionClass = "bg-white text-ink dark:bg-ink dark:text-cream";
+
 export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -91,11 +98,11 @@ export function InquiryForm({ defaultVehicleInterest }: { defaultVehicleInterest
             Budget Range
           </label>
           <select id="budget" name="budget" defaultValue="" className={`${inputClass} appearance-none`}>
-            <option value="">Not sure yet</option>
-            <option value="under-25k">Under $25,000</option>
-            <option value="25k-50k">$25,000 – $50,000</option>
-            <option value="50k-100k">$50,000 – $100,000</option>
-            <option value="100k-plus">$100,000+</option>
+            <option value="" className={optionClass}>Not sure yet</option>
+            <option value="under-25k" className={optionClass}>Under $25,000</option>
+            <option value="25k-50k" className={optionClass}>$25,000 – $50,000</option>
+            <option value="50k-100k" className={optionClass}>$50,000 – $100,000</option>
+            <option value="100k-plus" className={optionClass}>$100,000+</option>
           </select>
         </div>
       </div>
