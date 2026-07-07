@@ -5,6 +5,15 @@
    explicit site toggle needs to be able to override system settings. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Native form-control chrome (a <select>'s open dropdown, checkboxes,
+   scrollbars) is drawn by the browser/OS, not by our `dark:` utility
+   classes — without this, the dropdown popup renders with its default
+   light background while the closed select's text is already themed
+   cream by `dark:text-cream`, making the open list's options unreadable. */
+.dark {
+  color-scheme: dark;
+}
+
 @theme inline {
   /* Black / white / red — the classic JDM racing-livery palette (Type-R
      red, Nismo, Mugen) rather than a warm paper tone. Ink is near-black,
