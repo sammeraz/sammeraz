@@ -1,0 +1,83 @@
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { Container } from "@/components/ui/Container";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { InquiryForm } from "@/components/contact/InquiryForm";
+import { InquiryFormWithVehicleParam } from "@/components/contact/InquiryFormWithVehicleParam";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { site } from "@/data/site";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Start an inquiry with AIM Imports about sourcing a Japanese-market vehicle.",
+};
+
+const nextSteps = [
+  {
+    title: "You tell us what you're after",
+    description: "Make, model, spec, condition, budget — as much or as little as you know.",
+  },
+  {
+    title: "We reply with feasibility",
+    description: "What's realistic to source, roughly what it costs delivered nationwide, and timeline.",
+  },
+  {
+    title: "We start the search",
+    description: "If it's a good fit, sourcing begins and you hear from us at every stage.",
+  },
+];
+
+export default function ContactPage() {
+  return (
+    <>
+      <PageHeader
+        eyebrow="Contact"
+        title="Start an Inquiry"
+        description="Tell us what you're looking for. We'll let you know what's realistic to source and what it costs to get it here."
+      />
+
+      <section className="border-t border-ink/15 bg-cream pb-24 pt-12 dark:border-cream/15 dark:bg-ink md:pb-28">
+        <Container className="grid gap-16 md:grid-cols-[1.1fr_0.9fr] md:gap-24">
+          <Reveal className="reveal-instant">
+            <Suspense fallback={<InquiryForm />}>
+              <InquiryFormWithVehicleParam />
+            </Suspense>
+          </Reveal>
+
+          <RevealGroup className="reveal-instant flex flex-col gap-12">
+            <div className="flex flex-col gap-7 border-t border-ink/15 pt-8 dark:border-cream/15">
+              <RevealItem className="reveal-instant">
+                <span className="font-display text-sm text-accent">What Happens Next</span>
+              </RevealItem>
+              {nextSteps.map((step, index) => (
+                <RevealItem
+                  key={step.title}
+                  className="reveal-instant flex gap-4 border-b border-ink/15 pb-7 last:border-b-0 last:pb-0 dark:border-cream/15"
+                >
+                  <span className="font-display text-lg text-accent">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg leading-tight text-ink dark:text-cream">{step.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink/60 dark:text-cream/60">{step.description}</p>
+                  </div>
+                </RevealItem>
+              ))}
+            </div>
+
+            <RevealItem className="reveal-instant flex flex-col gap-3 border-t border-ink/15 pt-8 dark:border-cream/15">
+              <span className="font-display text-sm text-ink/45 dark:text-cream/45">Direct</span>
+              <a
+                href={`mailto:${site.email}`}
+                className="text-base text-ink underline underline-offset-4 hover:text-accent dark:text-cream"
+              >
+                {site.email}
+              </a>
+              <span className="text-sm text-ink/60 dark:text-cream/60">{site.location} &middot; nationwide delivery</span>
+            </RevealItem>
+          </RevealGroup>
+        </Container>
+      </section>
+    </>
+  );
+}

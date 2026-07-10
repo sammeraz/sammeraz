@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* Class-based dark mode: `dark:` utilities activate under a `.dark`
+   ancestor (toggled by ThemeProvider), not just OS preference — an
+   explicit site toggle needs to be able to override system settings. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Native form-control chrome (a <select>'s open dropdown, checkboxes,
+   scrollbars) is drawn by the browser/OS, not by our `dark:` utility
+   classes — without this, the dropdown popup renders with its default
+   light background while the closed select's text is already themed
+   cream by `dark:text-cream`, making the open list's options unreadable. */
+.dark {
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Black / white / red — the classic JDM racing-livery palette (Type-R
+     red, Nismo, Mugen) rather than a warm paper tone. Ink is near-black,
+     cream is now a clean white, sand is repurposed as a dark charcoal for
+     secondary dark surfaces (mobile nav, filter panels). Red is used
+     confidently and often, not just as a rare accent. Ink-soft and sand
+     stay strictly achromatic (R=G=B, no warm or cool cast) and sit close
+     to ink in value, so elevated surfaces read as a subtle, dark step up
+     rather than a visibly separate grey or tinted panel. */
+  --color-ink: #0d0d0d;
+  --color-ink-soft: #161616;
+  --color-cream: #ffffff;
+  --color-cream-deep: #f2f2f2;
+  --color-sand: #1f1f1f;
+  --color-accent: #d3261a;
+  --color-accent-soft: #e8483d;
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-oswald);
+
+  --container-page: 1280px;
+}
+
+:root {
+  --background: var(--color-ink);
+  --foreground: var(--color-cream);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Dark, not cream: every page opens on a dark section (Hero, PageHeader, or
+   a dark breadcrumb strip) and the Footer is dark too, so this is what
+   briefly shows through fading/transparent content during a page
+   transition. A cream body here meant that gap flashed white against the
+   surrounding dark sections; matching them removes the flash instead of
+   just changing how the transition moves. */
+body {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-cream);
+}
+
+/* Oswald is a bold condensed grotesque — uppercase and a bold weight give it
+   the confident, motorsport-livery energy the brand reference uses for
+   headlines, nav, and model names. */
+.font-display {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Custom cursor replaces the native pointer, except where a real text caret
+   is expected (form fields) — never hide the cursor from someone typing.
+   The `*` (plus !important) is required: links carry a browser-default
+   `cursor: pointer` declared directly on the element, and an element's own
+   specified cursor always wins over an inherited one no matter the origin —
+   so without overriding every descendant, hovering any link/button brought
+   the system pointer back. */
+.cursor-none-custom,
+.cursor-none-custom * {
+  cursor: none !important;
+}
+
+.cursor-none-custom input,
+.cursor-none-custom textarea,
+.cursor-none-custom select,
+.cursor-none-custom [contenteditable="true"] {
+  cursor: auto !important;
+}
+
+/* Subtle film-grain texture — print/paper surface. */
+.bg-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.bg-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+}
+
+/* Dark falloff toward the edges, like natural lens vignetting on a photo. */
+.bg-radial-vignette {
+  background: radial-gradient(120% 120% at 50% 45%, transparent 45%, rgb(0 0 0 / 0.35) 100%);
+}
+
+/* Hide scrollbar on the horizontal vehicle carousel while staying scrollable
+   (touch/drag/wheel all still work — this only hides the visual scrollbar chrome). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Framer Motion's whileInView/initial reveals bake their hidden (opacity:0,
+   translated) state into the server-rendered HTML. Hydration and the
+   IntersectionObserver that shows them resolve almost instantly on a fast
+   local connection, but on a real device over a real network there's a
+   genuinely visible gap where that raw markup is all that's on screen —
+   reading as unloaded content. Forcing the visible end state here avoids
+   that without a JS/hydration-timing device check, which previously caused
+   a component swap that broke desktop's animation outright. */
+@media (max-width: 767px) {
+  .reveal-instant-mobile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Same fix, applied regardless of device — for content directly under a
+   page's hero that must never be caught mid-reveal no matter how slow the
+   connection is, on desktop included. */
+.reveal-instant {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* The carousel bleeds off the right edge on purpose (it's what invites a
+   drag/scroll), but its left edge was a flat viewport-relative padding while
+   the heading above it sits inside Container, which centers within a
+   1280px max-width — beyond that width the two drift apart, since Container's
+   own left edge moves inward with the viewport but the carousel's didn't.
+   Mirrors Container's centering math for the left edge only; the right
+   edge is untouched so the bleed still works.
+
+   scroll-padding-left has to match: with enough cards to actually overflow,
+   snap-mandatory forces the scroll position to the nearest valid snap point
+   on load, and padding alone isn't one — the browser was "correcting"
+   scrollLeft to exactly the padding value, hiding the whole gutter behind
+   the first card. Setting scroll-padding-left tells it that inset IS the
+   true edge of the snap port, so resting at scrollLeft:0 with the gutter
+   showing is itself a valid, stable snap position. */
+@media (min-width: 768px) {
+  .carousel-align-start {
+    padding-left: max(2.5rem, calc((100vw - 1280px) / 2 + 2.5rem));
+    scroll-padding-left: max(2.5rem, calc((100vw - 1280px) / 2 + 2.5rem));
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
