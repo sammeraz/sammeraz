@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useScroll, type Variants } from "motion/react";
 import type { Vehicle } from "@/lib/types";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
@@ -51,6 +51,42 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
     const amount = card ? card.offsetWidth + 24 : 320;
     el.scrollBy({ left: amount * direction, behavior: "smooth" });
   }
+
+  // A trackpad's horizontal swipe already arrives as deltaX and scrolls this
+  // natively — this only steps in for a plain vertical mouse wheel (deltaY
+  // dominant), remapping it to horizontal so a wheel swipes between cars too.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    function handleWheel(event: WheelEvent) {
+      if (event.ctrlKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+
+      const maxScrollLeft = el!.scrollWidth - el!.clientWidth;
+      const scrollingForward = event.deltaY > 0;
+      const atEnd = scrollingForward ? el!.scrollLeft >= maxScrollLeft - 1 : el!.scrollLeft <= 0;
+      // At either end, don't preventDefault — let the page scroll vertically
+      // instead of trapping the wheel here.
+      if (atEnd) return;
+
+      event.preventDefault();
+      // This container's scroll-smooth CSS (for the arrow buttons' smooth
+      // scrollBy) turns out to apply even to a direct scrollLeft assignment
+      // here, and scroll-snap's settle animates too regardless of any
+      // per-call behavior option — confirmed empirically, not just in
+      // theory. Left alone, every wheel tick would kick off its own
+      // competing smooth-scroll, making the whole gesture feel laggy.
+      // Flipping scroll-behavior to instant just for this one assignment,
+      // then immediately restoring it, keeps the arrow buttons' intentional
+      // smooth animation working for every other caller.
+      el!.style.scrollBehavior = "auto";
+      el!.scrollLeft += event.deltaY;
+      el!.style.scrollBehavior = "";
+    }
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
 
   return (
     <div>
