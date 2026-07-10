@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { getResend } from "@/lib/resend";
+import { site } from "@/data/site";
 
 interface ContactPayload {
   name?: string;
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const { name, email, message } = payload;
+  const { name, email, phone, vehicleInterest, budget, message } = payload;
 
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return NextResponse.json(
@@ -33,10 +35,35 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
   }
 
-  // TODO: wire this up to a real email/CRM destination (e.g. Resend, SendGrid,
-  // or a simple forwarding inbox) once one is chosen. For now, inquiries are
-  // only logged server-side so the form has a working endpoint to submit to.
-  console.log("New AIM Imports inquiry:", payload);
+  const details = [
+    `Name: ${name}`,
+    `Email: ${email}`,
+    phone?.trim() ? `Phone: ${phone}` : null,
+    vehicleInterest?.trim() ? `Vehicle of interest: ${vehicleInterest}` : null,
+    budget?.trim() ? `Budget: ${budget}` : null,
+    "",
+    message,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+
+  try {
+    // Reply-To is the customer's own address, not the sending domain, so
+    // whoever reads this in the contact@ inbox can just hit reply.
+    await getResend().emails.send({
+      from: `${site.name} Website <inquiries@aimimports.jp>`,
+      to: site.email,
+      replyTo: email,
+      subject: `New inquiry from ${name}`,
+      text: details,
+    });
+  } catch (error) {
+    console.error("Failed to send inquiry email:", error);
+    return NextResponse.json(
+      { error: "Something went wrong sending your inquiry. Please try again." },
+      { status: 502 },
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }

@@ -46,7 +46,17 @@ export function Footer() {
 
       <div className="border-t border-cream/10 py-6">
         <Container className="flex flex-col items-center justify-between gap-3 text-xs text-cream/45 md:flex-row">
-          <span>&copy; {year} AIM Imports. All rights reserved.</span>
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center md:justify-start">
+            <span>&copy; {year} AIM Imports. All rights reserved.</span>
+            <span aria-hidden="true">&middot;</span>
+            <Link href="/privacy" className="transition-colors hover:text-cream">
+              Privacy Policy
+            </Link>
+            <span aria-hidden="true">&middot;</span>
+            <Link href="/terms" className="transition-colors hover:text-cream">
+              Terms of Service
+            </Link>
+          </div>
           <span>JDM import specialists &middot; Leander, Texas</span>
         </Container>
       </div>
