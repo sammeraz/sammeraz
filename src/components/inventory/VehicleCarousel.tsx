@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, type Variants } from "motion/react";
 import type { Vehicle } from "@/lib/types";
 import { VehicleCard } from "@/components/inventory/VehicleCard";
@@ -17,6 +17,13 @@ interface VehicleCarouselProps {
 
 const arrowButtonClass =
   "flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors duration-200 hover:border-accent hover:bg-accent hover:text-cream disabled:pointer-events-none disabled:opacity-30 dark:border-cream dark:text-cream dark:hover:text-cream";
+
+/* Overlaid directly on the card row, so it needs to hold up against
+ * whatever's behind it — a dark placeholder now, real photos of any
+ * brightness later — rather than the page's own light/dark theme. A
+ * translucent, blurred dark backing reads reasonably against either. */
+const overlayArrowButtonClass =
+  "absolute top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-cream/25 bg-ink/50 text-cream backdrop-blur-sm transition-colors duration-200 hover:border-accent hover:bg-accent sm:flex";
 
 const cardRow: Variants = {
   hidden: {},
@@ -43,6 +50,8 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
   const hasVehicles = vehicles.length > 0;
   const itemCount = hasVehicles ? vehicles.length : placeholderCount;
   const { scrollXProgress } = useScroll({ container: scrollerRef });
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
 
   function scrollByCard(direction: 1 | -1) {
     const el = scrollerRef.current;
@@ -52,35 +61,83 @@ export function VehicleCarousel({ vehicles, placeholderCount = 6 }: VehicleCarou
     el.scrollBy({ left: amount * direction, behavior: "smooth" });
   }
 
+  // Drives which overlay arrow(s) show: hide the left one at the very start,
+  // the right one at the very end, so neither ever points toward a scroll
+  // that has nowhere left to go. Re-checked on resize too, since widening
+  // the viewport can open up room that a narrower one had used up.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    function updateEdges() {
+      const maxScrollLeft = el!.scrollWidth - el!.clientWidth;
+      setAtStart(el!.scrollLeft <= 0);
+      setAtEnd(el!.scrollLeft >= maxScrollLeft - 1);
+    }
+
+    updateEdges();
+    el.addEventListener("scroll", updateEdges, { passive: true });
+    window.addEventListener("resize", updateEdges);
+    return () => {
+      el.removeEventListener("scroll", updateEdges);
+      window.removeEventListener("resize", updateEdges);
+    };
+  }, []);
+
   return (
     <div>
-      <motion.div
-        ref={(node) => {
-          scrollerRef.current = node;
-          inViewRef.current = node;
-        }}
-        variants={cardRow}
-        initial="hidden"
-        animate={startsInViewport ? "show" : undefined}
-        whileInView={startsInViewport ? undefined : "show"}
-        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-        className="carousel-align-start no-scrollbar flex snap-x snap-mandatory items-start gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 pt-2 sm:pl-6 sm:pr-0"
-      >
-        {Array.from({ length: itemCount }).map((_, i) => (
-          <motion.div
-            key={hasVehicles ? vehicles[i].slug : i}
-            data-carousel-item
-            variants={cardItem}
-            className="reveal-instant-mobile w-[84vw] shrink-0 snap-center sm:w-[340px] sm:snap-start"
+      <div className="relative">
+        <motion.div
+          ref={(node) => {
+            scrollerRef.current = node;
+            inViewRef.current = node;
+          }}
+          variants={cardRow}
+          initial="hidden"
+          animate={startsInViewport ? "show" : undefined}
+          whileInView={startsInViewport ? undefined : "show"}
+          viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+          className="carousel-align-start no-scrollbar flex snap-x snap-mandatory items-start gap-6 overflow-x-auto scroll-smooth px-[8vw] pb-2 pt-2 sm:pl-6 sm:pr-0"
+        >
+          {Array.from({ length: itemCount }).map((_, i) => (
+            <motion.div
+              key={hasVehicles ? vehicles[i].slug : i}
+              data-carousel-item
+              variants={cardItem}
+              className="reveal-instant-mobile w-[84vw] shrink-0 snap-center sm:w-[340px] sm:snap-start"
+            >
+              {hasVehicles ? <VehicleCard vehicle={vehicles[i]} /> : <ComingSoonCard />}
+            </motion.div>
+          ))}
+          {/* Trailing spacer so the last card can snap clear of the viewport edge
+              in the sm:+ bleed layout — a no-op on mobile, where the symmetric
+              padding above already covers it. */}
+          <div className="w-px shrink-0 md:w-6" aria-hidden="true" />
+        </motion.div>
+
+        {atStart ? null : (
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.88 }}
+            onClick={() => scrollByCard(-1)}
+            aria-label="Scroll to previous vehicle"
+            className={`${overlayArrowButtonClass} left-2 sm:left-4`}
           >
-            {hasVehicles ? <VehicleCard vehicle={vehicles[i]} /> : <ComingSoonCard />}
-          </motion.div>
-        ))}
-        {/* Trailing spacer so the last card can snap clear of the viewport edge
-            in the sm:+ bleed layout — a no-op on mobile, where the symmetric
-            padding above already covers it. */}
-        <div className="w-px shrink-0 md:w-6" aria-hidden="true" />
-      </motion.div>
+            <ArrowLeftIcon className="h-4 w-4" />
+          </motion.button>
+        )}
+        {atEnd ? null : (
+          <motion.button
+            type="button"
+            whileTap={{ scale: 0.88 }}
+            onClick={() => scrollByCard(1)}
+            aria-label="Scroll to next vehicle"
+            className={`${overlayArrowButtonClass} right-2 sm:right-4`}
+          >
+            <ArrowRightIcon className="h-4 w-4" />
+          </motion.button>
+        )}
+      </div>
 
       <Container className="mt-8 flex items-center gap-6">
         <p className="shrink-0 text-xs uppercase tracking-[0.1em] text-ink/45 dark:text-cream/45 sm:hidden">
