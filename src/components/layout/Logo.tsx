@@ -20,7 +20,7 @@ export function Logo({ className = "" }: { className?: string }) {
         className="h-10 w-10 object-contain transition-transform duration-300 ease-out group-hover:scale-110 md:h-11 md:w-11"
       />
       <span className="hidden text-[10px] font-medium uppercase tracking-[0.32em] opacity-60 transition-opacity duration-300 sm:inline group-hover:opacity-100">
-        Leander, TX
+        Leander, Texas
       </span>
     </Link>
   );

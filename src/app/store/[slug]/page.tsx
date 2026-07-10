@@ -126,7 +126,7 @@ export default async function MagazineDetailPage({
                   </div>
                   <div className="flex items-center gap-2.5">
                     <ClockIcon className="h-4 w-4 shrink-0 text-ink/40 dark:text-cream/40" />
-                    <p className="text-xs text-ink/60 dark:text-cream/60">Ships from Leander, TX in 3–5 business days</p>
+                    <p className="text-xs text-ink/60 dark:text-cream/60">Ships from Leander, Texas in 3–5 business days</p>
                   </div>
                 </div>
               </Reveal>

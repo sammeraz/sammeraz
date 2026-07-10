@@ -30,7 +30,7 @@ const faqs: FAQItem[] = [
   {
     question: "Do you offer financing?",
     answer:
-      "Not yet — imported vehicles don't fit standard auto loans, so we're working on a lending partnership built for that. In the meantime, reach out and we'll help you figure out what's realistic.",
+      "Not yet — imported vehicles don't always fit standard auto loans, so we're working on a lending partnership built for that. In the meantime, reach out and we'll help you figure out what's realistic.",
   },
   {
     question: "I don't see what I want in current inventory — can you still help?",
